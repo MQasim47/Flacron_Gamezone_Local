@@ -23,7 +23,6 @@ A full-stack football streaming and analytics platform. Watch live matches, foll
 - [API Reference](#api-reference)
 - [Admin Panel](#admin-panel)
 - [Background Jobs](#background-jobs)
-- [Mobile App](#mobile-app)
 - [Deployment](#deployment)
 - [Security Notes](#security-notes)
 
@@ -39,7 +38,6 @@ Flacron GameZone provides:
 - **League standings, fixtures, and results**
 - **Subscription billing** via Stripe (monthly and yearly plans)
 - **Admin panel** for managing leagues, teams, matches, streams, and users
-- **Expo mobile app** consuming the same backend
 
 All features degrade gracefully when third-party API keys are absent, so the project runs locally with no external dependencies configured.
 
@@ -59,7 +57,6 @@ All features degrade gracefully when third-party API keys are absent, so the pro
 | Football Data | API-Football (primary), SportMonks (fallback) |
 | Streams | YouTube Data API v3 |
 | Email | Brevo (contact form) |
-| Mobile | Expo (React Native) |
 
 ---
 
@@ -88,9 +85,6 @@ flacron-gamezone/
 │   ├── page-components/      # Full page components
 │   ├── shared/               # API client, utilities, shared UI
 │   └── widgets/              # Composite UI blocks (shell, stats cards)
-│
-├── mobile/                   # Expo React Native app
-│   └── src/App.js
 │
 └── docker-compose.yml        # PostgreSQL service
 ```
@@ -188,12 +182,6 @@ This creates a demo league, two teams, a match, and a placeholder stream.
 | Variable | Required | Description |
 |---|---|---|
 | `NEXT_PUBLIC_API_BASE` | Yes | Backend URL (e.g. `http://localhost:4000`) |
-
-### Mobile (`mobile/.env`)
-
-| Variable | Required | Description |
-|---|---|---|
-| `EXPO_PUBLIC_API_BASE` | Yes | Backend URL (e.g. `http://localhost:4000`) |
 
 > **Note:** All external integrations are optional for local development. The app falls back to mock data or disables the relevant feature when keys are missing.
 
@@ -396,23 +384,6 @@ Cron jobs are only active when `NODE_ENV=production`.
 | YouTube stream refresh | Every 6 min | Searches YouTube for streams on live matches that don't have one |
 | AI summary generation | Every 15 min | Generates post-match summaries for recently finished matches |
 | AI preview generation | Every 30 min | Generates pre-match previews for matches within the next 2 days |
-
----
-
-## Mobile App
-
-A minimal Expo app that displays live matches, auto-refreshing every 45 seconds.
-
-```bash
-cd mobile
-cp .env.example .env
-npm install
-npm run start        # opens Expo DevTools
-npm run android      # Android emulator
-npm run ios          # iOS simulator (macOS only)
-```
-
-Set `EXPO_PUBLIC_API_BASE` to your backend's LAN IP (e.g. `http://192.168.1.x:4000`) when testing on a physical device.
 
 ---
 
