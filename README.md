@@ -415,16 +415,5 @@ npm start
 Or deploy to Vercel — set `NEXT_PUBLIC_API_BASE` to your production backend URL in the project settings.
 
 ---
-
-## Security Notes
-
-This is an MVP starter. Before going to production, review and address:
-
-- **Rate limiting** is applied globally and on the contact form endpoint; tighten limits as needed
-- **Helmet** is enabled for standard HTTP security headers
-- **CORS** is locked to `FRONTEND_ORIGIN`; confirm this is set correctly
-- **JWT secret** must be changed from the development default in production
-- **Input validation** uses Zod schemas on all POST/PUT endpoints
-- **Passwords** are hashed with bcrypt (cost factor 10)
 - **Stripe webhooks** are verified using the webhook signing secret
 - Additional hardening to consider: WAF rules, audit logging, HTTPS enforcement, CSP headers
