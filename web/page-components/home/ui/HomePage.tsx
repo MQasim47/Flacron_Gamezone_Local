@@ -47,85 +47,68 @@ interface SearchResults {
   matches: Match[];
 }
 
+interface HomePageProps {
+  initialFeaturedLeagues: League[];
+  initialLiveMatches: Match[];
+  initialUpcomingMatches: Match[];
+}
+
 const Skeleton = ({ className = "" }: { className?: string }) => (
   <div
     className={`relative overflow-hidden bg-slate-800/60 rounded-xl before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-slate-700/40 before:to-transparent ${className}`}
   />
 );
 
-export default function HomePage() {
-  const [featuredLeagues, setFeaturedLeagues] = useState<League[]>([]);
-  const [liveMatches, setLiveMatches] = useState<Match[]>([]);
-  const [totalLiveMatches, setTotalLiveMatches] = useState<number>(0);
-  const [upcomingMatches, setUpcomingMatches] = useState<Match[]>([]);
+export default function HomePage({
+  initialFeaturedLeagues,
+  initialLiveMatches,
+  initialUpcomingMatches,
+}: HomePageProps) {
+  const [featuredLeagues, setFeaturedLeagues] = useState<League[]>(
+    initialFeaturedLeagues,
+  );
+  const [liveMatches, setLiveMatches] = useState<Match[]>(
+    initialLiveMatches.slice(0, 4),
+  );
+  const [totalLiveMatches, setTotalLiveMatches] = useState<number>(
+    initialLiveMatches.length,
+  );
+  const [upcomingMatches, setUpcomingMatches] = useState<Match[]>(
+    initialUpcomingMatches,
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResults | null>(
     null,
   );
   const [isSearching, setIsSearching] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(false);
 
-  // Ref to track live match count without causing re-renders in the interval effect
-  const liveMatchCountRef = useRef(0);
+  const liveMatchCountRef = useRef(initialLiveMatches.length);
 
-  // Update ref whenever live count changes
   useEffect(() => {
     liveMatchCountRef.current = totalLiveMatches || liveMatches.length;
   }, [totalLiveMatches, liveMatches.length]);
 
-  // Load initial data only once
-  const loadInitialData = useCallback(async () => {
-    try {
-      setLoading(true);
-      console.log("Loading Initial Data");
-
-      const [leaguesRes, liveRes, upcomingRes] = await Promise.all([
-        apiGet<{ success: boolean; leagues: League[] }>("/api/leagues"),
-        apiGet<Match[]>("/api/matches/live"),
-        apiGet<Match[]>("/api/matches?status=UPCOMING"),
-      ]);
-
-      setFeaturedLeagues(leaguesRes.leagues?.slice(0, 8) ?? []);
-      setTotalLiveMatches(Array.isArray(liveRes) ? liveRes.length : 0);
-      setLiveMatches(Array.isArray(liveRes) ? liveRes.slice(0, 4) : []);
-      setUpcomingMatches(
-        Array.isArray(upcomingRes) ? upcomingRes.slice(0, 6) : [],
-      );
-    } catch (error) {
-      console.error("Error loading initial data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Refresh only live matches
   const refreshLiveMatches = useCallback(async () => {
     try {
       const liveRes = await apiGet<Match[]>("/api/matches/live");
-      const newLiveMatches = Array.isArray(liveRes) ? liveRes.slice(0, 4) : [];
-
-      setLiveMatches(newLiveMatches);
-      setTotalLiveMatches(Array.isArray(liveRes) ? liveRes.length : 0);
+      const all = Array.isArray(liveRes) ? liveRes : [];
+      setLiveMatches(all.slice(0, 4));
+      setTotalLiveMatches(all.length);
     } catch (error) {
       console.error("Error refreshing live matches:", error);
     }
   }, []);
 
-  // Initial load + periodic live refresh (Corrected)
   useEffect(() => {
-    loadInitialData();
-
     const interval = setInterval(() => {
-      // Use the ref instead of state to prevent re-creating interval
       if (liveMatchCountRef.current > 0) {
         refreshLiveMatches();
       }
     }, 45000);
-
     return () => clearInterval(interval);
-  }, [loadInitialData, refreshLiveMatches]);
+  }, [refreshLiveMatches]);
 
-  // Search with debounce
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchQuery.trim()) {
@@ -134,13 +117,11 @@ export default function HomePage() {
         setSearchResults(null);
       }
     }, 300);
-
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
   async function performSearch() {
     if (!searchQuery.trim()) return;
-
     try {
       setIsSearching(true);
       const results = await apiGet<SearchResults>(
@@ -661,95 +642,72 @@ export default function HomePage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-4">
-          {loading
-            ? Array.from({ length: 6 }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 border border-slate-700/50 rounded-2xl p-5"
-                >
-                  <Skeleton className="h-6 w-24 mx-auto rounded-full mb-4" />
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="w-8 h-8 rounded-lg shrink-0" />
-                      <Skeleton className="h-4 flex-1 rounded-lg" />
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="w-8 h-8 rounded-lg shrink-0" />
-                      <Skeleton className="h-4 flex-1 rounded-lg" />
-                    </div>
+          {upcomingMatches.map((match) => (
+            <Link key={match.id} href={`/match/${match.id}`}>
+              <div className="group bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-slate-700/50 hover:border-blue-500/50 rounded-2xl p-5 transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                <div className="flex items-center justify-center mb-4">
+                  {getStatusBadge(match.status)}
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    {match.homeTeam.logo ? (
+                      <img
+                        src={match.homeTeam.logo}
+                        alt={match.homeTeam.name}
+                        className="w-8 h-8 object-contain"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-xs font-bold">
+                        {match.homeTeam.name.substring(0, 2)}
+                      </div>
+                    )}
+                    <span className="font-semibold text-sm truncate group-hover:text-blue-400 transition-colors">
+                      {match.homeTeam.name}
+                    </span>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-slate-700/50 flex justify-between">
-                    <Skeleton className="h-3 w-16 rounded-lg" />
-                    <Skeleton className="h-3 w-12 rounded-lg" />
+                  <div className="flex items-center gap-3">
+                    {match.awayTeam.logo ? (
+                      <img
+                        src={match.awayTeam.logo}
+                        alt={match.awayTeam.name}
+                        className="w-8 h-8 object-contain"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-xs font-bold">
+                        {match.awayTeam.name.substring(0, 2)}
+                      </div>
+                    )}
+                    <span className="font-semibold text-sm truncate group-hover:text-purple-400 transition-colors">
+                      {match.awayTeam.name}
+                    </span>
                   </div>
                 </div>
-              ))
-            : upcomingMatches.map((match) => (
-                <Link key={match.id} href={`/match/${match.id}`}>
-                  <div className="group bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-slate-700/50 hover:border-blue-500/50 rounded-2xl p-5 transition-all duration-300 hover:scale-[1.02] cursor-pointer">
-                    <div className="flex items-center justify-center mb-4">
-                      {getStatusBadge(match.status)}
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        {match.homeTeam.logo ? (
-                          <img
-                            src={match.homeTeam.logo}
-                            alt={match.homeTeam.name}
-                            className="w-8 h-8 object-contain"
-                          />
-                        ) : (
-                          <div className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-xs font-bold">
-                            {match.homeTeam.name.substring(0, 2)}
-                          </div>
-                        )}
-                        <span className="font-semibold text-sm truncate group-hover:text-blue-400 transition-colors">
-                          {match.homeTeam.name}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        {match.awayTeam.logo ? (
-                          <img
-                            src={match.awayTeam.logo}
-                            alt={match.awayTeam.name}
-                            className="w-8 h-8 object-contain"
-                          />
-                        ) : (
-                          <div className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-xs font-bold">
-                            {match.awayTeam.name.substring(0, 2)}
-                          </div>
-                        )}
-                        <span className="font-semibold text-sm truncate group-hover:text-purple-400 transition-colors">
-                          {match.awayTeam.name}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-slate-700/50">
-                      <div className="flex items-center justify-between text-xs text-slate-400">
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {new Date(match.kickoffTime).toLocaleDateString(
-                            undefined,
-                            { month: "short", day: "numeric" },
-                          )}
-                        </div>
-                        <div>
-                          {new Date(match.kickoffTime).toLocaleTimeString(
-                            "en-US",
-                            { hour: "2-digit", minute: "2-digit" },
-                          )}
-                        </div>
-                      </div>
-                      {match.league && (
-                        <div className="flex items-center gap-1 mt-2 text-xs text-slate-500">
-                          <Trophy className="w-3 h-3" />
-                          {match.league.name}
-                        </div>
+                <div className="mt-4 pt-4 border-t border-slate-700/50">
+                  <div className="flex items-center justify-between text-xs text-slate-400">
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {new Date(match.kickoffTime).toLocaleDateString(
+                        undefined,
+                        { month: "short", day: "numeric" },
                       )}
                     </div>
+                    <div>
+                      {new Date(match.kickoffTime).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
                   </div>
-                </Link>
-              ))}
+                  {match.league && (
+                    <div className="flex items-center gap-1 mt-2 text-xs text-slate-500">
+                      <Trophy className="w-3 h-3" />
+                      {match.league.name}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
 
