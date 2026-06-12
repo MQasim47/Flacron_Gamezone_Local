@@ -3,6 +3,7 @@ import { matchRepository } from '../repositories/match.repository.js';
 import { youtubeService } from './youtube.service.js';
 import { sportSrcService } from './sportSrc.service.js';
 import { config } from '../config/index.js';
+import { upsertSportSrcStream } from './sportSrcStream.helper.js';
 
 export const streamService = {
    getActiveStreams() {
@@ -109,39 +110,9 @@ async function findAndSaveSportSrcStream(
    slug: string
 ): Promise<void> {
    const detail = await sportSrcService.getDetail(slug);
-   if (!detail?.stream_url) {
-      await streamRepository.markNoStream(dbMatchId);
-      return;
-   }
+   if (!detail) return;
 
-   const sources = [
-      detail.stream_url,
-      detail.stream_url_2,
-      detail.stream_url_3,
-   ].filter(Boolean) as string[];
-
-   await streamRepository.upsert(
-      dbMatchId,
-      {
-         type: 'EMBED',
-         provider: 'sportsrc',
-         url: detail.stream_url,
-         isActive: true,
-         youtubeVideoId: null,
-         streamTitle: `${detail.home_team} vs ${detail.away_team}`,
-         streamSources: JSON.stringify(sources),
-      },
-      {
-         type: 'EMBED',
-         provider: 'sportsrc',
-         url: detail.stream_url,
-         isActive: true,
-         youtubeVideoId: null,
-         streamTitle: `${detail.home_team} vs ${detail.away_team}`,
-         streamSources: JSON.stringify(sources),
-         lastCheckedAt: new Date(),
-      }
-   );
+   await upsertSportSrcStream(dbMatchId, detail);
 }
 
 async function findAndSaveSportSrcStreamById(dbMatchId: string): Promise<any> {

@@ -223,8 +223,6 @@ export const adminStreamController = {
       const { config } = await import('../config/index.js');
 
       if (config.footballDataProvider === 'sportsrc') {
-         const { streamService } =
-            await import('../services/stream.service.js');
          const stream = await streamService.findStreamForMatch(matchId);
          if (!stream) {
             return res

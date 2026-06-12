@@ -58,9 +58,15 @@ export const config = {
 
    // Which provider to use for live sync & match browsing
    // "sportsrc" | "api-football"
-   footballDataProvider:
-      (process.env.FOOTBALL_DATA_PROVIDER as 'sportsrc' | 'api-football') ??
-      'sportsrc',
+   footballDataProvider: (() => {
+      const provider = process.env.FOOTBALL_DATA_PROVIDER ?? 'sportsrc';
+      if (provider !== 'sportsrc' && provider !== 'api-football') {
+         throw new Error(
+            `Invalid FOOTBALL_DATA_PROVIDER: ${provider}. Must be "sportsrc" or "api-football"`
+         );
+      }
+      return provider as 'sportsrc' | 'api-football';
+   })(),
 
    ai: {
       openaiKey: process.env.OPENAI_API_KEY ?? '',

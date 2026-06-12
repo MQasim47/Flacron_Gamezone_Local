@@ -161,17 +161,29 @@ export const deepDataController = {
       const slug = await resolveSlug(req.params.id);
       if (!slug) return res.status(404).json({ error: 'Match not found' });
 
-      const [lineups, stats, incidents, odds, votes, h2h, lastMatches, graph] =
-         await Promise.allSettled([
-            sportSrcService.getLineups(slug),
-            sportSrcService.getStats(slug),
-            sportSrcService.getIncidents(slug),
-            sportSrcService.getOdds(slug),
-            sportSrcService.getVotes(slug),
-            sportSrcService.getH2H(slug),
-            sportSrcService.getLastMatches(slug),
-            sportSrcService.getGraph(slug),
-         ]);
+      const [
+         lineups,
+         stats,
+         incidents,
+         shotmap,
+         odds,
+         votes,
+         h2h,
+         lastMatches,
+         graph,
+         highlights,
+      ] = await Promise.allSettled([
+         sportSrcService.getLineups(slug),
+         sportSrcService.getStats(slug),
+         sportSrcService.getIncidents(slug),
+         sportSrcService.getShotmap(slug),
+         sportSrcService.getOdds(slug),
+         sportSrcService.getVotes(slug),
+         sportSrcService.getH2H(slug),
+         sportSrcService.getLastMatches(slug),
+         sportSrcService.getGraph(slug),
+         sportSrcService.getHighlights(slug),
+      ]);
 
       res.json({
          success: true,
@@ -179,12 +191,15 @@ export const deepDataController = {
          lineups: lineups.status === 'fulfilled' ? lineups.value : null,
          stats: stats.status === 'fulfilled' ? stats.value : null,
          incidents: incidents.status === 'fulfilled' ? incidents.value : null,
+         shotmap: shotmap.status === 'fulfilled' ? shotmap.value : null,
          odds: odds.status === 'fulfilled' ? odds.value : null,
          votes: votes.status === 'fulfilled' ? votes.value : null,
          h2h: h2h.status === 'fulfilled' ? h2h.value : null,
          lastMatches:
             lastMatches.status === 'fulfilled' ? lastMatches.value : null,
          graph: graph.status === 'fulfilled' ? graph.value : null,
+         highlights:
+            highlights.status === 'fulfilled' ? highlights.value : null,
       });
    },
 };

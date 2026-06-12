@@ -4,6 +4,7 @@ import { teamRepository } from '../repositories/team.repository.js';
 import { matchRepository } from '../repositories/match.repository.js';
 import { streamRepository } from '../repositories/stream.repository.js';
 import { cacheSet, cacheDel } from '../lib/redis.js';
+import { upsertSportSrcStream } from './sportSrcStream.helper.js';
 
 export async function syncLiveFromSportSrc(): Promise<string[]> {
    let fixtures;
@@ -125,7 +126,10 @@ export async function syncLiveFromSportSrc(): Promise<string[]> {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 async function upsertTeamByName(name: string, leagueId: string | null) {
-   const existing = await teamRepository.findFirst({ name });
+   const existing = await teamRepository.findFirst({
+      name,
+      ...(leagueId && { leagueId }),
+   });
    if (existing) return existing;
    return teamRepository.create({ name, leagueId, logo: null });
 }
@@ -137,43 +141,9 @@ async function saveStreamFromDetail(
    const detail = await sportSrcService.getDetail(sportSrcMatchId);
    if (!detail) return;
 
-   const primaryUrl = detail.stream_url ?? null;
-   if (!primaryUrl) {
-      await streamRepository.markNoStream(dbMatchId);
-      return;
-   }
-
-   // Collect up to 3 redundant sources
-   const sources = [
-      detail.stream_url,
-      detail.stream_url_2,
-      detail.stream_url_3,
-   ].filter(Boolean) as string[];
-
-   await streamRepository.upsert(
-      dbMatchId,
-      {
-         type: 'EMBED',
-         provider: 'sportsrc',
-         url: primaryUrl,
-         isActive: true,
-         youtubeVideoId: null,
-         streamTitle: `${detail.home_team} vs ${detail.away_team}`,
-         streamSources: JSON.stringify(sources),
-      },
-      {
-         type: 'EMBED',
-         provider: 'sportsrc',
-         url: primaryUrl,
-         isActive: true,
-         youtubeVideoId: null,
-         streamTitle: `${detail.home_team} vs ${detail.away_team}`,
-         streamSources: JSON.stringify(sources),
-         lastCheckedAt: new Date(),
-      }
-   );
+   const sourceCount = (await upsertSportSrcStream(dbMatchId, detail)) ?? 0;
 
    console.log(
-      `[sportSrcSync] Saved ${sources.length} stream source(s) for match ${dbMatchId}`
+      `[sportSrcSync] Saved ${sourceCount} stream source(s) for match ${dbMatchId}`
    );
 }
