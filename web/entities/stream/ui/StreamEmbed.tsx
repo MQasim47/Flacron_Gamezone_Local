@@ -9,6 +9,8 @@ import {
    RefreshCw,
    Volume2,
    Maximize2,
+   ChevronLeft,
+   ChevronRight,
 } from 'lucide-react';
 import { apiGet } from '@/shared/api/client';
 import type { StreamData, MatchStatus } from '@/shared/types';
@@ -19,6 +21,7 @@ interface StreamStatusResponse {
       url: string;
       youtubeVideoId: string | null;
       streamTitle: string | null;
+      sources?: string[];
    } | null;
 }
 
@@ -38,6 +41,8 @@ export default function StreamEmbed({
    matchId,
 }: Props) {
    const [stream, setStream] = useState<StreamData | null>(initialStream);
+   const [sources, setSources] = useState<string[]>([]);
+   const [activeSourceIndex, setActiveSourceIndex] = useState(0);
    const [showEmbed, setShowEmbed] = useState(false);
    const [embedError, setEmbedError] = useState(false);
    const [checking, setChecking] = useState(false);
@@ -50,12 +55,16 @@ export default function StreamEmbed({
          if (data.found && data.stream) {
             setStream({
                type: 'EMBED',
-               provider: 'youtube',
+               provider: stream?.provider ?? 'sportsrc',
                url: data.stream.url,
                isActive: true,
                youtubeVideoId: data.stream.youtubeVideoId,
                streamTitle: data.stream.streamTitle,
             });
+            // Store redundant sources if provided
+            if (data.stream.sources?.length) {
+               setSources(data.stream.sources);
+            }
          }
       } catch {}
    };
@@ -72,6 +81,10 @@ export default function StreamEmbed({
       await pollStatus();
       setTimeout(() => setChecking(false), 1500);
    };
+
+   // Active URL — use sources array if available, else fall back to stream.url
+   const activeUrl =
+      sources.length > 0 ? sources[activeSourceIndex] : (stream?.url ?? null);
 
    const noStream = !stream || stream.type === 'NONE' || !stream.isActive;
 
@@ -91,7 +104,7 @@ export default function StreamEmbed({
                      Searching for Stream…
                   </h3>
                   <p className="text-sm text-slate-400 mb-6">
-                     Auto-checking YouTube every 60 seconds.
+                     Auto-checking every 60 seconds.
                   </p>
                   <button
                      onClick={handleCheck}
@@ -123,7 +136,7 @@ export default function StreamEmbed({
          ? stream.streamTitle.length > 55
             ? stream.streamTitle.slice(0, 55) + '…'
             : stream.streamTitle
-         : (stream.provider ?? 'YouTube');
+         : (stream.provider ?? 'Live Stream');
 
       return (
          <div className="relative overflow-hidden bg-gradient-to-br from-slate-900/95 to-cyan-900/30 border-2 border-cyan-500/30 rounded-2xl p-8 text-center shadow-xl">
@@ -136,7 +149,7 @@ export default function StreamEmbed({
             <p className="text-sm text-cyan-300 font-semibold mb-2">
                {homeTeam} vs {awayTeam}
             </p>
-            <div className="inline-flex items-center gap-2 bg-cyan-500/20 rounded-lg px-4 py-2 mb-6">
+            <div className="inline-flex items-center gap-2 bg-cyan-500/20 rounded-lg px-4 py-2 mb-2">
                {stream.provider === 'youtube' ? (
                   <Youtube className="w-4 h-4 text-red-400" />
                ) : (
@@ -144,7 +157,14 @@ export default function StreamEmbed({
                )}
                <span className="text-sm font-bold text-cyan-400">{title}</span>
             </div>
-            <div className="space-y-3 max-w-md mx-auto">
+            {/* Show source count if multiple sources available */}
+            {sources.length > 1 && (
+               <p className="text-xs text-slate-400 mb-4">
+                  {sources.length} stream sources available — switch if one goes
+                  down
+               </p>
+            )}
+            <div className="space-y-3 max-w-md mx-auto mt-4">
                <button
                   onClick={() => {
                      setShowEmbed(true);
@@ -161,8 +181,8 @@ export default function StreamEmbed({
                <div className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
                   <p className="text-xs text-yellow-300/80 font-medium">
-                     Streams are provided by official broadcasters. We do not
-                     host or distribute unauthorized content.
+                     Streams are provided by licensed broadcasters via SportSRC.
+                     We do not host or distribute unauthorized content.
                   </p>
                </div>
             </div>
@@ -172,6 +192,7 @@ export default function StreamEmbed({
 
    return (
       <div className="relative overflow-hidden bg-slate-900/95 border-2 border-cyan-500/30 rounded-2xl shadow-2xl">
+         {/* Header */}
          <div className="flex items-center justify-between p-4 bg-slate-950/50 border-b border-cyan-500/20">
             <div className="flex items-center gap-3">
                <span className="relative flex h-3 w-3">
@@ -188,7 +209,7 @@ export default function StreamEmbed({
                      )}
                      {stream.streamTitle
                         ? stream.streamTitle.slice(0, 40)
-                        : (stream.provider ?? 'YouTube')}
+                        : (stream.provider ?? 'SportSRC')}
                   </div>
                </div>
             </div>
@@ -212,6 +233,7 @@ export default function StreamEmbed({
             </div>
          </div>
 
+         {/* Player */}
          <div className="relative bg-black" style={{ paddingBottom: '56.25%' }}>
             {embedError ? (
                <div className="absolute inset-0 flex items-center justify-center bg-slate-900">
@@ -221,25 +243,18 @@ export default function StreamEmbed({
                         Stream Ended
                      </h4>
                      <p className="text-sm text-slate-400 mb-4">
-                        The stream may have ended or been removed.
+                        {sources.length > 1
+                           ? 'Try switching to another source below.'
+                           : 'The stream may have ended or been removed.'}
                      </p>
-                     {stream.youtubeVideoId && (
-                        <a
-                           href={`https://www.youtube.com/watch?v=${stream.youtubeVideoId}`}
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           className="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-xl text-sm font-bold text-red-400 transition-all"
-                        >
-                           <Youtube className="w-4 h-4" /> Watch on YouTube
-                        </a>
-                     )}
                   </div>
                </div>
-            ) : stream.url ? (
+            ) : activeUrl ? (
                <iframe
-                  src={stream.url}
+                  key={activeUrl}
+                  src={activeUrl}
                   className="absolute inset-0 w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  allow="autoplay; fullscreen; encrypted-media"
                   allowFullScreen
                   onError={() => setEmbedError(true)}
                   title={`${homeTeam} vs ${awayTeam} - Live Stream`}
@@ -247,6 +262,58 @@ export default function StreamEmbed({
             ) : null}
          </div>
 
+         {/* Multi-source switcher */}
+         {sources.length > 1 && (
+            <div className="p-4 bg-slate-950/50 border-t border-cyan-500/20">
+               <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-semibold uppercase tracking-wide">
+                     Stream Sources ({activeSourceIndex + 1}/{sources.length})
+                  </span>
+                  <div className="flex gap-2">
+                     <button
+                        onClick={() => {
+                           setActiveSourceIndex((i) => Math.max(0, i - 1));
+                           setEmbedError(false);
+                        }}
+                        disabled={activeSourceIndex === 0}
+                        className="p-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg transition-all"
+                     >
+                        <ChevronLeft className="w-4 h-4 text-slate-300" />
+                     </button>
+                     {sources.map((_, i) => (
+                        <button
+                           key={i}
+                           onClick={() => {
+                              setActiveSourceIndex(i);
+                              setEmbedError(false);
+                           }}
+                           className={`w-7 h-7 rounded-lg text-xs font-bold transition-all ${
+                              i === activeSourceIndex
+                                 ? 'bg-cyan-600 text-white'
+                                 : 'bg-slate-800 hover:bg-slate-700 text-slate-400'
+                           }`}
+                        >
+                           {i + 1}
+                        </button>
+                     ))}
+                     <button
+                        onClick={() => {
+                           setActiveSourceIndex((i) =>
+                              Math.min(sources.length - 1, i + 1)
+                           );
+                           setEmbedError(false);
+                        }}
+                        disabled={activeSourceIndex === sources.length - 1}
+                        className="p-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg transition-all"
+                     >
+                        <ChevronRight className="w-4 h-4 text-slate-300" />
+                     </button>
+                  </div>
+               </div>
+            </div>
+         )}
+
+         {/* Footer */}
          <div className="p-4 bg-slate-950/50 border-t border-cyan-500/20">
             <div className="flex items-center justify-between text-xs text-slate-400">
                <div className="flex items-center gap-2">

@@ -1,5 +1,6 @@
 'use client';
 
+import { getAllDeepData } from '@/shared/api/deepData';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -88,8 +89,29 @@ export function MatchDetailClient({ initialMatch, matchId }: Props) {
    const [loadingMatch, setLoadingMatch] = useState(!initialMatch);
    const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+   const [deepData, setDeepData] = useState<any>(null);
+   const [deepLoading, setDeepLoading] = useState(false);
+   const [deepTab, setDeepTab] = useState<
+      'lineups' | 'stats' | 'incidents' | 'odds' | 'votes' | 'h2h'
+   >('lineups');
+   const [deepLoaded, setDeepLoaded] = useState(false);
+
    const router = useRouter();
    const { isPremium, loading: subLoading } = useSubscription();
+
+   async function loadDeepData() {
+      if (deepLoaded || !isPremium) return;
+      try {
+         setDeepLoading(true);
+         const data = await getAllDeepData(matchId);
+         setDeepData(data);
+         setDeepLoaded(true);
+      } catch {
+         // deep data unavailable — silent fail
+      } finally {
+         setDeepLoading(false);
+      }
+   }
 
    async function loadMatch() {
       try {
@@ -697,6 +719,440 @@ export function MatchDetailClient({ initialMatch, matchId }: Props) {
                         </div>
                      </div>
                   </div>
+               </div>
+            </PremiumGate>
+
+            {/* Deep Match Data — Premium gated */}
+            <PremiumGate isPremium={isPremium} feature="Deep Match Data">
+               <div className="relative overflow-hidden bg-slate-900/90 backdrop-blur-xl border-2 border-slate-700/50 rounded-2xl shadow-2xl">
+                  {/* Section header */}
+                  <div className="p-6 border-b border-slate-700/50">
+                     <div className="flex items-center justify-between flex-wrap gap-3">
+                        <div className="flex items-center gap-3">
+                           <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                              <Target className="w-5 h-5 text-white" />
+                           </div>
+                           <div>
+                              <h3 className="font-black text-white text-lg uppercase tracking-wide">
+                                 Deep Match Data
+                              </h3>
+                              <p className="text-xs text-indigo-400 font-bold">
+                                 Lineups · Stats · Incidents · Odds
+                              </p>
+                           </div>
+                        </div>
+                        {!deepLoaded && (
+                           <button
+                              onClick={loadDeepData}
+                              disabled={deepLoading}
+                              className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black px-5 py-2.5 rounded-xl text-sm transition-all hover:scale-105 disabled:opacity-50 uppercase tracking-wide"
+                           >
+                              {deepLoading ? (
+                                 <>
+                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />{' '}
+                                    Loading…
+                                 </>
+                              ) : (
+                                 <>
+                                    <Sparkles className="w-4 h-4" /> Load Data
+                                 </>
+                              )}
+                           </button>
+                        )}
+                     </div>
+                  </div>
+
+                  {!deepLoaded && !deepLoading && (
+                     <div className="p-12 text-center">
+                        <Shield className="w-12 h-12 text-slate-600 mx-auto mb-3" />
+                        <p className="text-slate-400 text-sm font-semibold">
+                           Click "Load Data" to fetch live lineups, stats,
+                           incidents, odds and more from SportSRC.
+                        </p>
+                     </div>
+                  )}
+
+                  {deepLoaded && deepData && (
+                     <>
+                        {/* Tabs */}
+                        <div className="flex overflow-x-auto border-b border-slate-700/50 px-2 pt-2 gap-1">
+                           {(
+                              [
+                                 {
+                                    id: 'lineups',
+                                    label: 'Lineups',
+                                    available: !!deepData.lineups,
+                                 },
+                                 {
+                                    id: 'stats',
+                                    label: 'Stats',
+                                    available: !!deepData.stats,
+                                 },
+                                 {
+                                    id: 'incidents',
+                                    label: 'Incidents',
+                                    available: !!deepData.incidents?.length,
+                                 },
+                                 {
+                                    id: 'odds',
+                                    label: 'Odds',
+                                    available: !!deepData.odds,
+                                 },
+                                 {
+                                    id: 'votes',
+                                    label: 'Votes',
+                                    available: !!deepData.votes,
+                                 },
+                                 {
+                                    id: 'h2h',
+                                    label: 'H2H',
+                                    available: !!deepData.h2h,
+                                 },
+                              ] as const
+                           ).map((tab) => (
+                              <button
+                                 key={tab.id}
+                                 onClick={() => setDeepTab(tab.id as any)}
+                                 className={`flex-shrink-0 px-4 py-2.5 text-xs font-black uppercase tracking-wide rounded-t-lg transition-all relative ${
+                                    deepTab === tab.id
+                                       ? 'text-indigo-400'
+                                       : tab.available
+                                         ? 'text-slate-400 hover:text-white'
+                                         : 'text-slate-600 cursor-not-allowed'
+                                 }`}
+                                 disabled={!tab.available}
+                              >
+                                 {tab.label}
+                                 {!tab.available && (
+                                    <span className="ml-1 text-slate-600">
+                                       —
+                                    </span>
+                                 )}
+                                 {deepTab === tab.id && (
+                                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t" />
+                                 )}
+                              </button>
+                           ))}
+                        </div>
+
+                        {/* Tab content */}
+                        <div className="p-6">
+                           {deepTab === 'lineups' && deepData.lineups && (
+                              <div className="grid md:grid-cols-2 gap-6">
+                                 {['home', 'away'].map((side) => {
+                                    const lineup = deepData.lineups[side];
+                                    if (!lineup) return null;
+                                    const teamName =
+                                       side === 'home'
+                                          ? match?.homeTeam.name
+                                          : match?.awayTeam.name;
+                                    return (
+                                       <div
+                                          key={side}
+                                          className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50"
+                                       >
+                                          <div className="flex items-center justify-between mb-3">
+                                             <h4 className="font-black text-white text-sm uppercase">
+                                                {teamName}
+                                             </h4>
+                                             {lineup.formation && (
+                                                <span className="text-xs text-indigo-400 font-bold bg-indigo-500/10 px-2 py-1 rounded-lg border border-indigo-500/20">
+                                                   {lineup.formation}
+                                                </span>
+                                             )}
+                                          </div>
+                                          <div className="space-y-2">
+                                             {(lineup.players || []).map(
+                                                (player: any, i: number) => (
+                                                   <div
+                                                      key={i}
+                                                      className={`flex items-center gap-3 p-2 rounded-lg ${player.isSub ? 'opacity-60' : ''}`}
+                                                   >
+                                                      <span className="w-6 h-6 bg-slate-700 rounded-full flex items-center justify-center text-xs font-bold text-slate-300 flex-shrink-0">
+                                                         {player.number ??
+                                                            i + 1}
+                                                      </span>
+                                                      <span className="text-sm text-white font-medium flex-1 truncate">
+                                                         {player.name}
+                                                      </span>
+                                                      {player.position && (
+                                                         <span className="text-xs text-slate-500 flex-shrink-0">
+                                                            {player.position}
+                                                         </span>
+                                                      )}
+                                                      {player.isSub && (
+                                                         <span className="text-xs text-yellow-500 flex-shrink-0">
+                                                            SUB
+                                                         </span>
+                                                      )}
+                                                   </div>
+                                                )
+                                             )}
+                                          </div>
+                                       </div>
+                                    );
+                                 })}
+                              </div>
+                           )}
+
+                           {deepTab === 'stats' && deepData.stats && (
+                              <div className="space-y-3">
+                                 {Object.entries(deepData.stats.home || {}).map(
+                                    ([key, homeVal]) => {
+                                       const awayVal = (deepData.stats.away ||
+                                          {})[key];
+                                       if (homeVal == null && awayVal == null)
+                                          return null;
+                                       const label = key
+                                          .replace(/_/g, ' ')
+                                          .replace(/\b\w/g, (c) =>
+                                             c.toUpperCase()
+                                          );
+                                       const h = Number(homeVal) || 0;
+                                       const a = Number(awayVal) || 0;
+                                       const total = h + a || 1;
+                                       return (
+                                          <div
+                                             key={key}
+                                             className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/30"
+                                          >
+                                             <div className="flex justify-between text-xs font-bold text-slate-300 mb-2">
+                                                <span className="text-cyan-400">
+                                                   {String(homeVal ?? 0)}
+                                                </span>
+                                                <span className="text-slate-400 uppercase tracking-wide">
+                                                   {label}
+                                                </span>
+                                                <span className="text-purple-400">
+                                                   {String(awayVal ?? 0)}
+                                                </span>
+                                             </div>
+                                             <div className="flex h-2 rounded-full overflow-hidden bg-slate-700">
+                                                <div
+                                                   className="bg-gradient-to-r from-cyan-500 to-cyan-400 transition-all"
+                                                   style={{
+                                                      width: `${(h / total) * 100}%`,
+                                                   }}
+                                                />
+                                                <div className="bg-gradient-to-r from-purple-400 to-purple-500 transition-all flex-1" />
+                                             </div>
+                                          </div>
+                                       );
+                                    }
+                                 )}
+                              </div>
+                           )}
+
+                           {deepTab === 'incidents' &&
+                              deepData.incidents?.length > 0 && (
+                                 <div className="space-y-2">
+                                    {deepData.incidents.map(
+                                       (inc: any, i: number) => (
+                                          <div
+                                             key={i}
+                                             className="flex items-center gap-3 p-3 bg-slate-800/50 rounded-xl border border-slate-700/30"
+                                          >
+                                             <span className="w-10 text-center text-xs font-black text-slate-400 flex-shrink-0">
+                                                {inc.time
+                                                   ? `${inc.time}'`
+                                                   : '—'}
+                                             </span>
+                                             <span
+                                                className={`text-sm font-black flex-shrink-0 ${
+                                                   inc.type === 'goal'
+                                                      ? 'text-green-400'
+                                                      : inc.type ===
+                                                          'yellow_card'
+                                                        ? 'text-yellow-400'
+                                                        : inc.type ===
+                                                            'red_card'
+                                                          ? 'text-red-400'
+                                                          : 'text-slate-400'
+                                                }`}
+                                             >
+                                                {inc.type === 'goal'
+                                                   ? '⚽'
+                                                   : inc.type === 'yellow_card'
+                                                     ? '🟨'
+                                                     : inc.type === 'red_card'
+                                                       ? '🟥'
+                                                       : inc.type === 'sub'
+                                                         ? '🔄'
+                                                         : '•'}
+                                             </span>
+                                             <div className="flex-1 min-w-0">
+                                                <span className="text-sm text-white font-medium truncate block">
+                                                   {inc.player ?? '—'}
+                                                </span>
+                                                {inc.team && (
+                                                   <span className="text-xs text-slate-500">
+                                                      {inc.team}
+                                                   </span>
+                                                )}
+                                             </div>
+                                          </div>
+                                       )
+                                    )}
+                                 </div>
+                              )}
+
+                           {deepTab === 'odds' && deepData.odds && (
+                              <div className="grid grid-cols-3 gap-4">
+                                 {[
+                                    {
+                                       label: match?.homeTeam.name ?? 'Home',
+                                       key: 'home_win',
+                                       color: 'from-cyan-600 to-blue-600',
+                                    },
+                                    {
+                                       label: 'Draw',
+                                       key: 'draw',
+                                       color: 'from-slate-600 to-slate-500',
+                                    },
+                                    {
+                                       label: match?.awayTeam.name ?? 'Away',
+                                       key: 'away_win',
+                                       color: 'from-purple-600 to-pink-600',
+                                    },
+                                 ].map(({ label, key, color }) => {
+                                    const odd = deepData.odds[key];
+                                    return (
+                                       <div
+                                          key={key}
+                                          className={`bg-gradient-to-br ${color} rounded-xl p-4 text-center shadow-lg`}
+                                       >
+                                          <div className="text-xs text-white/70 font-semibold uppercase mb-1 truncate">
+                                             {label}
+                                          </div>
+                                          <div className="text-2xl font-black text-white">
+                                             {odd?.decimal ?? '—'}
+                                          </div>
+                                          {odd?.fractional && (
+                                             <div className="text-xs text-white/60 mt-1">
+                                                {odd.fractional}
+                                             </div>
+                                          )}
+                                       </div>
+                                    );
+                                 })}
+                                 {deepData.odds.bookmaker && (
+                                    <div className="col-span-3 text-center text-xs text-slate-500 mt-2">
+                                       via {deepData.odds.bookmaker}
+                                    </div>
+                                 )}
+                              </div>
+                           )}
+
+                           {deepTab === 'votes' && deepData.votes && (
+                              <div className="space-y-4">
+                                 {[
+                                    {
+                                       label: `${match?.homeTeam.name ?? 'Home'} Win`,
+                                       pct: deepData.votes.home_win_pct,
+                                       color: 'bg-cyan-500',
+                                    },
+                                    {
+                                       label: 'Draw',
+                                       pct: deepData.votes.draw_pct,
+                                       color: 'bg-slate-500',
+                                    },
+                                    {
+                                       label: `${match?.awayTeam.name ?? 'Away'} Win`,
+                                       pct: deepData.votes.away_win_pct,
+                                       color: 'bg-purple-500',
+                                    },
+                                 ].map(({ label, pct, color }) => (
+                                    <div key={label}>
+                                       <div className="flex justify-between text-sm font-bold mb-1">
+                                          <span className="text-slate-300">
+                                             {label}
+                                          </span>
+                                          <span className="text-white">
+                                             {pct != null ? `${pct}%` : '—'}
+                                          </span>
+                                       </div>
+                                       <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
+                                          <div
+                                             className={`h-full ${color} rounded-full transition-all`}
+                                             style={{ width: `${pct ?? 0}%` }}
+                                          />
+                                       </div>
+                                    </div>
+                                 ))}
+                                 {deepData.votes.total_votes != null && (
+                                    <p className="text-xs text-slate-500 text-center">
+                                       {deepData.votes.total_votes.toLocaleString()}{' '}
+                                       total votes
+                                    </p>
+                                 )}
+                              </div>
+                           )}
+
+                           {deepTab === 'h2h' && deepData.h2h && (
+                              <div className="space-y-4">
+                                 <div className="grid grid-cols-3 gap-4 text-center mb-4">
+                                    {[
+                                       {
+                                          label: match?.homeTeam.name ?? 'Home',
+                                          val: deepData.h2h.home_team_wins,
+                                          color: 'text-cyan-400',
+                                       },
+                                       {
+                                          label: 'Draws',
+                                          val: deepData.h2h.draws,
+                                          color: 'text-slate-400',
+                                       },
+                                       {
+                                          label: match?.awayTeam.name ?? 'Away',
+                                          val: deepData.h2h.away_team_wins,
+                                          color: 'text-purple-400',
+                                       },
+                                    ].map(({ label, val, color }) => (
+                                       <div
+                                          key={label}
+                                          className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/30"
+                                       >
+                                          <div
+                                             className={`text-3xl font-black ${color}`}
+                                          >
+                                             {val ?? '—'}
+                                          </div>
+                                          <div className="text-xs text-slate-400 truncate mt-1">
+                                             {label}
+                                          </div>
+                                       </div>
+                                    ))}
+                                 </div>
+                                 {deepData.h2h.recent_matches?.length > 0 && (
+                                    <div className="space-y-2">
+                                       <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">
+                                          Recent Meetings
+                                       </h4>
+                                       {deepData.h2h.recent_matches
+                                          .slice(0, 5)
+                                          .map((m: any, i: number) => (
+                                             <div
+                                                key={i}
+                                                className="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl border border-slate-700/30 text-sm"
+                                             >
+                                                <span className="text-slate-300 truncate flex-1">
+                                                   {m.home_team ?? '?'}
+                                                </span>
+                                                <span className="font-black text-white mx-3 flex-shrink-0">
+                                                   {m.score ?? '—'}
+                                                </span>
+                                                <span className="text-slate-300 truncate flex-1 text-right">
+                                                   {m.away_team ?? '?'}
+                                                </span>
+                                             </div>
+                                          ))}
+                                    </div>
+                                 )}
+                              </div>
+                           )}
+                        </div>
+                     </>
+                  )}
                </div>
             </PremiumGate>
 

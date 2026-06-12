@@ -11,6 +11,8 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'cdn.sportmonks.com',
          },
+         { protocol: 'https', hostname: 'api.sportsrc.org' },
+         { protocol: 'https', hostname: '*.sportsrc.org' },
       ],
    },
 };
