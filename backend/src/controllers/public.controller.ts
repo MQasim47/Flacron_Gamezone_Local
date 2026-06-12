@@ -1,13 +1,17 @@
 import type { Request, Response } from 'express';
-import { leagueService } from '../services/league.service.js';
-import { teamService } from '../services/team.service.js';
-import { matchService } from '../services/match.service.js';
-import { streamService } from '../services/stream.service.js';
-import { youtubeService } from '../services/youtube.service.js';
+import { config } from '../config/index.js';
 import {
    FootballApiError,
    footballApiService,
 } from '../services/footballApi.service.js';
+import { leagueService } from '../services/league.service.js';
+import { matchService } from '../services/match.service.js';
+import {
+   SportSrcError,
+   sportSrcService,
+} from '../services/sportSrc.service.js';
+import { streamService } from '../services/stream.service.js';
+import { teamService } from '../services/team.service.js';
 
 export const publicController = {
    async getLeagues(_req: Request, res: Response) {
@@ -53,10 +57,16 @@ export const publicController = {
    async getLiveMatches(_req: Request, res: Response) {
       const liveMatches = await matchService.getAll({ status: 'LIVE' });
 
-      // Read last known API error from cache (set by cron/sync)
       const { cacheGet } = await import('../lib/redis.js');
+
+      // Read error from whichever provider is active
+      const errorKey =
+         config.footballDataProvider === 'sportsrc'
+            ? 'sportsrc:last-error'
+            : 'api-football:last-error';
+
       const apiError = await cacheGet<{ code: string; message: string }>(
-         'api-football:last-error'
+         errorKey
       );
 
       res.json({ matches: liveMatches, apiError: apiError ?? null });
@@ -83,18 +93,48 @@ export const publicController = {
    },
 
    async getApiStatus(_req: Request, res: Response) {
-      try {
-         await footballApiService.getLiveFixturesCached();
-         res.json({ ok: true, error: null });
-      } catch (err) {
-         if (err instanceof FootballApiError) {
-            res.json({
-               ok: false,
-               code: err.code,
-               error: err.message,
-            });
-         } else {
-            res.json({ ok: false, code: 'UNKNOWN', error: 'Unknown error' });
+      if (config.footballDataProvider === 'sportsrc') {
+         try {
+            const account = await sportSrcService.getAccount();
+            res.json({ ok: true, provider: 'sportsrc', account, error: null });
+         } catch (err) {
+            if (err instanceof SportSrcError) {
+               res.json({
+                  ok: false,
+                  provider: 'sportsrc',
+                  code: err.code,
+                  error: err.message,
+               });
+            } else {
+               res.json({
+                  ok: false,
+                  provider: 'sportsrc',
+                  code: 'UNKNOWN',
+                  error: 'Unknown error',
+               });
+            }
+         }
+      } else {
+         // Legacy api-football path — unchanged
+         try {
+            await footballApiService.getLiveFixturesCached();
+            res.json({ ok: true, provider: 'api-football', error: null });
+         } catch (err) {
+            if (err instanceof FootballApiError) {
+               res.json({
+                  ok: false,
+                  provider: 'api-football',
+                  code: err.code,
+                  error: err.message,
+               });
+            } else {
+               res.json({
+                  ok: false,
+                  provider: 'api-football',
+                  code: 'UNKNOWN',
+                  error: 'Unknown error',
+               });
+            }
          }
       }
    },

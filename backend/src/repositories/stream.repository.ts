@@ -37,6 +37,7 @@ export const streamRepository = {
             match: {
                select: {
                   id: true,
+                  apiMatchSlug: true,
                   kickoffTime: true,
                   status: true,
                   homeTeam: { select: { name: true } },
@@ -56,6 +57,7 @@ export const streamRepository = {
          isActive?: boolean;
          youtubeVideoId?: string | null;
          streamTitle?: string | null;
+         streamSources?: string | null;
       },
       update: {
          type?: 'EMBED' | 'NONE';
@@ -64,6 +66,7 @@ export const streamRepository = {
          isActive?: boolean;
          youtubeVideoId?: string | null;
          streamTitle?: string | null;
+         streamSources?: string | null;
          lastCheckedAt?: Date;
       }
    ) {
@@ -74,7 +77,6 @@ export const streamRepository = {
       });
    },
 
-   /** Called by youtube.service when a live stream is found. */
    saveYoutubeStream(matchId: string, videoId: string, title: string) {
       const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
       return prisma.stream.upsert({
@@ -101,7 +103,6 @@ export const streamRepository = {
       });
    },
 
-   /** Called by youtube.service when no stream is found for a match. */
    markNoStream(matchId: string) {
       return prisma.stream.upsert({
          where: { matchId },
@@ -140,7 +141,7 @@ export const streamRepository = {
                },
             ],
          },
-         select: { id: true },
+         select: { id: true, apiMatchSlug: true },
       });
    },
 };

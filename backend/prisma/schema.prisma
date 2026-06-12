@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -29,7 +30,7 @@ model User {
   password  String
   role      Role     @default(USER)
   createdAt DateTime @default(now())
-  
+
   subscription Subscription?
 }
 
@@ -38,14 +39,14 @@ model Subscription {
   userId               String    @unique
   stripeCustomerId     String?   @unique
   stripeSubscriptionId String?   @unique
-  status               String    @default("inactive") // inactive, active, canceled, past_due
-  plan                 String?   // monthly, yearly
+  status               String    @default("inactive")
+  plan                 String?
   currentPeriodStart   DateTime?
   currentPeriodEnd     DateTime?
   cancelAtPeriodEnd    Boolean   @default(false)
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
-  
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -56,7 +57,7 @@ model League {
   logo        String?
   apiLeagueId Int?     @unique
   createdAt   DateTime @default(now())
-  
+
   teams   Team[]
   matches Match[]
 }
@@ -68,9 +69,9 @@ model Team {
   apiTeamId Int?     @unique
   leagueId  String?
   createdAt DateTime @default(now())
-  
+
   league League? @relation(fields: [leagueId], references: [id])
-  
+
   homeMatches Match[] @relation("HomeTeam")
   awayMatches Match[] @relation("AwayTeam")
 }
@@ -78,6 +79,7 @@ model Team {
 model Match {
   id           String      @id @default(cuid())
   apiFixtureId Int?        @unique
+  apiMatchSlug String?     @unique // SportSRC string slug e.g. "man-city-vs-arsenal-20260611"
   leagueId     String?
   homeTeamId   String
   awayTeamId   String
@@ -87,26 +89,27 @@ model Match {
   venue        String?
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-  
+
   league   League? @relation(fields: [leagueId], references: [id])
   homeTeam Team    @relation("HomeTeam", fields: [homeTeamId], references: [id])
   awayTeam Team    @relation("AwayTeam", fields: [awayTeamId], references: [id])
-  
-  stream   Stream?
-  aiTexts  AISummary[]
+
+  stream  Stream?
+  aiTexts AISummary[]
 }
 
 model Stream {
-  id        String     @id @default(cuid())
-  matchId   String     @unique
-  type      StreamType @default(NONE)
-  provider  String?
-  url       String?
-  isActive  Boolean    @default(false)
+  id             String     @id @default(cuid())
+  matchId        String     @unique
+  type           StreamType @default(NONE)
+  provider       String?
+  url            String?
+  isActive       Boolean    @default(false)
   youtubeVideoId String?
   streamTitle    String?
   lastCheckedAt  DateTime?
-  
+  streamSources  String? // JSON array of redundant embed URLs from SportSRC
+
   match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
 }
 
@@ -115,12 +118,12 @@ model AISummary {
   matchId   String
   provider  String
   language  String
-  kind      String   // "preview" | "summary"
+  kind      String
   content   String   @db.Text
   createdAt DateTime @default(now())
-  
+
   match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  
+
   @@unique([matchId, language, kind], name: "matchId_language_kind")
   @@index([matchId, language, kind])
 }

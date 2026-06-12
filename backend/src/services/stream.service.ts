@@ -1,6 +1,8 @@
 import { streamRepository } from '../repositories/stream.repository.js';
 import { matchRepository } from '../repositories/match.repository.js';
 import { youtubeService } from './youtube.service.js';
+import { sportSrcService } from './sportSrc.service.js';
+import { config } from '../config/index.js';
 
 export const streamService = {
    getActiveStreams() {
@@ -11,23 +13,42 @@ export const streamService = {
       const match = await matchRepository.findByIdWithTeams(matchId);
       if (!match) throw Object.assign(new Error('Not found'), { status: 404 });
 
-      if (!match.stream?.isActive || !match.stream?.url) {
-         if (match.status === 'LIVE') {
+      // If we already have an active stream, return it with all sources
+      if (match.stream?.isActive && match.stream?.url) {
+         const sources = parseStreamSources(
+            (match.stream as any).streamSources
+         );
+         return {
+            found: true,
+            stream: {
+               url: match.stream.url,
+               youtubeVideoId: (match.stream as any).youtubeVideoId,
+               streamTitle: (match.stream as any).streamTitle,
+               sources, // redundant sources for frontend switcher
+            },
+         };
+      }
+
+      // No active stream — try to find one for live matches
+      if (match.status === 'LIVE') {
+         if (
+            config.footballDataProvider === 'sportsrc' &&
+            (match as any).apiMatchSlug
+         ) {
+            // SportSRC path: fetch detail endpoint for embed URLs
+            findAndSaveSportSrcStream(
+               match.id,
+               (match as any).apiMatchSlug
+            ).catch(console.error);
+         } else {
+            // Fallback: YouTube search
             youtubeService
                .findAndSaveStreamForMatch(match.id)
                .catch(console.error);
          }
-         return { found: false };
       }
 
-      return {
-         found: true,
-         stream: {
-            url: match.stream.url,
-            youtubeVideoId: (match.stream as any).youtubeVideoId,
-            streamTitle: (match.stream as any).streamTitle,
-         },
-      };
+      return { found: false };
    },
 
    upsert(data: {
@@ -63,6 +84,76 @@ export const streamService = {
    },
 
    findStreamForMatch(matchId: string) {
+      // Admin-triggered manual search — respects active provider
+      if (config.footballDataProvider === 'sportsrc') {
+         return findAndSaveSportSrcStreamById(matchId);
+      }
       return youtubeService.findAndSaveStreamForMatch(matchId);
    },
 };
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function parseStreamSources(raw: string | null | undefined): string[] {
+   if (!raw) return [];
+   try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+   } catch {
+      return [];
+   }
+}
+
+async function findAndSaveSportSrcStream(
+   dbMatchId: string,
+   slug: string
+): Promise<void> {
+   const detail = await sportSrcService.getDetail(slug);
+   if (!detail?.stream_url) {
+      await streamRepository.markNoStream(dbMatchId);
+      return;
+   }
+
+   const sources = [
+      detail.stream_url,
+      detail.stream_url_2,
+      detail.stream_url_3,
+   ].filter(Boolean) as string[];
+
+   await streamRepository.upsert(
+      dbMatchId,
+      {
+         type: 'EMBED',
+         provider: 'sportsrc',
+         url: detail.stream_url,
+         isActive: true,
+         youtubeVideoId: null,
+         streamTitle: `${detail.home_team} vs ${detail.away_team}`,
+         streamSources: JSON.stringify(sources),
+      },
+      {
+         type: 'EMBED',
+         provider: 'sportsrc',
+         url: detail.stream_url,
+         isActive: true,
+         youtubeVideoId: null,
+         streamTitle: `${detail.home_team} vs ${detail.away_team}`,
+         streamSources: JSON.stringify(sources),
+         lastCheckedAt: new Date(),
+      }
+   );
+}
+
+async function findAndSaveSportSrcStreamById(dbMatchId: string): Promise<any> {
+   const match = await matchRepository.findByIdWithTeams(dbMatchId);
+   if (!match) return null;
+
+   const slug = (match as any).apiMatchSlug;
+   if (!slug) {
+      // No slug — fall back to YouTube
+      return youtubeService.findAndSaveStreamForMatch(dbMatchId);
+   }
+
+   await findAndSaveSportSrcStream(dbMatchId, slug);
+   return streamRepository.findByMatchId(dbMatchId);
+}

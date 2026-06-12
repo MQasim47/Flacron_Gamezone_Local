@@ -33,9 +33,7 @@ export const matchRepository = {
          if (Number.isNaN(parsedDate.getTime())) {
             throw Object.assign(
                new Error('Invalid date format. Use YYYY-MM-DD'),
-               {
-                  status: 400,
-               }
+               { status: 400 }
             );
          }
          where.kickoffTime = {
@@ -69,6 +67,14 @@ export const matchRepository = {
       });
    },
 
+   /** Find by SportSRC string slug */
+   findBySlug(slug: string) {
+      return prisma.match.findUnique({
+         where: { apiMatchSlug: slug },
+         include: matchIncludesFull,
+      });
+   },
+
    findByApiFixtureId(apiFixtureId: number) {
       return prisma.match.findUnique({ where: { apiFixtureId } });
    },
@@ -99,7 +105,7 @@ export const matchRepository = {
                },
             ],
          },
-         select: { id: true },
+         select: { id: true, apiMatchSlug: true },
       });
    },
 
@@ -207,7 +213,6 @@ export const matchRepository = {
       };
    },
 
-   // ─── FIXED: now respects status and leagueId filters ────────────────────────
    findPaginated({
       page,
       limit,
@@ -251,6 +256,7 @@ export const matchRepository = {
       score?: string | null;
       venue?: string | null;
       apiFixtureId?: number | null;
+      apiMatchSlug?: string | null;
    }) {
       return prisma.match.create({
          data,
@@ -274,6 +280,18 @@ export const matchRepository = {
       });
    },
 
+   /**
+    * Upsert by SportSRC string slug — preferred over the int-hash method
+    * once the apiMatchSlug column exists.
+    */
+   upsertBySlug(slug: string, create: any, update: any) {
+      return prisma.match.upsert({
+         where: { apiMatchSlug: slug },
+         update,
+         create: { ...create, apiMatchSlug: slug },
+      });
+   },
+
    markStaleLiveAsFinished(currentLiveApiIds: number[]) {
       const validApiIds = currentLiveApiIds.filter((id) => id > 0);
       return prisma.match.updateMany({
@@ -282,6 +300,21 @@ export const matchRepository = {
             ...(validApiIds.length > 0
                ? { apiFixtureId: { notIn: validApiIds } }
                : {}),
+         },
+         data: { status: 'FINISHED' },
+      });
+   },
+
+   /**
+    * Mark stale live matches as finished using slug list.
+    * Used by SportSRC sync path.
+    */
+   markStaleLiveAsFinishedBySlugs(activeSlugs: string[]) {
+      if (!activeSlugs.length) return Promise.resolve({ count: 0 });
+      return prisma.match.updateMany({
+         where: {
+            status: 'LIVE',
+            apiMatchSlug: { notIn: activeSlugs },
          },
          data: { status: 'FINISHED' },
       });

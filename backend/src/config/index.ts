@@ -16,7 +16,6 @@ export const config = {
       url: process.env.DATABASE_URL ?? '',
    },
 
-   // Upstash REST — replaces the old ioredis REDIS_URL
    upstash: {
       url: process.env.UPSTASH_REDIS_REST_URL ?? '',
       token: process.env.UPSTASH_REDIS_REST_TOKEN ?? '',
@@ -32,6 +31,7 @@ export const config = {
    },
 
    football: {
+      // Legacy api-football (kept for fallback)
       key: process.env.API_FOOTBALL_KEY ?? '',
       baseUrl:
          process.env.API_FOOTBALL_BASEURL ??
@@ -41,6 +41,26 @@ export const config = {
          process.env.API_SPORT_MONKS_BASEURL ??
          'https://api.sportmonks.com/v3/football',
    },
+
+   // SportSRC Enterprise — primary provider
+   sportSrc: {
+      key: process.env.SPORT_SRC_KEY ?? '',
+      baseUrl: process.env.SPORT_SRC_BASEURL ?? 'https://api.sportsrc.org/v2',
+   },
+
+   // Entity Sport — additional deep data
+   entitySport: {
+      key: process.env.ENTITY_SPORT_KEY ?? '',
+      baseUrl:
+         process.env.ENTITY_SPORT_BASEURL ??
+         'https://restapi.entitysport.com/v2',
+   },
+
+   // Which provider to use for live sync & match browsing
+   // "sportsrc" | "api-football"
+   footballDataProvider:
+      (process.env.FOOTBALL_DATA_PROVIDER as 'sportsrc' | 'api-football') ??
+      'sportsrc',
 
    ai: {
       openaiKey: process.env.OPENAI_API_KEY ?? '',
@@ -56,11 +76,9 @@ export function validateConfig() {
    if (config.nodeEnv === 'production' && config.jwt.secret === 'dev_secret') {
       throw new Error('JWT_SECRET must be set in production');
    }
-
    if (config.port <= 0 || Number.isNaN(config.port)) {
       throw new Error('PORT must be a valid positive number');
    }
-
    if (!config.db.url) {
       throw new Error('DATABASE_URL is required');
    }

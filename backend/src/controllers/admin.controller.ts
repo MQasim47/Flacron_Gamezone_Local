@@ -220,6 +220,21 @@ export const adminStreamController = {
 
    async findForMatch(req: Request, res: Response) {
       const matchId = req.params.matchId ?? req.params.id;
+      const { config } = await import('../config/index.js');
+
+      if (config.footballDataProvider === 'sportsrc') {
+         const { streamService } =
+            await import('../services/stream.service.js');
+         const stream = await streamService.findStreamForMatch(matchId);
+         if (!stream) {
+            return res
+               .status(404)
+               .json({ found: false, error: 'No stream found for this match' });
+         }
+         return res.json({ found: true, stream });
+      }
+
+      // Legacy YouTube path
       const stream = await streamService.findStreamForMatch(matchId);
       if (!stream) {
          return res
@@ -230,6 +245,29 @@ export const adminStreamController = {
    },
 
    async bulkYoutubeSearch(req: Request, res: Response) {
+      const { config } = await import('../config/index.js');
+
+      if (config.footballDataProvider === 'sportsrc') {
+         // With SportSRC, streams come from the detail endpoint during sync.
+         // Manual bulk refresh: re-fetch detail for all live matches.
+         const liveMatches = await matchRepository.findLive();
+         let refreshed = 0;
+         for (const match of liveMatches) {
+            try {
+               await streamService.findStreamForMatch(match.id);
+               refreshed++;
+            } catch {
+               // continue
+            }
+         }
+         return res.json({
+            success: true,
+            refreshed,
+            message: `Refreshed streams for ${refreshed} live matches via SportSRC`,
+         });
+      }
+
+      // Legacy YouTube bulk search
       const liveMatches = await matchRepository.findLive();
       let searched = 0;
       for (const match of liveMatches) {
@@ -237,13 +275,13 @@ export const adminStreamController = {
             await youtubeService.findAndSaveStreamForMatch(match.id);
             searched++;
          } catch {
-            // continue on error
+            // continue
          }
       }
       res.json({
          success: true,
          searched,
-         message: `Searched ${searched} live matches`,
+         message: `Searched ${searched} live matches via YouTube`,
       });
    },
 };
