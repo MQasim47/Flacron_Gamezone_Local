@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, Save, Calendar } from 'lucide-react';
-import type { AdminMatch } from '../api/matchesApi';
+import type { AdminMatch } from '@/shared/types';
 import type { Team } from '@/entities/team/model/types';
 import type { League } from '@/entities/league/model/types';
 
