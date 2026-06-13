@@ -10,7 +10,7 @@ import {
    Sparkles,
    Download,
 } from 'lucide-react';
-import type { AdminMatch } from '../api/matchesApi';
+import type { AdminMatch } from '@/shared/types';
 import type { League } from '@/entities/league/model/types';
 import { PaginationControls } from '@/shared/ui/PaginationControls';
 
