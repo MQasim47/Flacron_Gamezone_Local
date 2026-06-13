@@ -1,5 +1,8 @@
+// web/features/admin-streams/api/streamsApi.ts
 import { apiGet, apiPut, apiPost, apiDelete } from '@/shared/api/client';
 import type { AdminStream, AdminMatch } from '@/shared/types';
+
+export type StreamMatch = AdminMatch;
 
 export const getStreams = () => apiGet<AdminStream[]>('/api/admin/streams');
 
