@@ -10,7 +10,7 @@ import { youtubeService } from '../services/youtube.service.js';
 let isLiveSyncing = false;
 
 export function startSyncCron() {
-   if (!config.isProduction) return;
+   // if (!config.isProduction) return;
    console.log('[cron:sync] Initializing cron jobs...');
 
    runLiveSync('initial');

@@ -1,9 +1,8 @@
-import { sportSrcService, SportSrcError } from './sportSrc.service.js';
+import { cacheDel, cacheSet } from '../lib/redis.js';
 import { leagueRepository } from '../repositories/league.repository.js';
-import { teamRepository } from '../repositories/team.repository.js';
 import { matchRepository } from '../repositories/match.repository.js';
-import { streamRepository } from '../repositories/stream.repository.js';
-import { cacheSet, cacheDel } from '../lib/redis.js';
+import { teamRepository } from '../repositories/team.repository.js';
+import { SportSrcError, sportSrcService } from './sportSrc.service.js';
 import { upsertSportSrcStream } from './sportSrcStream.helper.js';
 
 export async function syncLiveFromSportSrc(): Promise<string[]> {
@@ -39,7 +38,14 @@ export async function syncLiveFromSportSrc(): Promise<string[]> {
    for (const fixture of fixtures) {
       try {
          const slug = fixture.id;
-         if (!slug) continue;
+         if (!slug) {
+            console.warn(
+               '[sportSrcSync] Skipping fixture: missing id',
+               fixture
+            );
+            continue;
+         }
+
          activeSlugs.push(slug);
 
          // ── Upsert league ──────────────────────────────────────────────────
@@ -47,31 +53,75 @@ export async function syncLiveFromSportSrc(): Promise<string[]> {
             ? Number(fixture.league_id)
             : null;
 
-         const league = leagueApiId
-            ? await leagueRepository.upsertByApiId({
-                 apiLeagueId: leagueApiId,
-                 name: fixture.league ?? 'Unknown',
-                 country: fixture.country ?? null,
-                 logo: null,
-              })
-            : null;
+         let league = null;
+
+         if (leagueApiId) {
+            league = await leagueRepository.upsertByApiId({
+               apiLeagueId: leagueApiId,
+               name: fixture.league ?? 'Unknown',
+               country: fixture.country ?? null,
+               logo: fixture.league_logo ?? null,
+            });
+         } else if (fixture.league) {
+            // No numeric ID — find by name or create
+            league = await leagueRepository.findFirst({ name: fixture.league });
+            if (!league) {
+               try {
+                  league = await leagueRepository.create({
+                     name: fixture.league,
+                     country: fixture.country ?? null,
+                     logo: fixture.league_logo ?? null,
+                     apiLeagueId: null,
+                  });
+               } catch {
+                  // Another process may have created it — try finding again
+                  league = await leagueRepository.findFirst({
+                     name: fixture.league,
+                  });
+               }
+            } else {
+               // Update logo/country if missing
+               if (
+                  (!league.logo && fixture.league_logo) ||
+                  (!league.country && fixture.country)
+               ) {
+                  league = await leagueRepository.update(league.id, {
+                     country: league.country ?? fixture.country ?? null,
+                     logo: league.logo ?? fixture.league_logo ?? null,
+                  });
+               }
+            }
+         }
 
          // ── Upsert teams by name ───────────────────────────────────────────
          const homeTeam = await upsertTeamByName(
             fixture.home_team,
             league?.id ?? null
          );
+         if (!homeTeam) {
+            console.warn(
+               '[sportSrcSync] Skipping fixture: home team not saved',
+               { slug, homeTeam: fixture.home_team }
+            );
+            continue;
+         }
+
          const awayTeam = await upsertTeamByName(
             fixture.away_team,
             league?.id ?? null
          );
-
-         if (!homeTeam || !awayTeam) continue;
+         if (!awayTeam) {
+            console.warn(
+               '[sportSrcSync] Skipping fixture: away team not saved',
+               { slug, awayTeam: fixture.away_team }
+            );
+            continue;
+         }
 
          const homeScore = fixture.home_score ?? 0;
          const awayScore = fixture.away_score ?? 0;
 
-         // ── Upsert match by slug (clean — no hash needed anymore) ─────────
+         // ── Upsert match by slug ───────────────────────────────────────────
          const match = await matchRepository.upsertBySlug(
             slug,
             {
@@ -89,18 +139,24 @@ export async function syncLiveFromSportSrc(): Promise<string[]> {
             }
          );
 
-         if (!match?.id) continue;
+         if (!match?.id) {
+            console.warn(
+               '[sportSrcSync] Skipping fixture: match upsert returned null',
+               { slug }
+            );
+            continue;
+         }
+
          liveMatchIds.push(match.id);
 
-         // ── Pull stream URLs from detail endpoint ─────────────────────────
-         if (fixture.has_stream !== false) {
-            saveStreamFromDetail(match.id, slug).catch((err) =>
-               console.error(
-                  `[sportSrcSync] Stream fetch failed for ${slug}:`,
-                  err
-               )
-            );
-         }
+         // ── Pull stream URLs and venue from detail endpoint ────────────────
+         // Always fetch detail to get venue + stream sources
+         saveStreamFromDetail(match.id, slug).catch((err) =>
+            console.error(
+               `[sportSrcSync] Stream fetch failed for ${slug}:`,
+               err
+            )
+         );
       } catch (err) {
          console.error(
             `[sportSrcSync] Error processing fixture ${fixture.id}:`,
@@ -140,6 +196,11 @@ async function saveStreamFromDetail(
 ) {
    const detail = await sportSrcService.getDetail(sportSrcMatchId);
    if (!detail) return;
+
+   // Save venue if present
+   if (detail.venue) {
+      await matchRepository.update(dbMatchId, { venue: detail.venue });
+   }
 
    const sourceCount = (await upsertSportSrcStream(dbMatchId, detail)) ?? 0;
 

@@ -14,7 +14,7 @@ export default async function LiveMatchesPage() {
 
    try {
       const baseUrl =
-         process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:4000';
+         process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
       const res = await fetch(`${baseUrl}/api/matches/live`, {
          cache: 'no-store',
       });

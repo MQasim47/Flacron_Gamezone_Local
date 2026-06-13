@@ -48,10 +48,7 @@ export default function LeaguesClient({ leagues }: { leagues: League[] }) {
                   {currentLeagues.map((league, index) => (
                      <LeagueCard
                         key={league.id}
-                        id={league.id}
-                        name={league.name}
-                        country={league.country}
-                        logo={league.logo}
+                        league={league}
                         index={index}
                      />
                   ))}

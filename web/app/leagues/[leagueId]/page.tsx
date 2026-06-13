@@ -94,11 +94,7 @@ export default async function LeagueDetailsPage({
             <ErrorState error={fetchError} />
          ) : data ? (
             <>
-               <LeagueHeader
-                  name={data.league.name}
-                  country={data.league.country}
-                  logo={data.league.logo}
-               />
+               <LeagueHeader league={data.league} />
                <LeagueDetailsClient data={data} />
             </>
          ) : null}

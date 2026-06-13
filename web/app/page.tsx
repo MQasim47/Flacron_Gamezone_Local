@@ -15,7 +15,7 @@ export default async function RootPage() {
    let liveMatches: any[] = [];
    let upcomingMatches: any[] = [];
 
-   const baseUrl = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:4000';
+   const baseUrl = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
 
    try {
       const [leaguesRes, liveRes, upcomingRes] = await Promise.all([

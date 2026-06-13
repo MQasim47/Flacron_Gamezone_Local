@@ -23,15 +23,17 @@ export class SportSrcError extends Error {
 // ─── Raw response shapes ──────────────────────────────────────────────────────
 
 export interface SportSrcMatch {
-   id: string; // match slug/id used for detail calls
+   id: string;
    home_team: string;
    away_team: string;
    home_score: number | null;
    away_score: number | null;
-   status: string; // "inprogress" | "finished" | "notstarted"
-   kickoff: string; // ISO string
+   status: string;
+   kickoff: string;
    league: string;
    league_id?: string | number;
+   league_logo?: string;
+   league_flag?: string;
    country?: string;
    venue?: string;
    has_stream?: boolean;
@@ -125,7 +127,7 @@ export const sportSrcService = {
     */
    async getMatches(
       status: 'inprogress' | 'finished' | 'notstarted',
-      date?: string // YYYY-MM-DD
+      date?: string
    ): Promise<SportSrcMatch[]> {
       const params: Record<string, string> = {
          type: 'matches',
@@ -135,12 +137,75 @@ export const sportSrcService = {
       if (date) params.date = date;
 
       const data = await get<{
-         data?: SportSrcMatch[];
+         success?: boolean;
+         data?: Array<{
+            league: {
+               name: string;
+               country: string;
+               flag: string;
+               logo: string;
+            };
+            matches: Array<{
+               id: string;
+               title: string;
+               timestamp: number;
+               status: string;
+               status_detail: string;
+               round: string;
+               teams: {
+                  home: {
+                     name: string;
+                     code: string;
+                     color: string;
+                     badge: string;
+                  };
+                  away: {
+                     name: string;
+                     code: string;
+                     color: string;
+                     badge: string;
+                  };
+               };
+               score: {
+                  current: { home: number; away: number };
+                  period_1: string | null;
+                  period_2: string | null;
+                  display: string;
+               };
+            }>;
+         }>;
          matches?: SportSrcMatch[];
       }>(params, status === 'inprogress' ? 30 : 120);
 
-      // API returns either data[] or matches[] — normalise
-      return data.data ?? data.matches ?? [];
+      // Legacy flat shape
+      if (data.matches) return data.matches;
+
+      // New grouped-by-league shape
+      if (data.data && Array.isArray(data.data) && data.data[0]?.league) {
+         return data.data.flatMap((group) =>
+            group.matches.map((m) => ({
+               id: m.id,
+               home_team: m.teams.home.name,
+               away_team: m.teams.away.name,
+               home_score: m.score.current.home,
+               away_score: m.score.current.away,
+               status: m.status,
+               kickoff: new Date(m.timestamp).toISOString(),
+               league: group.league.name,
+               league_logo: group.league.logo,
+               league_flag: group.league.flag,
+               country: group.league.country,
+               venue: undefined,
+               has_stream: false,
+               has_standing: false,
+            }))
+         );
+      }
+
+      // Flat data[] shape (original assumption)
+      if (data.data) return data.data as unknown as SportSrcMatch[];
+
+      return [];
    },
 
    /**

@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { deepDataController } from '../controllers/deepData.controller.js';
-import { requireAuth, requirePremium } from '../middleware/auth.middleware.js';
 import { asyncHandler } from '../middleware/error.middleware.js';
 
 const router = Router();
