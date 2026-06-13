@@ -5,18 +5,25 @@ export async function upsertSportSrcStream(
    dbMatchId: string,
    detail: SportSrcDetail
 ) {
-   const primaryUrl = detail.stream_url;
+   // New shape: sources[] array with embedUrl
+   const sourcesFromArray = (detail.sources ?? [])
+      .map((s) => s.embedUrl)
+      .filter(Boolean);
+
+   // Legacy flat shape: stream_url, stream_url_2, stream_url_3
+   const sourcesFromFlat = [
+      detail.stream_url,
+      detail.stream_url_2,
+      detail.stream_url_3,
+   ].filter(Boolean) as string[];
+
+   const sources = sourcesFromArray.length ? sourcesFromArray : sourcesFromFlat;
+   const primaryUrl = sources[0] ?? null;
 
    if (!primaryUrl) {
       await streamRepository.markNoStream(dbMatchId);
       return 0;
    }
-
-   const sources = [
-      detail.stream_url,
-      detail.stream_url_2,
-      detail.stream_url_3,
-   ].filter(Boolean) as string[];
 
    const streamData = {
       type: 'EMBED' as const,

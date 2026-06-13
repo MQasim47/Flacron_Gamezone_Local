@@ -41,6 +41,16 @@ export interface SportSrcMatch {
    has_stream?: boolean;
    has_standing?: boolean;
 }
+
+export interface SportSrcStreamSource {
+   id: string;
+   streamNo: number;
+   embedUrl: string;
+   source: string;
+   hd: boolean;
+   language: string;
+}
+
 export interface SportSrcDetail {
    id: string;
    home_team: string;
@@ -52,11 +62,14 @@ export interface SportSrcDetail {
    league: string;
    league_id?: string | number;
    country?: string;
-   venue?: string;
-   referee?: string;
-   stream_url?: string; // primary embed URL
-   stream_url_2?: string; // redundancy source 2
-   stream_url_3?: string; // redundancy source 3
+   venue?: string | null;
+   referee?: string | null;
+   // Legacy flat fields (kept for backward compat)
+   stream_url?: string;
+   stream_url_2?: string;
+   stream_url_3?: string;
+   // New shape
+   sources?: SportSrcStreamSource[];
    [key: string]: unknown;
 }
 
@@ -227,11 +240,35 @@ export const sportSrcService = {
     */
    async getDetail(matchId: string): Promise<SportSrcDetail | null> {
       try {
-         const data = await get<{ data?: SportSrcDetail }>(
-            { type: 'detail', id: matchId },
-            20
-         );
-         return data.data ?? null;
+         const data = await get<{
+            success?: boolean;
+            data?: {
+               match_info?: Partial<SportSrcDetail>;
+               sources?: SportSrcStreamSource[];
+               info?: { venue?: string | null; referee?: string | null };
+            };
+         }>({ type: 'detail', id: matchId }, 20);
+
+         // New nested shape: { success, data: { match_info, sources, info } }
+         if (data.data && 'match_info' in data.data) {
+            const { match_info, sources, info } = data.data;
+            return {
+               id: matchId,
+               home_team: match_info?.home_team ?? '',
+               away_team: match_info?.away_team ?? '',
+               home_score: match_info?.home_score ?? null,
+               away_score: match_info?.away_score ?? null,
+               status: match_info?.status ?? '',
+               kickoff: match_info?.kickoff ?? '',
+               league: match_info?.league ?? '',
+               venue: info?.venue ?? null,
+               referee: info?.referee ?? null,
+               sources: sources ?? [],
+            } as SportSrcDetail;
+         }
+
+         // Legacy flat shape: { data: SportSrcDetail }
+         return (data as any).data ?? null;
       } catch (err) {
          if (err instanceof SportSrcError && err.code === 'NOT_FOUND')
             return null;
