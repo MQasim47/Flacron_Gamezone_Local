@@ -8,6 +8,12 @@ interface Team {
    apiTeamId: number | null;
 }
 
+interface Venue {
+   id: string;
+   name: string;
+   city: string | null;
+}
+
 interface SimpleMatchCardProps {
    id: string;
    homeTeam: Team;
@@ -15,7 +21,7 @@ interface SimpleMatchCardProps {
    kickoffTime: string;
    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
    score: string | null;
-   venue: string | null;
+   venue?: Venue | null;
 }
 
 export function SimpleMatchCard({
@@ -100,7 +106,8 @@ export function SimpleMatchCard({
          </div>
          {venue && (
             <div className="text-xs text-muted-foreground text-center mt-2">
-               📍 {venue}
+               📍 {venue.name}
+               {venue.city ? `, ${venue.city}` : ''}
             </div>
          )}
       </Link>

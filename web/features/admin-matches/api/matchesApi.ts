@@ -23,14 +23,12 @@ export const createMatch = (data: {
    awayTeamId: string;
    leagueId?: string;
    kickoffTime: string;
-   venue?: string;
 }) => apiPost<AdminMatch>('/api/admin/matches', data);
 
 export const updateMatch = (
    id: string,
    data: Partial<{
       kickoffTime: string;
-      venue: string;
       status: string;
       score: string;
       leagueId: string;

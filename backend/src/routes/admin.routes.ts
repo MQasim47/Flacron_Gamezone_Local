@@ -40,7 +40,7 @@ const matchCreateSchema = z.object({
    kickoffTime: z.string(),
    status: z.enum(['UPCOMING', 'LIVE', 'FINISHED']).optional(),
    score: z.string().nullable().optional(),
-   venue: z.string().nullable().optional(),
+   // venue: z.string().nullable().optional(),
    apiFixtureId: z.number().nullable().optional(),
 });
 

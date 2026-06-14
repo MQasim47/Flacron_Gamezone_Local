@@ -100,7 +100,9 @@ export const aiService = {
             ? { name: match.league.name, country: match.league.country }
             : null,
          kickoffTime: match.kickoffTime,
-         venue: match.venue,
+         venue: match.venue
+            ? `${match.venue.name}${match.venue.city ? `, ${match.venue.city}` : ''}`
+            : null,
          status: match.status,
          score: match.score,
       };

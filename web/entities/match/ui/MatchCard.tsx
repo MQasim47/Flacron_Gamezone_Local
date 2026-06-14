@@ -80,7 +80,8 @@ export function MatchCard({
                {match.venue ? (
                   <span className="text-xs text-slate-500 flex items-center gap-1 truncate">
                      <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                     {match.venue}
+                     {match.venue.name}
+                     {match.venue.city ? `, ${match.venue.city}` : ''}
                   </span>
                ) : (
                   <span />

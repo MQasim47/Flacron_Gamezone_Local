@@ -403,7 +403,8 @@ export function MatchDetailClient({ initialMatch, matchId }: Props) {
                         <div className="inline-flex items-center gap-2 bg-slate-900/70 rounded-xl px-5 py-2.5 border border-slate-700/50 shadow-lg">
                            <MapPin className="w-4 h-4 text-cyan-400" />
                            <span className="text-sm text-slate-300 font-semibold">
-                              {match.venue}
+                              {match.venue.name}
+                              {match.venue.city ? `, ${match.venue.city}` : ''}
                            </span>
                         </div>
                      </div>

@@ -31,6 +31,12 @@ interface League {
    apiLeagueId: number | null;
 }
 
+interface Venue {
+   id: string;
+   name: string;
+   city: string | null;
+}
+
 interface Match {
    id: string;
    apiFixtureId: number | null;
@@ -40,7 +46,7 @@ interface Match {
    kickoffTime: string;
    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
    score: string | null;
-   venue: string | null;
+   venue: Venue | null;
    league: League | null;
    homeTeam: Team;
    awayTeam: Team;
@@ -468,7 +474,8 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                            {m.venue && (
                               <div className="text-xs text-slate-500 mt-3 text-center flex items-center justify-center gap-1.5">
                                  <Sparkles className="w-3 h-3" />
-                                 {m.venue}
+                                 {m.venue.name}
+                                 {m.venue.city ? `, ${m.venue.city}` : ''}
                               </div>
                            )}
                         </div>

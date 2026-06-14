@@ -3,6 +3,7 @@ import { BackButton } from '@/shared/ui/BackButton';
 import { LeagueHeader } from '@/entities/league/ui/LeagueHeader';
 import { ErrorState } from '@/shared/ui/LoadingErrorStates';
 import LeagueDetailsClient from '../../../page-components/league-details/ui/LeagueDetailsClient';
+import { Venue } from '@/shared/types';
 
 interface Team {
    id: string;
@@ -17,7 +18,7 @@ interface Match {
    kickoffTime: string;
    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
    score: string | null;
-   venue: string | null;
+   venue?: Venue | null;
 }
 interface StandingTeam {
    team: Team;

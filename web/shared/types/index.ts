@@ -39,6 +39,17 @@ export interface AISummary {
    createdAt: string;
 }
 
+export interface Venue {
+   id: string;
+   name: string;
+   city: string | null;
+   country: string | null;
+   image: string | null;
+   capacity: number | null;
+   lat: number | null;
+   lng: number | null;
+}
+
 export interface Match {
    id: string;
    apiFixtureId?: number | null;
@@ -49,8 +60,8 @@ export interface Match {
    kickoffTime: string;
    status: MatchStatus;
    score: string | null;
-   venue: string | null;
-   league?: League | LeagueRef; // Allow the simpler League type here
+   venue?: Venue | null;
+   league?: League | LeagueRef;
    homeTeam: TeamRef;
    awayTeam: TeamRef;
    stream?: StreamData | null;

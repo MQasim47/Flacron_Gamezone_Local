@@ -6,6 +6,7 @@ import { SimpleMatchCard } from '@/entities/match/ui/SimpleMatchCard';
 import { Tabs } from '@/shared/ui/Tabs';
 import { EmptyState } from '@/shared/ui/LoadingErrorStates';
 import { Calendar, TrendingUp, Trophy } from 'lucide-react';
+import { Venue } from '@/shared/types';
 
 type TabId = 'standings' | 'fixtures' | 'results';
 
@@ -22,7 +23,7 @@ interface Match {
    kickoffTime: string;
    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
    score: string | null;
-   venue: string | null;
+   venue?: Venue | null;
 }
 interface StandingTeam {
    team: Team;

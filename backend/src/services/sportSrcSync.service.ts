@@ -133,7 +133,6 @@ export async function syncLiveFromSportSrc(): Promise<string[]> {
                kickoffTime: new Date(fixture.kickoff),
                status: 'LIVE',
                score: `${homeScore}-${awayScore}`,
-               venue: fixture.venue ?? null,
             },
             {
                status: 'LIVE',
@@ -338,14 +337,12 @@ export async function syncUpcomingFromSportSrc(
                   kickoffTime: new Date(fixture.kickoff),
                   status: 'UPCOMING',
                   score: null,
-                  venue: fixture.venue ?? null,
                },
                {
                   // Only update fields that can legitimately change pre-match.
                   // Crucially, do NOT update status here — a match already
                   // transitioned to LIVE by the live sync must stay LIVE.
                   kickoffTime: new Date(fixture.kickoff),
-                  venue: fixture.venue ?? null,
                }
             );
 

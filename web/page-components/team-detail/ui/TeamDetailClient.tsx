@@ -32,6 +32,12 @@ interface TeamData {
    apiTeamId: number | null;
 }
 
+interface Venue {
+   id: string;
+   name: string;
+   city: string | null;
+}
+
 interface Match {
    id: string;
    homeTeam: TeamData;
@@ -39,7 +45,7 @@ interface Match {
    kickoffTime: string;
    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
    score: string | null;
-   venue: string | null;
+   venue: Venue | null;
    league: League;
 }
 
@@ -659,7 +665,8 @@ function MatchCard({
                <div className="flex items-center justify-center gap-2 mt-4 pt-4 border-t border-slate-700/50">
                   <MapPin className="w-4 h-4 text-slate-500" />
                   <span className="text-sm text-slate-400 font-semibold">
-                     {match.venue}
+                     {match.venue.name}
+                     {match.venue.city ? `, ${match.venue.city}` : ''}
                   </span>
                </div>
             )}

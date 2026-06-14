@@ -13,6 +13,17 @@ export interface League {
    apiLeagueId: number | null;
 }
 
+export interface Venue {
+   id: string;
+   name: string;
+   city: string | null;
+   country: string | null;
+   image: string | null;
+   capacity: number | null;
+   lat: number | null;
+   lng: number | null;
+}
+
 export interface Stream {
    id: string;
    matchId: string;
@@ -41,7 +52,7 @@ export interface Match {
    kickoffTime: string;
    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
    score: string | null;
-   venue: string | null;
+   venue: Venue | null;
    league: League | null;
    homeTeam: Team;
    awayTeam: Team;

@@ -8,6 +8,12 @@ interface TeamData {
 interface League {
    name: string;
 }
+interface Venue {
+   id: string;
+   name: string;
+   city: string | null;
+}
+
 interface Match {
    id: string;
    homeTeam: TeamData;
@@ -15,7 +21,7 @@ interface Match {
    kickoffTime: string;
    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
    score: string | null;
-   venue: string | null;
+   venue?: Venue | null;
    league: League;
 }
 

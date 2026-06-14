@@ -1,6 +1,3 @@
-// web/page-components/live/ui/LiveMatchesClient.tsx
-// Full updated file:
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -36,6 +33,12 @@ interface Stream {
    provider: string | null;
    isActive: boolean;
 }
+interface Venue {
+   id: string;
+   name: string;
+   city: string | null;
+}
+
 interface Match {
    id: string;
    homeTeam: Team;
@@ -44,7 +47,7 @@ interface Match {
    kickoffTime: string;
    status: string;
    score: string | null;
-   venue: string | null;
+   venue: Venue | null;
    stream: Stream | null;
 }
 interface ApiError {
@@ -295,7 +298,10 @@ export default function LiveMatchesClient({
                                  {match.venue && (
                                     <div className="flex items-center gap-2">
                                        <MapPin className="w-4 h-4" />
-                                       {match.venue}
+                                       {match.venue.name}
+                                       {match.venue.city
+                                          ? `, ${match.venue.city}`
+                                          : ''}
                                     </div>
                                  )}
                                  {match.stream?.type === 'EMBED' &&

@@ -30,6 +30,12 @@ interface Team {
    logo: string | null;
 }
 
+interface Venue {
+   id: string;
+   name: string;
+   city: string | null;
+}
+
 interface Match {
    id: string;
    homeTeam: Team;
@@ -38,7 +44,7 @@ interface Match {
    kickoffTime: string;
    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
    score: string | null;
-   venue: string | null;
+   venue?: Venue | null;
 }
 
 interface SearchResults {

@@ -412,7 +412,7 @@ export const matchService = {
                      kickoffTime: new Date(fixture.fixture.date),
                      status: 'LIVE',
                      score: `${fixture.goals?.home ?? 0}-${fixture.goals?.away ?? 0}`,
-                     venue: fixture.fixture?.venue?.name,
+                     // venue: fixture.fixture?.venue?.name,
                   },
                   {
                      status: 'LIVE',

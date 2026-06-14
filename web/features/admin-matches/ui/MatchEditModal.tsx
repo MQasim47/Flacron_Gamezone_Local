@@ -11,7 +11,6 @@ interface MatchFormData {
    awayTeamId: string;
    leagueId: string;
    kickoffTime: string;
-   venue: string;
    status: string;
    score: string;
 }
@@ -40,7 +39,6 @@ export function MatchEditModal({
       awayTeamId: '',
       leagueId: '',
       kickoffTime: '',
-      venue: '',
       status: 'UPCOMING',
       score: '',
    });
@@ -52,7 +50,6 @@ export function MatchEditModal({
             awayTeamId: match.awayTeam.id,
             leagueId: match.league?.id ?? '',
             kickoffTime: new Date(match.kickoffTime).toISOString().slice(0, 16),
-            venue: match.venue ?? '',
             status: match.status,
             score: match.score ?? '',
          });
@@ -62,7 +59,6 @@ export function MatchEditModal({
             awayTeamId: '',
             leagueId: '',
             kickoffTime: '',
-            venue: '',
             status: 'UPCOMING',
             score: '',
          });
@@ -153,18 +149,17 @@ export function MatchEditModal({
                      className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 rounded-xl text-sm outline-none"
                   />
                </div>
-               <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
-                     Venue
-                  </label>
-                  <input
-                     type="text"
-                     value={form.venue}
-                     onChange={(e) => set('venue', e.target.value)}
-                     placeholder="Old Trafford"
-                     className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 rounded-xl text-sm outline-none"
-                  />
-               </div>
+               {match?.venue && (
+                  <div>
+                     <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                        Venue (synced automatically)
+                     </label>
+                     <div className="w-full px-3 py-2.5 bg-slate-800/30 border border-slate-700/50 rounded-xl text-sm text-slate-400">
+                        {match.venue.name}
+                        {match.venue.city ? `, ${match.venue.city}` : ''}
+                     </div>
+                  </div>
+               )}
                <SelectField
                   k="status"
                   label="Status"
