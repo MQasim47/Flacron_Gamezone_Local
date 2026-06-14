@@ -5,6 +5,7 @@ export const streamRepository = {
       return prisma.stream.findMany({
          where: { isActive: true, type: 'EMBED' },
          include: {
+            venue: true,
             match: {
                include: { homeTeam: true, awayTeam: true },
             },
@@ -16,6 +17,7 @@ export const streamRepository = {
    findAllWithMatch() {
       return prisma.stream.findMany({
          include: {
+            venue: true,
             match: {
                select: {
                   id: true,
@@ -34,6 +36,7 @@ export const streamRepository = {
       return prisma.stream.findUnique({
          where: { matchId },
          include: {
+            venue: true,
             match: {
                select: {
                   id: true,

@@ -53,6 +53,10 @@ interface HomePageProps {
    initialUpcomingMatches: Match[];
 }
 
+// World Cup detection — matches league names containing "World Cup"
+const isWorldCupMatch = (m: Match) =>
+   !!m.league?.name && /world cup/i.test(m.league.name);
+
 const Skeleton = ({ className = '' }: { className?: string }) => (
    <div
       className={`relative overflow-hidden bg-slate-800/60 rounded-xl before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-slate-700/40 before:to-transparent ${className}`}
@@ -73,7 +77,12 @@ export default function HomePage({
    const [totalLiveMatches, setTotalLiveMatches] = useState<number>(
       initialLiveMatches.length
    );
+   const [allLiveMatches, setAllLiveMatches] =
+      useState<Match[]>(initialLiveMatches);
    const [upcomingMatches, setUpcomingMatches] = useState<Match[]>(
+      initialUpcomingMatches
+   );
+   const [allUpcomingMatches, setAllUpcomingMatches] = useState<Match[]>(
       initialUpcomingMatches
    );
    const [searchQuery, setSearchQuery] = useState('');
@@ -83,20 +92,41 @@ export default function HomePage({
    const [isSearching, setIsSearching] = useState(false);
    const [loading] = useState(false);
 
+   // ── Live matches: fetch, store, display ──────────────────────────────
    const refreshLiveMatches = useCallback(async () => {
       try {
          const liveRes = await apiGet<any>('/api/matches/live');
-         const all = Array.isArray(liveRes) ? liveRes : (liveRes.matches ?? []);
+         const all: Match[] = Array.isArray(liveRes)
+            ? liveRes
+            : (liveRes.matches ?? []);
+         setAllLiveMatches(all);
          setLiveMatches(all.slice(0, 4));
          setTotalLiveMatches(all.length);
       } catch {}
    }, []);
 
+   // ── Upcoming matches: fetch, store, display (same pattern as live) ────
+   const refreshUpcomingMatches = useCallback(async () => {
+      try {
+         const upcomingRes = await apiGet<any>('/api/matches?status=UPCOMING');
+         const all: Match[] = Array.isArray(upcomingRes)
+            ? upcomingRes
+            : (upcomingRes.matches ?? []);
+         setAllUpcomingMatches(all);
+         setUpcomingMatches(all.slice(0, 6));
+      } catch {}
+   }, []);
+
    useEffect(() => {
       refreshLiveMatches();
-      const interval = setInterval(refreshLiveMatches, 45000);
-      return () => clearInterval(interval);
-   }, [refreshLiveMatches]);
+      refreshUpcomingMatches();
+      const liveInterval = setInterval(refreshLiveMatches, 45000);
+      const upcomingInterval = setInterval(refreshUpcomingMatches, 60000);
+      return () => {
+         clearInterval(liveInterval);
+         clearInterval(upcomingInterval);
+      };
+   }, [refreshLiveMatches, refreshUpcomingMatches]);
 
    useEffect(() => {
       const timer = setTimeout(() => {
@@ -137,6 +167,12 @@ export default function HomePage({
          );
       return null;
    };
+
+   // World Cup matches: live ones first, then upcoming ones — from the same
+   // fetched/stored datasets as the Live and Upcoming sections below.
+   const worldCupLive = allLiveMatches.filter(isWorldCupMatch);
+   const worldCupUpcoming = allUpcomingMatches.filter(isWorldCupMatch);
+   const worldCupMatches = [...worldCupLive, ...worldCupUpcoming].slice(0, 4);
 
    return (
       <div className="space-y-8 sm:space-y-12">
@@ -358,6 +394,155 @@ export default function HomePage({
                </div>
             )}
          </div>
+
+         {/* World Cup Spotlight Section */}
+         {worldCupMatches.length > 0 && (
+            <div className="space-y-4 sm:space-y-6">
+               <div className="relative overflow-hidden rounded-xl sm:rounded-2xl">
+                  <div className="relative bg-gradient-to-br from-yellow-900/50 via-amber-900/40 to-yellow-900/50 backdrop-blur-xl border border-yellow-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                     <div className="flex items-center justify-between flex-wrap gap-3 sm:gap-4">
+                        <div className="flex items-center gap-3 sm:gap-4">
+                           <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                              <Trophy className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
+                           </div>
+                           <div>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                 <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white">
+                                    World Cup Spotlight
+                                 </h2>
+                                 {worldCupLive.length > 0 && (
+                                    <div className="flex items-center gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-red-500/20 border border-red-500/30">
+                                       <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
+                                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
+                                          <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-red-500" />
+                                       </span>
+                                       <span className="text-xs font-black text-red-400 uppercase tracking-wide">
+                                          {worldCupLive.length} LIVE
+                                       </span>
+                                    </div>
+                                 )}
+                              </div>
+                              <p className="text-xs sm:text-sm text-yellow-300 font-medium mt-0.5">
+                                 🏆 Follow the World Cup action live
+                              </p>
+                           </div>
+                        </div>
+                        <Link
+                           href="/matches"
+                           className="hidden sm:flex items-center gap-2 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 text-yellow-300 hover:text-yellow-200 font-bold px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-sm transition-all"
+                        >
+                           View All <ChevronRight className="w-4 h-4" />
+                        </Link>
+                     </div>
+                  </div>
+               </div>
+
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  {worldCupMatches.map((match) => (
+                     <Link key={match.id} href={`/match/${match.id}`}>
+                        <div className="group relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border-2 border-yellow-500/30 hover:border-yellow-400/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.02] cursor-pointer shadow-lg">
+                           <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
+                              {match.status === 'LIVE' ? (
+                                 <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-gradient-to-r from-red-600 to-orange-600 shadow-lg">
+                                    <span className="relative flex h-2 w-2">
+                                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                                       <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                                    </span>
+                                    <span className="text-xs font-black text-white uppercase">
+                                       LIVE
+                                    </span>
+                                 </div>
+                              ) : (
+                                 <div className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 shadow-lg">
+                                    <Clock className="w-3 h-3 text-white" />
+                                    <span className="text-xs font-black text-white uppercase">
+                                       Upcoming
+                                    </span>
+                                 </div>
+                              )}
+                           </div>
+                           <div className="space-y-3 sm:space-y-4">
+                              <div className="flex items-center gap-2">
+                                 {match.league?.logo && (
+                                    <img
+                                       src={match.league.logo}
+                                       alt={match.league.name}
+                                       className="w-5 h-5 object-contain"
+                                    />
+                                 )}
+                                 <span className="text-xs font-bold text-yellow-400 uppercase tracking-wide truncate">
+                                    {match.league?.name}
+                                 </span>
+                              </div>
+                              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4 mt-4 sm:mt-6">
+                                 <div className="text-right">
+                                    <div className="flex justify-end mb-2">
+                                       {match.homeTeam.logo ? (
+                                          <img
+                                             src={match.homeTeam.logo}
+                                             alt={match.homeTeam.name}
+                                             className="w-10 h-10 sm:w-16 sm:h-16 object-contain"
+                                          />
+                                       ) : (
+                                          <div className="w-10 h-10 sm:w-16 sm:h-16 bg-slate-700 rounded-xl flex items-center justify-center text-base sm:text-xl font-black">
+                                             {match.homeTeam.name.substring(
+                                                0,
+                                                2
+                                             )}
+                                          </div>
+                                       )}
+                                    </div>
+                                    <div className="text-xs sm:text-base font-bold text-white truncate">
+                                       {match.homeTeam.name}
+                                    </div>
+                                 </div>
+                                 <div className="text-center min-w-[60px] sm:min-w-[90px]">
+                                    {match.status === 'LIVE' ? (
+                                       <div className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-red-400 via-orange-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                                          {match.score || '0-0'}
+                                       </div>
+                                    ) : (
+                                       <div className="text-xs sm:text-sm font-bold text-slate-300">
+                                          {new Date(
+                                             match.kickoffTime
+                                          ).toLocaleString('en-US', {
+                                             month: 'short',
+                                             day: 'numeric',
+                                             hour: '2-digit',
+                                             minute: '2-digit',
+                                          })}
+                                       </div>
+                                    )}
+                                 </div>
+                                 <div className="text-left">
+                                    <div className="flex justify-start mb-2">
+                                       {match.awayTeam.logo ? (
+                                          <img
+                                             src={match.awayTeam.logo}
+                                             alt={match.awayTeam.name}
+                                             className="w-10 h-10 sm:w-16 sm:h-16 object-contain"
+                                          />
+                                       ) : (
+                                          <div className="w-10 h-10 sm:w-16 sm:h-16 bg-slate-700 rounded-xl flex items-center justify-center text-base sm:text-xl font-black">
+                                             {match.awayTeam.name.substring(
+                                                0,
+                                                2
+                                             )}
+                                          </div>
+                                       )}
+                                    </div>
+                                    <div className="text-xs sm:text-base font-bold text-white truncate">
+                                       {match.awayTeam.name}
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </Link>
+                  ))}
+               </div>
+            </div>
+         )}
 
          {/* Live Matches Section */}
          {liveMatches.length > 0 && (

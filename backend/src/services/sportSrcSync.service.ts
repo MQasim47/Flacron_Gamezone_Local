@@ -2,6 +2,7 @@ import { cacheDel, cacheSet } from '../lib/redis.js';
 import { leagueRepository } from '../repositories/league.repository.js';
 import { matchRepository } from '../repositories/match.repository.js';
 import { teamRepository } from '../repositories/team.repository.js';
+import { venueRepository } from '../repositories/venue.repository.js';
 import { SportSrcError, sportSrcService } from './sportSrc.service.js';
 import { upsertSportSrcStream } from './sportSrcStream.helper.js';
 
@@ -208,9 +209,32 @@ async function saveStreamFromDetail(
    const detail = await sportSrcService.getDetail(sportSrcMatchId);
    if (!detail) return;
 
-   // Save venue if present
+   // Upsert venue if present
    if (detail.venue) {
-      await matchRepository.update(dbMatchId, { venue: detail.venue });
+      let venueId: string | null = null;
+
+      if (typeof detail.venue === 'string') {
+         // Plain string — just store the name
+         const venue = await venueRepository.upsertByNameAndCity({
+            name: detail.venue,
+         });
+         venueId = venue.id;
+      } else {
+         // Rich object from SportSRC
+         const v = detail.venue as any;
+         const venue = await venueRepository.upsertByNameAndCity({
+            name: v.stadium ?? 'Unknown',
+            city: v.city ?? null,
+            country: v.country ?? null,
+            image: v.image ?? null,
+            capacity: v.capacity ?? null,
+            lat: v.coordinates?.lat ?? null,
+            lng: v.coordinates?.lng ?? null,
+         });
+         venueId = venue.id;
+      }
+
+      await matchRepository.update(dbMatchId, { venueId });
    }
 
    const sourceCount = (await upsertSportSrcStream(dbMatchId, detail)) ?? 0;
@@ -218,4 +242,125 @@ async function saveStreamFromDetail(
    console.log(
       `[sportSrcSync] Saved ${sourceCount} stream source(s) for match ${dbMatchId}`
    );
+}
+
+/**
+ * Syncs upcoming matches from SportSRC for today + the next `daysAhead` days.
+ * Called once or twice daily — upcoming schedules don't need minute-level polling.
+ */
+export async function syncUpcomingFromSportSrc(
+   daysAhead = 2
+): Promise<string[]> {
+   const dates: string[] = [];
+   for (let i = 0; i <= daysAhead; i++) {
+      const d = new Date();
+      d.setUTCDate(d.getUTCDate() + i);
+      dates.push(d.toISOString().split('T')[0]);
+   }
+
+   const allMatchIds: string[] = [];
+
+   for (const date of dates) {
+      let fixtures;
+      try {
+         fixtures = await sportSrcService.getMatches('notstarted', date);
+      } catch (err) {
+         console.error(`[sportSrcSync:upcoming] Failed to fetch ${date}:`, err);
+         continue;
+      }
+
+      console.log(
+         `[sportSrcSync:upcoming] ${date} → ${fixtures.length} upcoming fixtures`
+      );
+
+      for (const fixture of fixtures) {
+         try {
+            const slug = fixture.id;
+            if (!slug) continue;
+
+            // ── Upsert league ──────────────────────────────────────────────
+            const leagueApiId = fixture.league_id
+               ? Number(fixture.league_id)
+               : null;
+            let league = null;
+
+            if (leagueApiId) {
+               league = await leagueRepository.upsertByApiId({
+                  apiLeagueId: leagueApiId,
+                  name: fixture.league ?? 'Unknown',
+                  country: fixture.country ?? null,
+                  logo: fixture.league_logo ?? null,
+               });
+            } else if (fixture.league) {
+               league = await leagueRepository.findFirst({
+                  name: fixture.league,
+               });
+               if (!league) {
+                  try {
+                     league = await leagueRepository.create({
+                        name: fixture.league,
+                        country: fixture.country ?? null,
+                        logo: fixture.league_logo ?? null,
+                        apiLeagueId: null,
+                     });
+                  } catch {
+                     league = await leagueRepository.findFirst({
+                        name: fixture.league,
+                     });
+                  }
+               }
+            }
+
+            // ── Upsert teams ───────────────────────────────────────────────
+            const homeTeam = await upsertTeamByName(
+               fixture.home_team,
+               league?.id ?? null,
+               (fixture as any).home_team_logo ?? null
+            );
+            if (!homeTeam) continue;
+
+            const awayTeam = await upsertTeamByName(
+               fixture.away_team,
+               league?.id ?? null,
+               (fixture as any).away_team_logo ?? null
+            );
+            if (!awayTeam) continue;
+
+            // ── Upsert match — only create/update if still UPCOMING ────────
+            // upsertBySlug uses WHERE apiMatchSlug = slug, so it won't
+            // overwrite a match that has already transitioned to LIVE/FINISHED.
+            const match = await matchRepository.upsertBySlug(
+               slug,
+               {
+                  leagueId: league?.id ?? null,
+                  homeTeamId: homeTeam.id,
+                  awayTeamId: awayTeam.id,
+                  kickoffTime: new Date(fixture.kickoff),
+                  status: 'UPCOMING',
+                  score: null,
+                  venue: fixture.venue ?? null,
+               },
+               {
+                  // Only update fields that can legitimately change pre-match.
+                  // Crucially, do NOT update status here — a match already
+                  // transitioned to LIVE by the live sync must stay LIVE.
+                  kickoffTime: new Date(fixture.kickoff),
+                  venue: fixture.venue ?? null,
+               }
+            );
+
+            if (match?.id) allMatchIds.push(match.id);
+         } catch (err) {
+            console.error(
+               `[sportSrcSync:upcoming] Error processing fixture ${fixture.id}:`,
+               err
+            );
+         }
+      }
+   }
+
+   console.log(
+      `[sportSrcSync:upcoming] Total upserted: ${allMatchIds.length} upcoming matches`
+   );
+   return allMatchIds;
 }

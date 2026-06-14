@@ -8,6 +8,7 @@ export const teamRepository = {
             ? { name: { contains: query, mode: 'insensitive' } }
             : undefined,
          include: {
+            venue: true,
             league: true,
             homeMatches: {
                where: { status: 'FINISHED' },
@@ -26,6 +27,7 @@ export const teamRepository = {
       return prisma.team.findUnique({
          where: { id },
          include: {
+            venue: true,
             league: {
                select: { id: true, name: true, country: true, logo: true },
             },
