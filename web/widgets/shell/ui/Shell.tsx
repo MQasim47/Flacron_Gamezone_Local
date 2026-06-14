@@ -280,9 +280,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
                   {/* Brand */}
                   <div>
                      <Link href="/" className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
-                           <Trophy className="w-6 h-6 text-white" />
-                        </div>
+                        <Image
+                           src="/logo.png"
+                           width={48}
+                           height={48}
+                           alt="Flacron GameZone"
+                           className="object-contain"
+                        />
                         <div className="font-black leading-none">
                            <span className="text-white">Flacron</span>
                            <br />

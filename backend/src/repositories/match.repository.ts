@@ -5,6 +5,7 @@ const matchIncludes = {
    league: true,
    homeTeam: true,
    awayTeam: true,
+   venue: true,
    stream: true,
 } as const;
 
@@ -61,13 +62,13 @@ export const matchRepository = {
          include: {
             homeTeam: true,
             awayTeam: true,
+            venue: true,
             stream: true,
             league: true,
          },
       });
    },
 
-   /** Find by SportSRC string slug */
    findBySlug(slug: string) {
       return prisma.match.findUnique({
          where: { apiMatchSlug: slug },
@@ -202,6 +203,7 @@ export const matchRepository = {
             league: {
                select: { id: true, name: true, country: true, logo: true },
             },
+            venue: true,
          },
          orderBy: { kickoffTime: 'desc' } as const,
       };
@@ -237,6 +239,7 @@ export const matchRepository = {
                league: true,
                homeTeam: true,
                awayTeam: true,
+               venue: true,
                stream: true,
             },
             orderBy: { kickoffTime: 'desc' },
@@ -254,13 +257,13 @@ export const matchRepository = {
       kickoffTime: Date;
       status?: 'UPCOMING' | 'LIVE' | 'FINISHED';
       score?: string | null;
-      venue?: string | null;
+      venueId?: string | null; // ← was venue string
       apiFixtureId?: number | null;
       apiMatchSlug?: string | null;
    }) {
       return prisma.match.create({
          data,
-         include: { league: true, homeTeam: true, awayTeam: true },
+         include: { league: true, homeTeam: true, awayTeam: true, venue: true },
       });
    },
 
@@ -268,7 +271,7 @@ export const matchRepository = {
       return prisma.match.update({
          where: { id },
          data,
-         include: { league: true, homeTeam: true, awayTeam: true },
+         include: { league: true, homeTeam: true, awayTeam: true, venue: true },
       });
    },
 
@@ -280,10 +283,6 @@ export const matchRepository = {
       });
    },
 
-   /**
-    * Upsert by SportSRC string slug — preferred over the int-hash method
-    * once the apiMatchSlug column exists.
-    */
    upsertBySlug(slug: string, create: any, update: any) {
       return prisma.match.upsert({
          where: { apiMatchSlug: slug },
@@ -305,10 +304,6 @@ export const matchRepository = {
       });
    },
 
-   /**
-    * Mark stale live matches as finished using slug list.
-    * Used by SportSRC sync path.
-    */
    markStaleLiveAsFinishedBySlugs(activeSlugs: string[]) {
       if (!activeSlugs.length) return Promise.resolve({ count: 0 });
       return prisma.match.updateMany({
@@ -340,6 +335,7 @@ export const matchRepository = {
             homeTeam: true,
             awayTeam: true,
             league: true,
+            venue: true,
             stream: true,
          },
          take: 10,

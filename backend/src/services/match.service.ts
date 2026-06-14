@@ -83,7 +83,7 @@ export const matchService = {
       kickoffTime: string;
       status?: 'UPCOMING' | 'LIVE' | 'FINISHED';
       score?: string | null;
-      venue?: string | null;
+      venueId?: string | null;
       apiFixtureId?: number | null;
    }) {
       const existing = await matchRepository.findFirst(
@@ -115,7 +115,7 @@ export const matchService = {
             : {}),
          ...('status' in data ? { status: data.status } : {}),
          ...('score' in data ? { score: data.score ?? null } : {}),
-         ...('venue' in data ? { venue: data.venue ?? null } : {}),
+         ...('venueId' in data ? { venueId: data.venueId ?? null } : {}),
          ...('apiFixtureId' in data
             ? { apiFixtureId: data.apiFixtureId ?? null }
             : {}),
