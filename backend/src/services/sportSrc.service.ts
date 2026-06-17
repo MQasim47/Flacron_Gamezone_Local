@@ -226,13 +226,63 @@ export const sportSrcService = {
 
    /**
     * Lightweight daily scores list — includes has_stream & has_standing flags.
+    * Response shape: { data: [{ id, name, country, flag, logo, matches: [...] }] }
     */
    async getScores(date?: string): Promise<SportSrcMatch[]> {
       const params: Record<string, string> = { type: 'scores' };
       if (date) params.date = date;
 
-      const data = await get<{ data?: SportSrcMatch[] }>(params, 30);
-      return data.data ?? [];
+      const data = await get<{
+         data?: Array<{
+            id: number;
+            name: string;
+            country?: string;
+            flag?: string | null;
+            logo?: string;
+            matches: Array<{
+               id: string;
+               timestamp: number;
+               status: string;
+               status_display?: string;
+               home: {
+                  id: number;
+                  name: string;
+                  score: number;
+                  badge?: string;
+               };
+               away: {
+                  id: number;
+                  name: string;
+                  score: number;
+                  badge?: string;
+               };
+            }>;
+         }>;
+      }>(params, 30);
+
+      if (!data.data) return [];
+
+      return data.data.flatMap((group) =>
+         group.matches.map((m) => ({
+            id: m.id,
+            home_team: m.home.name,
+            away_team: m.away.name,
+            home_team_logo: m.home.badge ?? null,
+            away_team_logo: m.away.badge ?? null,
+            home_score: m.home.score ?? null,
+            away_score: m.away.score ?? null,
+            status: m.status,
+            kickoff: new Date(m.timestamp * 1000).toISOString(),
+            league: group.name,
+            league_id: group.id, // ← THIS is what was missing
+            league_logo: group.logo,
+            league_flag: group.flag ?? undefined,
+            country: group.country,
+            venue: undefined,
+            has_stream: false,
+            has_standing: false,
+         }))
+      );
    },
 
    /**
@@ -413,12 +463,11 @@ export const sportSrcService = {
    },
 
    /**
-    * League standings by match ID or league ID (Premium).
+    * League standings by league ID (Premium).
     */
-   async getStanding(matchId?: string, leagueId?: string): Promise<any | null> {
-      if (!matchId && !leagueId) return null;
+   async getStanding(leagueId?: string): Promise<any | null> {
+      if (!leagueId) return null;
       const params: Record<string, string> = { type: 'standing' };
-      // if (matchId) params.id = matchId;
       if (leagueId) params.league_id = leagueId;
       try {
          const data = await get<{ data?: any }>(params, 120);

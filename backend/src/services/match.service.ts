@@ -170,7 +170,6 @@ export const matchService = {
 
       try {
          const raw = await sportSrcService.getStanding(
-            undefined,
             String(league.apiLeagueId)
          );
          if (!raw) return null;
