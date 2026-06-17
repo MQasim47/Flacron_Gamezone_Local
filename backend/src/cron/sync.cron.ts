@@ -9,6 +9,7 @@ import {
    syncUpcomingFromSportSrc,
 } from '../services/sportSrcSync.service.js';
 import { youtubeService } from '../services/youtube.service.js';
+import { matchRepository } from '../repositories/match.repository.js';
 
 let isLiveSyncing = false;
 let isUpcomingSyncing = false;
@@ -72,6 +73,14 @@ async function runLiveSync(source: string) {
          ids = await syncLiveFromSportSrc();
       } else {
          ids = await matchService.syncLiveFromApi();
+      }
+
+      // ── Clean up stale UPCOMING matches ───────────────────────────────────
+      const staleResult = await matchRepository.markStaleUpcomingAsFinished();
+      if (staleResult.count > 0) {
+         console.log(
+            `[cron:sync:live] Marked ${staleResult.count} stale UPCOMING matches as FINISHED`
+         );
       }
 
       const duration = Date.now() - startTime;

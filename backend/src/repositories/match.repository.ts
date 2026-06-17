@@ -315,6 +315,18 @@ export const matchRepository = {
       });
    },
 
+   markStaleUpcomingAsFinished() {
+      // Matches that were UPCOMING but kickoff was >2.5 hours ago
+      const cutoff = new Date(Date.now() - 2.5 * 60 * 60 * 1000);
+      return prisma.match.updateMany({
+         where: {
+            status: 'UPCOMING',
+            kickoffTime: { lt: cutoff },
+         },
+         data: { status: 'FINISHED' },
+      });
+   },
+
    countLive() {
       return prisma.match.count({ where: { status: 'LIVE' } });
    },

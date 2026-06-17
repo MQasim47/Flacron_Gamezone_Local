@@ -1,3 +1,4 @@
+// web/app/leagues/[leagueId]/page.tsx
 import type { Metadata } from 'next';
 import { BackButton } from '@/shared/ui/BackButton';
 import { LeagueHeader } from '@/entities/league/ui/LeagueHeader';
@@ -31,6 +32,15 @@ interface StandingTeam {
    goalDifference: number;
    points: number;
 }
+interface StandingsGroup {
+   name: string;
+   table: StandingTeam[];
+}
+interface StandingsData {
+   hasGroups: boolean;
+   table: StandingTeam[];
+   groups: StandingsGroup[];
+}
 interface LeagueDetailsResponse {
    league: {
       id: string;
@@ -38,7 +48,7 @@ interface LeagueDetailsResponse {
       country: string | null;
       logo: string | null;
    };
-   standings: StandingTeam[];
+   standings: StandingsData | null;
    upcomingMatches: Match[];
    recentMatches: Match[];
 }

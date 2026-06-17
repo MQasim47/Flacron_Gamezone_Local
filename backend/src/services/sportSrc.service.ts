@@ -418,7 +418,7 @@ export const sportSrcService = {
    async getStanding(matchId?: string, leagueId?: string): Promise<any | null> {
       if (!matchId && !leagueId) return null;
       const params: Record<string, string> = { type: 'standing' };
-      if (matchId) params.id = matchId;
+      // if (matchId) params.id = matchId;
       if (leagueId) params.league_id = leagueId;
       try {
          const data = await get<{ data?: any }>(params, 120);

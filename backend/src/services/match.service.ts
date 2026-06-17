@@ -7,6 +7,7 @@ import { matchRepository } from '../repositories/match.repository.js';
 import { teamRepository } from '../repositories/team.repository.js';
 import type { PaginatedResult, PaginationParams } from '../types/index.js';
 import { footballApiService } from './footballApi.service.js';
+import { sportSrcService } from './sportSrc.service.js';
 
 const MATCHES_CACHE_KEY = 'football:matches';
 const MATCHES_TTL = 60 * 2;
@@ -132,17 +133,13 @@ export const matchService = {
          throw Object.assign(new Error('League not found'), { status: 404 });
 
       const leagueMatches = matchRepository.findByLeague(leagueId);
-      const allTeams = await teamRepository.findAll();
-      const leagueTeams = allTeams.filter((t) => t.leagueId === leagueId);
 
-      const [finishedMatches, upcomingMatches, recentMatches] =
-         await Promise.all([
-            leagueMatches.finished(),
-            leagueMatches.upcoming(),
-            leagueMatches.recent(),
-         ]);
+      const [upcomingMatches, recentMatches, standings] = await Promise.all([
+         leagueMatches.upcoming(),
+         leagueMatches.recent(),
+         this._fetchStandingsFromApi(league),
+      ]);
 
-      const standings = this._calculateStandings(leagueTeams, finishedMatches);
       return { league, standings, upcomingMatches, recentMatches };
    },
 
@@ -160,57 +157,61 @@ export const matchService = {
       return { ...team, homeMatches, awayMatches };
    },
 
-   _calculateStandings(teams: any[], finishedMatches: any[]) {
-      const map = new Map<string, any>();
-      teams.forEach((t) =>
-         map.set(t.id, {
-            team: t,
-            played: 0,
-            won: 0,
-            drawn: 0,
-            lost: 0,
-            goalsFor: 0,
-            goalsAgainst: 0,
-            goalDifference: 0,
-            points: 0,
-         })
-      );
-      finishedMatches.forEach((m) => {
-         if (!m.score) return;
-         const [h, a] = m.score.split('-').map(Number);
-         if (isNaN(h) || isNaN(a)) return;
-         const home = map.get(m.homeTeamId);
-         const away = map.get(m.awayTeamId);
-         if (!home || !away) return;
-         home.played++;
-         away.played++;
-         home.goalsFor += h;
-         home.goalsAgainst += a;
-         away.goalsFor += a;
-         away.goalsAgainst += h;
-         if (h > a) {
-            home.won++;
-            home.points += 3;
-            away.lost++;
-         } else if (a > h) {
-            away.won++;
-            away.points += 3;
-            home.lost++;
-         } else {
-            home.drawn++;
-            away.drawn++;
-            home.points++;
-            away.points++;
-         }
-         home.goalDifference = home.goalsFor - home.goalsAgainst;
-         away.goalDifference = away.goalsFor - away.goalsAgainst;
-      });
-      return Array.from(map.values()).sort((a, b) => {
-         if (b.points !== a.points) return b.points - a.points;
-         if (b.goalDifference !== a.goalDifference)
-            return b.goalDifference - a.goalDifference;
-         return b.goalsFor - a.goalsFor;
-      });
+   /**
+    * Fetches the real, authoritative standings table from SportSRC
+    * (`?type=standing&league_id=<apiLeagueId>`) and normalizes it into the
+    * shape the frontend's StandingsTable component expects. Returns null
+    * when the league has no apiLeagueId or the provider call fails — the
+    * frontend renders an empty state in that case rather than showing
+    * fabricated numbers.
+    */
+   async _fetchStandingsFromApi(league: { apiLeagueId: number | null }) {
+      if (!league.apiLeagueId) return null;
+
+      try {
+         const raw = await sportSrcService.getStanding(
+            undefined,
+            String(league.apiLeagueId)
+         );
+         if (!raw) return null;
+
+         const normalizeRow = (row: any) => ({
+            team: {
+               id: row.team?.name ?? '',
+               name: row.team?.name ?? row.team?.short_name ?? 'Unknown',
+               logo: row.team?.badge ?? null,
+            },
+            played: row.stats?.played ?? 0,
+            won: row.stats?.wins ?? 0,
+            drawn: row.stats?.draws ?? 0,
+            lost: row.stats?.losses ?? 0,
+            goalsFor: row.stats?.goals_for ?? 0,
+            goalsAgainst: row.stats?.goals_against ?? 0,
+            goalDifference: Number(row.stats?.goal_diff) || 0,
+            points: row.stats?.points ?? 0,
+         });
+
+         const hasGroups = Array.isArray(raw.groups) && raw.groups.length > 0;
+
+         return {
+            hasGroups,
+            table: Array.isArray(raw.table) ? raw.table.map(normalizeRow) : [],
+            groups: hasGroups
+               ? raw.groups.map((g: any) => ({
+                    name: g.name,
+                    table: Array.isArray(g.table)
+                       ? g.table.map(normalizeRow)
+                       : [],
+                 }))
+               : [],
+         };
+      } catch (err) {
+         console.error(
+            `[matchService] Failed to fetch standings for league ${league.apiLeagueId}:`,
+            err
+         );
+         return null;
+      }
    },
 
    async fetchFromApi(params: {

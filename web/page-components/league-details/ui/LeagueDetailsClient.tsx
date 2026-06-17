@@ -36,8 +36,17 @@ interface StandingTeam {
    goalDifference: number;
    points: number;
 }
+interface StandingsGroup {
+   name: string;
+   table: StandingTeam[];
+}
+interface StandingsData {
+   hasGroups: boolean;
+   table: StandingTeam[];
+   groups: StandingsGroup[];
+}
 interface LeagueData {
-   standings: StandingTeam[];
+   standings: StandingsData | null;
    upcomingMatches: Match[];
    recentMatches: Match[];
 }
@@ -45,16 +54,27 @@ interface LeagueData {
 export default function LeagueDetailsClient({ data }: { data: LeagueData }) {
    const [activeTab, setActiveTab] = useState<TabId>('standings');
 
-   const standings = data?.standings ?? [];
+   const standings = data?.standings ?? null;
    const upcomingMatches = data?.upcomingMatches ?? [];
    const recentMatches = data?.recentMatches ?? [];
+   const standingsCount = standings
+      ? standings.hasGroups
+         ? standings.groups.reduce((sum, g) => sum + g.table.length, 0)
+         : standings.table.length
+      : 0;
+
+   const hasStandings = standings
+      ? standings.hasGroups
+         ? standings.groups.length > 0
+         : standings.table.length > 0
+      : false;
 
    const tabs = [
       {
          id: 'standings',
          label: 'Standings',
          icon: Trophy,
-         count: standings.length,
+         count: standingsCount,
       },
       {
          id: 'fixtures',
@@ -77,7 +97,27 @@ export default function LeagueDetailsClient({ data }: { data: LeagueData }) {
             activeTab={activeTab}
             onTabChange={(tabId) => setActiveTab(tabId as TabId)}
          />
-         {activeTab === 'standings' && <StandingsTable standings={standings} />}
+         {activeTab === 'standings' &&
+            (!hasStandings ? (
+               <EmptyState
+                  icon={<Trophy className="w-8 h-8 text-slate-600" />}
+                  title="No Standings Available"
+                  description="Standings for this league aren't available yet."
+               />
+            ) : standings!.hasGroups ? (
+               <div className="space-y-8">
+                  {standings!.groups.map((group) => (
+                     <div key={group.name} className="space-y-3">
+                        <h3 className="text-lg font-bold text-white">
+                           {group.name}
+                        </h3>
+                        <StandingsTable standings={group.table} />
+                     </div>
+                  ))}
+               </div>
+            ) : (
+               <StandingsTable standings={standings!.table} />
+            ))}
          {activeTab === 'fixtures' && (
             <div className="space-y-3">
                {upcomingMatches.length === 0 ? (
