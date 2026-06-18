@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
 import { login } from '../api/authApi';
 import { useAuth } from '@/shared/hooks';
+import { GoogleAuthButton } from './GoogleAuthButton';
 
 interface FormErrors {
    email?: string;
@@ -66,6 +67,14 @@ export function LoginForm() {
             </div>
          )}
 
+         <GoogleAuthButton onError={(msg) => setErrors({ general: msg })} />
+
+         <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-slate-700/50" />
+            <span className="text-xs text-slate-500">OR</span>
+            <div className="flex-1 h-px bg-slate-700/50" />
+         </div>
+
          {/* Email */}
          <div className="space-y-1.5">
             <label
@@ -100,12 +109,20 @@ export function LoginForm() {
 
          {/* Password */}
          <div className="space-y-1.5">
-            <label
-               htmlFor="password"
-               className="block text-sm font-medium text-slate-300"
-            >
-               Password
-            </label>
+            <div className="flex items-center justify-between">
+               <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-slate-300"
+               >
+                  Password
+               </label>
+               <Link
+                  href="/forgot-password"
+                  className="text-xs text-blue-400 hover:text-blue-300 transition-colors font-medium"
+               >
+                  Forgot password?
+               </Link>
+            </div>
             <div className="relative">
                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
                <input

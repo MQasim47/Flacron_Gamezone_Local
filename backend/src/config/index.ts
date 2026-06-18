@@ -76,6 +76,21 @@ export const config = {
    youtube: {
       apiKey: process.env.YOUTUBE_API_KEY ?? '',
    },
+
+   google: {
+      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+   },
+
+   passwordReset: {
+      ttlMinutes: Number(process.env.PASSWORD_RESET_TOKEN_TTL_MINUTES ?? 30),
+      fromEmail:
+         process.env.PASSWORD_RESET_FROM_EMAIL ?? 'noreply@flacrongamezone.com',
+      fromName: process.env.PASSWORD_RESET_FROM_NAME ?? 'Flacron Gamezone',
+   },
+
+   brevo: {
+      apiKey: process.env.BREVO_API_KEY ?? '',
+   },
 };
 
 export function validateConfig() {

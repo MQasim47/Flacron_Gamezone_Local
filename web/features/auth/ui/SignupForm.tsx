@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { signup } from '../api/authApi';
 import { useAuth } from '@/shared/hooks';
+import { GoogleAuthButton } from './GoogleAuthButton';
 
 interface FormErrors {
    email?: string;
@@ -110,6 +111,14 @@ export function SignupForm() {
                {errors.general}
             </div>
          )}
+
+         <GoogleAuthButton onError={(msg) => setErrors({ general: msg })} />
+
+         <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-slate-700/50" />
+            <span className="text-xs text-slate-500">OR</span>
+            <div className="flex-1 h-px bg-slate-700/50" />
+         </div>
 
          {/* Email */}
          <div className="space-y-1.5">

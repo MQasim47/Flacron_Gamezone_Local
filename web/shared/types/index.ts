@@ -108,6 +108,8 @@ export interface User {
    id: string | number;
    email: string;
    role: UserRole;
+   name?: string | null;
+   avatar?: string | null;
    subscription?: UserSubscription | null;
 }
 

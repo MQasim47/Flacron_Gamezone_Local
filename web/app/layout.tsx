@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import './globals.css';
 import { Shell } from '@/widgets/shell/ui/Shell';
-// Import from the 'geist' package instead
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 
@@ -20,7 +20,11 @@ export default function RootLayout({
          <body
             className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
          >
-            <Shell>{children}</Shell>
+            <GoogleOAuthProvider
+               clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+            >
+               <Shell>{children}</Shell>
+            </GoogleOAuthProvider>
          </body>
       </html>
    );

@@ -20,8 +20,53 @@ export const userRepository = {
       });
    },
 
+   findByGoogleId(googleId: string) {
+      return prisma.user.findUnique({
+         where: { googleId },
+         include: { subscription: true },
+      });
+   },
+
    create(data: { email: string; password: string }) {
       return prisma.user.create({ data });
+   },
+
+   createWithGoogle(data: {
+      email: string;
+      googleId: string;
+      name?: string | null;
+      avatar?: string | null;
+   }) {
+      return prisma.user.create({
+         data: {
+            email: data.email,
+            googleId: data.googleId,
+            name: data.name ?? null,
+            avatar: data.avatar ?? null,
+            password: null,
+         },
+      });
+   },
+
+   linkGoogleId(
+      userId: string,
+      data: { googleId: string; name?: string | null; avatar?: string | null }
+   ) {
+      return prisma.user.update({
+         where: { id: userId },
+         data: {
+            googleId: data.googleId,
+            name: data.name ?? undefined,
+            avatar: data.avatar ?? undefined,
+         },
+      });
+   },
+
+   updatePassword(userId: string, passwordHash: string) {
+      return prisma.user.update({
+         where: { id: userId },
+         data: { password: passwordHash },
+      });
    },
 
    /** Legacy — returns all users (no pagination). Prefer findPaginated. */
