@@ -75,6 +75,9 @@ export const metadata: Metadata = {
       // Add your Google Search Console verification code here after verifying
       google: 'IaIpsPSWml_uUJqTCHyQh1LDzQyXsuUWBTspqQLMhp4',
    },
+   icons: {
+      icon: '/icon.png',
+   },
 };
 
 export default function RootLayout({
