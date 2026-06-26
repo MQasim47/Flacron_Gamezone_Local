@@ -81,13 +81,13 @@ export function LeagueTab({ admin, onConfirmDelete }: Props) {
                      setPage(0);
                   }}
                   placeholder="Search leagues…"
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
                />
             </div>
             <button
                onClick={admin.bulkSync}
                disabled={admin.bulkSyncing}
-               className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 hover:border-blue-500/50 rounded-xl text-sm transition-all disabled:opacity-50"
+               className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 hover:border-brand/50 rounded-xl text-sm transition-all disabled:opacity-50"
             >
                <RefreshCw
                   className={`w-4 h-4 ${admin.bulkSyncing ? 'animate-spin' : ''}`}
@@ -96,7 +96,7 @@ export function LeagueTab({ admin, onConfirmDelete }: Props) {
             </button>
             <button
                onClick={openAdd}
-               className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl text-sm font-medium transition-all"
+               className="flex items-center gap-2 px-4 py-2.5 bg-brand hover:bg-brand rounded-xl text-sm font-medium transition-all"
             >
                <Plus className="w-4 h-4" /> Add League
             </button>
@@ -168,7 +168,7 @@ export function LeagueTab({ admin, onConfirmDelete }: Props) {
                                     onClick={() => openEdit(league)}
                                     className="p-1.5 hover:bg-slate-700 rounded-lg transition-colors"
                                  >
-                                    <Edit2 className="w-3.5 h-3.5 text-blue-400" />
+                                    <Edit2 className="w-3.5 h-3.5 text-brand" />
                                  </button>
                                  <button
                                     onClick={() =>
@@ -254,7 +254,7 @@ export function LeagueTab({ admin, onConfirmDelete }: Props) {
                                  }))
                               }
                               placeholder={placeholder}
-                              className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 rounded-xl text-sm outline-none"
+                              className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-brand/50 rounded-xl text-sm outline-none"
                            />
                         </div>
                      ))}
@@ -270,7 +270,7 @@ export function LeagueTab({ admin, onConfirmDelete }: Props) {
                      <button
                         onClick={handleSave}
                         disabled={admin.saving || !form.name.trim()}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900/50 rounded-xl text-sm font-medium disabled:opacity-50"
+                        className="flex items-center gap-2 px-4 py-2 bg-brand hover:bg-brand disabled:bg-brand/50 rounded-xl text-sm font-medium disabled:opacity-50"
                      >
                         {admin.saving ? (
                            <RefreshCw className="w-4 h-4 animate-spin" />

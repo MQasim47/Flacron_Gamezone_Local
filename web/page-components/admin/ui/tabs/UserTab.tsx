@@ -45,7 +45,7 @@ export function UserTab({ admin, onConfirmDelete }: Props) {
                value={admin.search}
                onChange={(e) => admin.onSearchChange(e.target.value)}
                placeholder="Search users…"
-               className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+               className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
             />
          </div>
 
@@ -131,7 +131,7 @@ export function UserTab({ admin, onConfirmDelete }: Props) {
                                     onClick={() => openEdit(user)}
                                     className="p-1.5 hover:bg-slate-700 rounded-lg"
                                  >
-                                    <Edit2 className="w-3.5 h-3.5 text-blue-400" />
+                                    <Edit2 className="w-3.5 h-3.5 text-brand" />
                                  </button>
                                  <button
                                     onClick={() =>
@@ -184,7 +184,7 @@ export function UserTab({ admin, onConfirmDelete }: Props) {
                         onChange={(e) =>
                            setRole(e.target.value as 'USER' | 'ADMIN')
                         }
-                        className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 rounded-xl text-sm outline-none"
+                        className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-brand/50 rounded-xl text-sm outline-none"
                      >
                         <option value="USER">User</option>
                         <option value="ADMIN">Admin</option>
@@ -201,7 +201,7 @@ export function UserTab({ admin, onConfirmDelete }: Props) {
                      <button
                         onClick={handleSave}
                         disabled={admin.saving}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900/50 rounded-xl text-sm font-medium disabled:opacity-50"
+                        className="px-4 py-2 bg-brand hover:bg-brand disabled:bg-brand/50 rounded-xl text-sm font-medium disabled:opacity-50"
                      >
                         {admin.saving ? 'Saving…' : 'Save'}
                      </button>

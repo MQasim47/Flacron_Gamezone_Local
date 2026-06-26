@@ -36,8 +36,8 @@ export function UserEditModal({
          <div className="relative bg-slate-900 border border-slate-700/50 rounded-2xl w-full max-w-sm p-6 shadow-2xl animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-6">
                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center">
-                     <User className="w-5 h-5 text-indigo-400" />
+                  <div className="w-10 h-10 bg-brand/10 border border-brand/20 rounded-xl flex items-center justify-center">
+                     <User className="w-5 h-5 text-brand" />
                   </div>
                   <div>
                      <h2 className="text-lg font-bold">Edit User</h2>
@@ -61,7 +61,7 @@ export function UserEditModal({
                <select
                   value={role}
                   onChange={(e) => setRole(e.target.value as 'USER' | 'ADMIN')}
-                  className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 rounded-xl text-sm outline-none"
+                  className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-brand/50 rounded-xl text-sm outline-none"
                >
                   <option value="USER">User</option>
                   <option value="ADMIN">Admin</option>
@@ -78,7 +78,7 @@ export function UserEditModal({
                <button
                   onClick={() => onSave(role)}
                   disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900/50 rounded-xl text-sm font-medium disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2 bg-brand hover:bg-brand disabled:bg-brand/50 rounded-xl text-sm font-medium disabled:opacity-50"
                >
                   <Save className={`w-4 h-4 ${saving ? 'animate-spin' : ''}`} />
                   {saving ? 'Saving…' : 'Save'}

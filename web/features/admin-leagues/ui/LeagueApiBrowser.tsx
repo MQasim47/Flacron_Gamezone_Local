@@ -185,8 +185,8 @@ export function LeagueApiBrowser({
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-slate-700/50 flex-shrink-0">
                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center">
-                     <Trophy className="w-5 h-5 text-blue-400" />
+                  <div className="w-10 h-10 bg-brand/10 border border-brand/20 rounded-xl flex items-center justify-center">
+                     <Trophy className="w-5 h-5 text-brand" />
                   </div>
                   <div>
                      <h2 className="text-lg font-bold">
@@ -218,7 +218,7 @@ export function LeagueApiBrowser({
                      value={search}
                      onChange={(e) => setSearch(e.target.value)}
                      placeholder="Search by name or country…"
-                     className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+                     className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
                   />
                </div>
                <div className="flex items-center justify-between text-sm">
@@ -228,7 +228,7 @@ export function LeagueApiBrowser({
                      className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors disabled:opacity-40"
                   >
                      {allFilteredSelected ? (
-                        <CheckSquare className="w-4 h-4 text-blue-400" />
+                        <CheckSquare className="w-4 h-4 text-brand" />
                      ) : (
                         <Square className="w-4 h-4" />
                      )}
@@ -245,7 +245,7 @@ export function LeagueApiBrowser({
             <div className="flex-1 overflow-y-auto p-4 min-h-0">
                {loading && (
                   <div className="flex flex-col items-center justify-center py-16 gap-3">
-                     <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+                     <Loader2 className="w-8 h-8 text-brand animate-spin" />
                      <p className="text-sm text-slate-400">
                         Fetching from Football API…
                      </p>
@@ -296,13 +296,13 @@ export function LeagueApiBrowser({
                               onClick={() => toggleSelect(league.apiLeagueId)}
                               className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all duration-150 ${
                                  isSelected
-                                    ? 'bg-blue-500/15 border-blue-500/50'
+                                    ? 'bg-brand/15 border-brand/50'
                                     : 'bg-slate-800/30 border-slate-700/40 hover:border-slate-600/60 hover:bg-slate-800/50'
                               }`}
                            >
                               <div className="flex-shrink-0">
                                  {isSelected ? (
-                                    <CheckSquare className="w-4 h-4 text-blue-400" />
+                                    <CheckSquare className="w-4 h-4 text-brand" />
                                  ) : (
                                     <Square className="w-4 h-4 text-slate-600" />
                                  )}
@@ -348,7 +348,7 @@ export function LeagueApiBrowser({
                      <button
                         onClick={handleLoadMore}
                         disabled={loadingMore}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-600/50 hover:border-blue-500/40 rounded-xl text-sm font-medium text-slate-300 hover:text-white transition-all disabled:opacity-50"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-600/50 hover:border-brand/40 rounded-xl text-sm font-medium text-slate-300 hover:text-white transition-all disabled:opacity-50"
                      >
                         {loadingMore ? (
                            <Loader2 className="w-4 h-4 animate-spin" />
@@ -382,7 +382,7 @@ export function LeagueApiBrowser({
                <button
                   onClick={handleImport}
                   disabled={importing || selected.size === 0}
-                  className="flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900/50 disabled:opacity-50 rounded-xl text-sm font-medium transition-all"
+                  className="flex items-center gap-2 px-5 py-2 bg-brand hover:bg-brand disabled:bg-brand/50 disabled:opacity-50 rounded-xl text-sm font-medium transition-all"
                >
                   {importing ? (
                      <Loader2 className="w-4 h-4 animate-spin" />

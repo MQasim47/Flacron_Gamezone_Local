@@ -95,14 +95,14 @@ export function LeagueBrowser({
                      setCurrentPage(0);
                   }}
                   placeholder="Search leagues…"
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
                />
             </div>
             <div className="flex gap-2">
                <button
                   onClick={onBulkSync}
                   disabled={bulkSyncing}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 hover:border-blue-500/50 rounded-xl text-sm transition-all disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 hover:border-brand/50 rounded-xl text-sm transition-all disabled:opacity-50"
                >
                   <RefreshCw
                      className={`w-4 h-4 ${bulkSyncing ? 'animate-spin' : ''}`}
@@ -112,7 +112,7 @@ export function LeagueBrowser({
                {/* Import from API — primary CTA */}
                <button
                   onClick={onImportFromApi}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl text-sm font-medium transition-all shadow-lg shadow-blue-500/20"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-brand hover:bg-brand rounded-xl text-sm font-medium transition-all shadow-lg shadow-brand/20"
                >
                   <Download className="w-4 h-4" /> Import from API
                </button>
@@ -208,7 +208,7 @@ export function LeagueBrowser({
                                     className="p-1.5 hover:bg-slate-700 rounded-lg transition-colors"
                                     title="Edit"
                                  >
-                                    <Edit2 className="w-3.5 h-3.5 text-blue-400" />
+                                    <Edit2 className="w-3.5 h-3.5 text-brand" />
                                  </button>
                                  <button
                                     onClick={() => onDelete(league)}

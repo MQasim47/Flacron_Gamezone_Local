@@ -35,14 +35,14 @@ export function AdminPanelTabs({ active, onChange }: Props) {
                className={cn(
                   'flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors relative flex-shrink-0',
                   active === id
-                     ? 'text-blue-400'
+                     ? 'text-brand'
                      : 'text-slate-400 hover:text-slate-200'
                )}
             >
                <Icon className="w-4 h-4" />
                {label}
                {active === id && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-t" />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-brand to-brand-dark rounded-t" />
                )}
             </button>
          ))}

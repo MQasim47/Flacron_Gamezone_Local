@@ -109,7 +109,7 @@ export default function ContactPage() {
       <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
          <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div
-               className="absolute top-20 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"
+               className="absolute top-20 left-10 w-96 h-96 bg-brand/10 rounded-full blur-3xl animate-pulse"
                style={{ animationDuration: '4s' }}
             />
             <div
@@ -117,7 +117,7 @@ export default function ContactPage() {
                style={{ animationDuration: '6s', animationDelay: '1s' }}
             />
             <div
-               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"
+               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand/5 rounded-full blur-3xl animate-pulse"
                style={{ animationDuration: '8s', animationDelay: '2s' }}
             />
          </div>
@@ -126,7 +126,7 @@ export default function ContactPage() {
                particleStyles.map((style, i) => (
                   <div
                      key={i}
-                     className="absolute w-1 h-1 bg-blue-400/20 rounded-full particle-float"
+                     className="absolute w-1 h-1 bg-brand/20 rounded-full particle-float"
                      style={style as React.CSSProperties}
                   />
                ))}
@@ -135,11 +135,11 @@ export default function ContactPage() {
             <div
                className={`text-center mb-12 transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
-               <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 mb-6 shadow-lg shadow-blue-500/50 relative group">
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
+               <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-brand via-brand to-purple-600 mb-6 shadow-lg shadow-brand/50 relative group">
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand to-brand-dark blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
                   <Mail className="w-10 h-10 text-white relative z-10" />
                </div>
-               <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent animate-gradient">
+               <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-brand via-purple-400 to-brand bg-clip-text text-transparent animate-gradient">
                   Get in Touch
                </h1>
                <p className="text-xl text-slate-400 max-w-2xl mx-auto">
@@ -208,10 +208,10 @@ export default function ContactPage() {
                   className={`lg:col-span-2 transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                >
                   <div className="relative group">
-                     <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
+                     <div className="absolute -inset-0.5 bg-gradient-to-r from-brand to-brand-dark rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
                      <div className="relative bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-2xl border border-slate-700/50 rounded-2xl p-8 shadow-2xl">
                         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                           <MessageCircle className="w-6 h-6 text-blue-400" />
+                           <MessageCircle className="w-6 h-6 text-brand" />
                            Send us a Message
                         </h2>
                         {success && (
@@ -277,7 +277,7 @@ export default function ContactPage() {
                                        </label>
                                        <div className="relative group/input">
                                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                             <Icon className="w-5 h-5 text-slate-500 group-focus-within/input:text-blue-400 transition-colors" />
+                                             <Icon className="w-5 h-5 text-slate-500 group-focus-within/input:text-brand transition-colors" />
                                           </div>
                                           <input
                                              id={id}
@@ -294,7 +294,7 @@ export default function ContactPage() {
                                              aria-invalid={Boolean(
                                                 error[id as keyof FormErrors]
                                              )}
-                                             className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                                             className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/50 transition-all duration-300"
                                           />
                                        </div>
                                        {error[id as keyof FormErrors] && (
@@ -319,7 +319,7 @@ export default function ContactPage() {
                               </label>
                               <div className="relative group/input">
                                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <MessageCircle className="w-5 h-5 text-slate-500 group-focus-within/input:text-blue-400 transition-colors" />
+                                    <MessageCircle className="w-5 h-5 text-slate-500 group-focus-within/input:text-brand transition-colors" />
                                  </div>
                                  <input
                                     id="subject"
@@ -329,7 +329,7 @@ export default function ContactPage() {
                                     value={formData.subject}
                                     onChange={handleChange}
                                     required
-                                    className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                                    className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/50 transition-all duration-300"
                                  />
                               </div>
                               {error.subject && (
@@ -357,7 +357,7 @@ export default function ContactPage() {
                                  onChange={handleChange}
                                  required
                                  rows={6}
-                                 className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 resize-none"
+                                 className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/50 transition-all duration-300 resize-none"
                               />
                               {error.message && (
                                  <p
@@ -374,7 +374,7 @@ export default function ContactPage() {
                               disabled={loading}
                               className="relative w-full group/btn overflow-hidden"
                            >
-                              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl transition-transform duration-300 group-hover/btn:scale-105" />
+                              <div className="absolute inset-0 bg-gradient-to-r from-brand to-brand-dark rounded-xl transition-transform duration-300 group-hover/btn:scale-105" />
                               <div className="relative flex items-center justify-center gap-2 py-3 text-white font-semibold">
                                  {loading ? (
                                     <>
@@ -417,7 +417,7 @@ export default function ContactPage() {
                >
                   <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6">
                      <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-                        <Clock className="w-5 h-5 text-blue-400" />
+                        <Clock className="w-5 h-5 text-brand" />
                         Support Hours
                      </h3>
                      <div className="space-y-2 text-sm">
@@ -427,7 +427,7 @@ export default function ContactPage() {
                         </div>
                         <div className="flex justify-between text-slate-300">
                            <span>Saturday</span>
-                           <span className="text-blue-400">10AM - 4PM EST</span>
+                           <span className="text-brand">10AM - 4PM EST</span>
                         </div>
                         <div className="flex justify-between text-slate-300">
                            <span>Sunday</span>
@@ -474,7 +474,7 @@ export default function ContactPage() {
                            <a
                               key={href}
                               href={href}
-                              className="block text-sm text-slate-400 hover:text-blue-400 transition-colors"
+                              className="block text-sm text-slate-400 hover:text-brand transition-colors"
                            >
                               → {label}
                            </a>

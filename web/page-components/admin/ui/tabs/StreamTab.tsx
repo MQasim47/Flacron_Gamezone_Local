@@ -48,7 +48,7 @@ export function StreamTab({ admin }: { admin: AdminState }) {
       <div className="space-y-4">
          <div className="flex items-center justify-between">
             <div>
-               <h2 className="text-xl font-black text-white">
+               <h2 className="text-xl font-bold text-white">
                   Stream Management
                </h2>
                <p className="text-sm text-slate-400 mt-1">
@@ -84,7 +84,7 @@ export function StreamTab({ admin }: { admin: AdminState }) {
                </button>
                <button
                   onClick={openAdd}
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-white font-semibold text-sm transition-all"
+                  className="flex items-center gap-2 bg-brand hover:bg-brand px-4 py-2 rounded-lg text-white font-semibold text-sm transition-all"
                >
                   <Plus className="w-5 h-5" /> Add Stream
                </button>
@@ -141,7 +141,7 @@ export function StreamTab({ admin }: { admin: AdminState }) {
                            <td className="px-6 py-4">
                               {match.stream ? (
                                  <div className="flex items-center gap-2">
-                                    <PlayCircle className="w-4 h-4 text-blue-400" />
+                                    <PlayCircle className="w-4 h-4 text-brand" />
                                     <span
                                        className={`text-xs font-semibold px-2 py-0.5 rounded-lg border ${match.stream.isActive ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-slate-700/50 text-slate-500 border-slate-600/30'}`}
                                     >
@@ -159,7 +159,7 @@ export function StreamTab({ admin }: { admin: AdminState }) {
                            <td className="px-6 py-4">
                               <button
                                  onClick={() => openEdit(match)}
-                                 className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700/50 hover:border-blue-500/50 text-blue-400 text-sm font-semibold transition-colors"
+                                 className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700/50 hover:border-brand/50 text-brand text-sm font-semibold transition-colors"
                               >
                                  <Edit2 className="w-4 h-4" />
                                  {match.stream ? 'Edit' : 'Add'}
@@ -175,8 +175,8 @@ export function StreamTab({ admin }: { admin: AdminState }) {
          {modal && (
             <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                <div className="w-full max-w-2xl bg-slate-900 border border-slate-700/50 rounded-2xl overflow-hidden">
-                  <div className="p-6 bg-gradient-to-r from-blue-600 to-cyan-600">
-                     <h3 className="text-xl font-black text-white">
+                  <div className="p-6 bg-gradient-to-r from-brand to-brand-dark">
+                     <h3 className="text-xl font-bold text-white">
                         Stream Editor
                      </h3>
                   </div>
@@ -233,7 +233,7 @@ export function StreamTab({ admin }: { admin: AdminState }) {
                            type="checkbox"
                            checked={form.isActive}
                            onChange={(e) => set('isActive', e.target.checked)}
-                           className="w-5 h-5 rounded accent-blue-500"
+                           className="w-5 h-5 rounded accent-brand"
                         />
                         <span className="text-sm font-semibold text-slate-300">
                            Stream is active
@@ -249,7 +249,7 @@ export function StreamTab({ admin }: { admin: AdminState }) {
                         <button
                            onClick={handleSave}
                            disabled={admin.saving}
-                           className="flex-1 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all text-sm disabled:opacity-50"
+                           className="flex-1 px-6 py-3 rounded-xl bg-brand hover:bg-brand text-white font-semibold transition-all text-sm disabled:opacity-50"
                         >
                            {admin.saving ? 'Saving…' : 'Save Stream'}
                         </button>

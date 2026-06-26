@@ -24,8 +24,8 @@ const sections = [
       id: 'information-we-collect',
       icon: Database,
       title: 'Information We Collect',
-      gradient: 'from-cyan-600 to-blue-600',
-      border: 'border-cyan-500/30',
+      gradient: 'from-brand to-brand-dark',
+      border: 'border-brand/30',
       glow: 'rgba(6,182,212,0.15)',
       content: [
          {
@@ -46,8 +46,8 @@ const sections = [
       id: 'how-we-use',
       icon: Eye,
       title: 'How We Use Your Information',
-      gradient: 'from-blue-600 to-purple-600',
-      border: 'border-blue-500/30',
+      gradient: 'from-brand to-brand-dark',
+      border: 'border-brand/30',
       glow: 'rgba(59,130,246,0.15)',
       content: [
          {
@@ -134,8 +134,8 @@ const sections = [
       id: 'cookies',
       icon: Globe,
       title: 'Cookies & Tracking',
-      gradient: 'from-cyan-600 to-teal-600',
-      border: 'border-cyan-500/30',
+      gradient: 'from-brand to-brand',
+      border: 'border-brand/30',
       glow: 'rgba(6,182,212,0.15)',
       content: [
          {
@@ -178,8 +178,8 @@ const sections = [
       id: 'contact',
       icon: Bell,
       title: 'Policy Updates & Contact',
-      gradient: 'from-blue-600 to-cyan-600',
-      border: 'border-blue-500/30',
+      gradient: 'from-brand to-brand-dark',
+      border: 'border-brand/30',
       glow: 'rgba(59,130,246,0.15)',
       content: [
          {
@@ -205,9 +205,9 @@ export function PrivacyClient() {
          <div className="max-w-5xl mx-auto px-6 pt-6">
             <Link
                href="/"
-               className="group inline-flex items-center gap-3 text-slate-400 hover:text-cyan-400 transition-all duration-300 px-4 py-2.5 rounded-xl hover:bg-slate-800/70 border border-transparent hover:border-cyan-500/30"
+               className="group inline-flex items-center gap-3 text-slate-400 hover:text-brand transition-all duration-300 px-4 py-2.5 rounded-xl hover:bg-slate-800/70 border border-transparent hover:border-brand/30"
             >
-               <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800/70 group-hover:bg-gradient-to-br group-hover:from-cyan-600 group-hover:to-blue-600 transition-all duration-300 shadow-lg">
+               <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800/70 group-hover:bg-gradient-to-br group-hover:from-brand group-hover:to-brand transition-all duration-300 shadow-lg">
                   <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                </div>
                <span className="text-sm font-bold uppercase tracking-wide">
@@ -234,24 +234,24 @@ export function PrivacyClient() {
             <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 md:py-28">
                <div className="flex items-center justify-center mb-6">
                   <div className="relative">
-                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-2xl blur-2xl opacity-60" />
-                     <div className="relative w-20 h-20 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl border border-cyan-500/50">
+                     <div className="absolute inset-0 bg-gradient-to-br from-brand to-brand-dark rounded-2xl blur-2xl opacity-60" />
+                     <div className="relative w-20 h-20 bg-gradient-to-br from-brand to-brand-dark rounded-2xl flex items-center justify-center shadow-2xl border border-brand/50">
                         <Shield className="w-10 h-10 text-white" />
                      </div>
                   </div>
                </div>
 
                <div className="text-center">
-                  <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-2 mb-6">
-                     <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
-                     <span className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">
+                  <div className="inline-flex items-center gap-2 bg-brand/10 border border-brand/30 rounded-full px-4 py-2 mb-6">
+                     <span className="w-2 h-2 bg-brand rounded-full animate-pulse" />
+                     <span className="text-sm font-semibold text-brand uppercase tracking-wider">
                         Legal Document
                      </span>
                   </div>
 
-                  <h1 className="text-5xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">
+                  <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 uppercase tracking-tight leading-none">
                      Privacy{' '}
-                     <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                     <span className="bg-gradient-to-r from-brand via-brand to-purple-400 bg-clip-text text-transparent">
                         Policy
                      </span>
                   </h1>
@@ -269,7 +269,7 @@ export function PrivacyClient() {
                </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
          </div>
 
          <div className="max-w-5xl mx-auto px-6 py-16 space-y-8">
@@ -277,7 +277,7 @@ export function PrivacyClient() {
             <div className="relative overflow-hidden bg-slate-900/80 backdrop-blur-xl border-2 border-slate-700/50 rounded-2xl p-6 shadow-xl">
                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,_rgba(6,182,212,0.08),transparent)]" />
                <div className="relative">
-                  <p className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-4">
+                  <p className="text-xs font-bold text-brand uppercase tracking-widest mb-4">
                      Quick Navigation
                   </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -285,9 +285,9 @@ export function PrivacyClient() {
                         <a
                            key={s.id}
                            href={`#${s.id}`}
-                           className="group flex items-center gap-2 text-sm text-slate-400 hover:text-cyan-400 transition-colors duration-200 font-semibold"
+                           className="group flex items-center gap-2 text-sm text-slate-400 hover:text-brand transition-colors duration-200 font-semibold"
                         >
-                           <ChevronRight className="w-3 h-3 text-cyan-500/50 group-hover:text-cyan-400 transition-colors flex-shrink-0" />
+                           <ChevronRight className="w-3 h-3 text-brand/50 group-hover:text-brand transition-colors flex-shrink-0" />
                            <span className="truncate">{s.title}</span>
                         </a>
                      ))}
@@ -296,14 +296,14 @@ export function PrivacyClient() {
             </div>
 
             {/* Intro card */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border-2 border-cyan-500/30 rounded-2xl p-8 shadow-xl">
+            <div className="relative overflow-hidden bg-gradient-to-br from-brand/20 to-brand/20 border-2 border-brand/30 rounded-2xl p-8 shadow-xl">
                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(6,182,212,0.1),transparent)]" />
                <div className="relative flex items-start gap-5">
-                  <div className="w-14 h-14 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                  <div className="w-14 h-14 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
                      <Shield className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                     <h2 className="text-xl font-black text-white mb-3 uppercase tracking-wide">
+                     <h2 className="text-xl font-bold text-white mb-3 uppercase tracking-wide">
                         Our Commitment to You
                      </h2>
                      <p className="text-slate-300 leading-relaxed font-medium">
@@ -316,7 +316,7 @@ export function PrivacyClient() {
                      </p>
                   </div>
                </div>
-               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500" />
+               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-brand via-brand to-brand" />
             </div>
 
             {/* Sections */}
@@ -343,7 +343,7 @@ export function PrivacyClient() {
                            >
                               <Icon className="w-6 h-6 text-white" />
                            </div>
-                           <h2 className="text-2xl font-black text-white uppercase tracking-tight">
+                           <h2 className="text-2xl font-bold text-white uppercase tracking-tight">
                               {section.title}
                            </h2>
                         </div>
@@ -356,7 +356,7 @@ export function PrivacyClient() {
                                     className={`w-1 rounded-full bg-gradient-to-b ${section.gradient} flex-shrink-0 mt-1`}
                                  />
                                  <div>
-                                    <h3 className="text-sm font-black text-white uppercase tracking-wider mb-2">
+                                    <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">
                                        {block.subtitle}
                                     </h3>
                                     <p className="text-slate-400 leading-relaxed font-medium text-sm">
@@ -379,10 +379,10 @@ export function PrivacyClient() {
             <div className="relative overflow-hidden bg-gradient-to-br from-slate-900/95 to-slate-800/95 border-2 border-slate-700/50 rounded-2xl p-8 text-center shadow-xl">
                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(6,182,212,0.08),transparent)]" />
                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-xl shadow-cyan-500/30">
+                  <div className="w-16 h-16 bg-gradient-to-br from-brand to-brand-dark rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-xl shadow-brand/30">
                      <Mail className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-3">
+                  <h3 className="text-2xl font-bold text-white uppercase tracking-tight mb-3">
                      Questions About Your Privacy?
                   </h3>
                   <p className="text-slate-400 font-medium mb-6 max-w-md mx-auto">
@@ -391,13 +391,13 @@ export function PrivacyClient() {
                   </p>
                   <a
                      href={`mailto:${PRIVACY_EMAIL}`}
-                     className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black px-8 py-4 rounded-xl shadow-lg shadow-cyan-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/40 uppercase tracking-wide text-sm"
+                     className="inline-flex items-center gap-2 bg-gradient-to-r from-brand to-brand-dark hover:from-brand hover:to-brand text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-brand/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-brand/40 uppercase tracking-wide text-sm"
                   >
                      <Mail className="w-5 h-5" />
                      Contact Privacy Team
                   </a>
                </div>
-               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500" />
+               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-brand via-brand to-purple-500" />
             </div>
          </div>
 

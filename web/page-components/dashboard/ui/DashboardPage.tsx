@@ -30,7 +30,7 @@ const PREMIUM_FEATURES = [
    {
       icon: Play,
       label: 'Live HD Streaming',
-      color: 'from-blue-500 to-cyan-500',
+      color: 'from-brand to-brand-dark',
    },
    {
       icon: Sparkles,
@@ -40,7 +40,7 @@ const PREMIUM_FEATURES = [
    {
       icon: TrendingUp,
       label: 'Advanced Statistics',
-      color: 'from-emerald-500 to-teal-500',
+      color: 'from-emerald-500 to-brand',
    },
    {
       icon: Shield,
@@ -55,7 +55,7 @@ const PREMIUM_FEATURES = [
    {
       icon: Star,
       label: 'Custom Profiles',
-      color: 'from-blue-500 to-violet-500',
+      color: 'from-brand to-violet-500',
    },
 ];
 
@@ -80,7 +80,7 @@ const QUICK_ACTIONS = [
       icon: Search,
       href: null,
       action: 'search',
-      gradient: 'from-blue-600 to-cyan-500',
+      gradient: 'from-brand to-brand-dark',
    },
    {
       label: 'Live Matches',
@@ -151,7 +151,7 @@ export default function DashboardPage() {
    if (loading) {
       return (
          <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
-            <Loader2 className="w-10 h-10 text-blue-400 animate-spin" />
+            <Loader2 className="w-10 h-10 text-brand animate-spin" />
          </div>
       );
    }
@@ -160,8 +160,8 @@ export default function DashboardPage() {
       <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen">
          <div className="space-y-6 max-w-5xl mx-auto px-4 py-8">
             {/* Hero */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900/30 to-purple-900/30 border border-slate-700/50 rounded-2xl p-8 shadow-2xl">
-               <div className="absolute top-0 right-0 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-brand/30 to-purple-900/30 border border-slate-700/50 rounded-2xl p-8 shadow-2xl">
+               <div className="absolute top-0 right-0 w-72 h-72 bg-brand/10 rounded-full blur-3xl pointer-events-none" />
                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                   <div className="max-w-xl">
                      <div
@@ -172,7 +172,7 @@ export default function DashboardPage() {
                         />
                         {isActive ? 'Premium Active' : 'Free Plan'}
                      </div>
-                     <h1 className="text-4xl font-black mb-2 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent">
+                     <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-white via-brand to-purple-300 bg-clip-text text-transparent">
                         Account Dashboard
                      </h1>
                      <p className="text-slate-300">
@@ -181,7 +181,7 @@ export default function DashboardPage() {
                      </p>
                   </div>
                </div>
-               <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+               <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-brand via-purple-500 to-pink-500" />
             </div>
 
             {/* Quick Actions */}
@@ -249,14 +249,14 @@ export default function DashboardPage() {
                <div className="lg:col-span-3 bg-slate-900/90 border border-slate-700/50 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-6">
                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg relative">
+                        <div className="w-12 h-12 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center shadow-lg relative">
                            <Crown className="w-6 h-6 text-white" />
                            {isActive && (
                               <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-900 animate-pulse" />
                            )}
                         </div>
                         <div>
-                           <h2 className="text-xl font-black text-white">
+                           <h2 className="text-xl font-bold text-white">
                               {hasPlan
                                  ? `${subscription!.plan!.charAt(0).toUpperCase() + subscription!.plan!.slice(1)} Plan`
                                  : 'Free Plan'}
@@ -322,14 +322,14 @@ export default function DashboardPage() {
                   )}
 
                   {!hasPlan && (
-                     <div className="mb-6 bg-blue-900/20 border border-blue-700/40 rounded-xl p-5">
+                     <div className="mb-6 bg-brand/20 border border-brand/40 rounded-xl p-5">
                         <p className="text-slate-300 text-sm mb-4">
                            Upgrade to Premium to unlock live streaming, AI
                            analysis, and more.
                         </p>
                         <button
                            onClick={() => router.push('/pricing')}
-                           className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-5 py-3 rounded-lg shadow-lg transition-all hover:scale-[1.02]"
+                           className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand to-brand-dark hover:from-brand-hover hover:to-brand text-white font-bold px-5 py-3 rounded-lg shadow-lg transition-all hover:scale-[1.02]"
                         >
                            <Sparkles className="w-4 h-4" /> View Premium Plans
                         </button>
@@ -340,7 +340,7 @@ export default function DashboardPage() {
                      <div className="space-y-3">
                         <button
                            onClick={() => router.push('/pricing')}
-                           className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-5 py-3 rounded-lg shadow-lg transition-all hover:scale-[1.02]"
+                           className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand to-brand-dark hover:from-brand-hover hover:to-brand text-white font-bold px-5 py-3 rounded-lg shadow-lg transition-all hover:scale-[1.02]"
                         >
                            <Crown className="w-4 h-4" /> Upgrade / Change Plan{' '}
                            <ChevronRight className="w-4 h-4" />
@@ -390,7 +390,7 @@ export default function DashboardPage() {
                   {hasPlan && isCanceled && (
                      <button
                         onClick={() => router.push('/pricing')}
-                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-5 py-3 rounded-lg shadow-lg transition-all hover:scale-[1.02]"
+                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand to-brand-dark hover:from-brand-hover hover:to-brand text-white font-bold px-5 py-3 rounded-lg shadow-lg transition-all hover:scale-[1.02]"
                      >
                         <Crown className="w-4 h-4" /> Resubscribe{' '}
                         <ChevronRight className="w-4 h-4" />

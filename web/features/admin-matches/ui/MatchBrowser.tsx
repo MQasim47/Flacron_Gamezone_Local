@@ -69,7 +69,7 @@ export function MatchBrowser({
    const statusColors: Record<string, string> = {
       LIVE: 'bg-red-500/20 text-red-400 border-red-500/30',
       FINISHED: 'bg-green-500/20 text-green-400 border-green-500/30',
-      UPCOMING: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+      UPCOMING: 'bg-brand/20 text-brand border-brand/30',
    };
 
    const formatDate = (d: string) =>
@@ -89,13 +89,13 @@ export function MatchBrowser({
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search matches…"
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
                />
             </div>
             <select
                value={statusFilter}
                onChange={(e) => onStatusFilterChange(e.target.value)}
-               className="px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+               className="px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
             >
                <option value="">All Statuses</option>
                <option value="UPCOMING">Upcoming</option>
@@ -105,7 +105,7 @@ export function MatchBrowser({
             <select
                value={leagueFilter}
                onChange={(e) => onLeagueFilterChange(e.target.value)}
-               className="px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+               className="px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
             >
                <option value="">All Leagues</option>
                {leagues.map((l) => (
@@ -117,7 +117,7 @@ export function MatchBrowser({
             <button
                onClick={onSync}
                disabled={syncing}
-               className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 hover:border-blue-500/50 rounded-xl text-sm transition-all disabled:opacity-50"
+               className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 hover:border-brand/50 rounded-xl text-sm transition-all disabled:opacity-50"
             >
                <RefreshCw
                   className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`}
@@ -212,7 +212,7 @@ export function MatchBrowser({
                                     className="p-1.5 hover:bg-slate-700 rounded-lg"
                                     title="Edit"
                                  >
-                                    <Edit2 className="w-3.5 h-3.5 text-blue-400" />
+                                    <Edit2 className="w-3.5 h-3.5 text-brand" />
                                  </button>
                                  <button
                                     onClick={() => onDelete(match)}

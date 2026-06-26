@@ -60,7 +60,7 @@ export function ForgotPasswordForm() {
             </div>
             <Link
                href="/login"
-               className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium"
+               className="inline-flex items-center gap-2 text-sm text-brand hover:text-brand-hover transition-colors font-medium"
             >
                <ArrowLeft className="w-4 h-4" /> Back to sign in
             </Link>
@@ -94,7 +94,7 @@ export function ForgotPasswordForm() {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/50 transition-all"
                />
             </div>
          </div>
@@ -102,7 +102,7 @@ export function ForgotPasswordForm() {
          <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg transition-all hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
+            className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-brand to-brand-dark hover:from-brand-hover hover:to-brand text-white font-semibold rounded-xl shadow-lg transition-all hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
          >
             {loading ? (
                <span className="flex items-center gap-2">
@@ -120,7 +120,7 @@ export function ForgotPasswordForm() {
          <p className="text-center text-sm text-slate-500">
             <Link
                href="/login"
-               className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors font-medium"
+               className="inline-flex items-center gap-1 text-brand hover:text-brand-hover transition-colors font-medium"
             >
                <ArrowLeft className="w-4 h-4" /> Back to sign in
             </Link>

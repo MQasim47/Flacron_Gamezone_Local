@@ -76,13 +76,11 @@ export function AdminPanel() {
          <div className="max-w-7xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex items-center gap-4">
-               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+               <div className="w-12 h-12 bg-gradient-to-br from-brand to-brand-dark rounded-2xl flex items-center justify-center shadow-lg shadow-brand/30">
                   <Shield className="w-6 h-6 text-white" />
                </div>
                <div>
-                  <h1 className="text-2xl font-black text-white">
-                     Admin Panel
-                  </h1>
+                  <h1 className="text-2xl font-bold text-white">Admin Panel</h1>
                   <p className="text-sm text-slate-400">
                      Manage your football platform
                   </p>

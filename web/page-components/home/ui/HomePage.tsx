@@ -22,7 +22,10 @@ import {
    Compass,
    Landmark,
    Flag,
+   LayoutGrid,
+   Radio,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -97,15 +100,15 @@ type FilterType =
    | 'africa'
    | 'asia';
 
-const QUICK_FILTERS: { id: FilterType; label: string; icon: string }[] = [
-   { id: 'all', label: 'All', icon: '⚽' },
-   { id: 'live', label: 'Live Now', icon: '🔴' },
-   { id: 'upcoming', label: 'Upcoming', icon: '⏰' },
-   { id: 'top', label: 'Top Leagues', icon: '🏆' },
-   { id: 'europe', label: 'Europe', icon: '🇪🇺' },
-   { id: 'americas', label: 'Americas', icon: '🌎' },
-   { id: 'africa', label: 'Africa', icon: '🌍' },
-   { id: 'asia', label: 'Asia', icon: '🌏' },
+const QUICK_FILTERS: { id: FilterType; label: string; icon: LucideIcon }[] = [
+   { id: 'all', label: 'All', icon: LayoutGrid },
+   { id: 'live', label: 'Live Now', icon: Radio },
+   { id: 'upcoming', label: 'Upcoming', icon: Clock },
+   { id: 'top', label: 'Top Leagues', icon: Trophy },
+   { id: 'europe', label: 'Europe', icon: Globe2 },
+   { id: 'americas', label: 'Americas', icon: Globe2 },
+   { id: 'africa', label: 'Africa', icon: Globe2 },
+   { id: 'asia', label: 'Asia', icon: Globe2 },
 ];
 
 const Skeleton = ({ className = '' }: { className?: string }) => (
@@ -426,7 +429,7 @@ export default function HomePage({
                            : 'bg-slate-800/60 text-slate-400 hover:text-white border border-slate-700/50 hover:border-brand/30'
                      }`}
                   >
-                     <span>{f.icon}</span>
+                     <f.icon className="w-3.5 h-3.5" />
                      {f.label}
                      {f.id === 'live' && totalLiveMatches > 0 && (
                         <span className="bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 ml-0.5">

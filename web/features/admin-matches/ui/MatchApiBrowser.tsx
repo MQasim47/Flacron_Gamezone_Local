@@ -302,7 +302,7 @@ export function MatchApiBrowser({
    const statusColors: Record<string, string> = {
       LIVE: 'bg-red-500/20 text-red-400',
       FINISHED: 'bg-green-500/20 text-green-400',
-      UPCOMING: 'bg-blue-500/20 text-blue-400',
+      UPCOMING: 'bg-brand/20 text-brand',
    };
 
    return (

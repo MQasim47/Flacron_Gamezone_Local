@@ -155,10 +155,10 @@ const COLOR_CLASSES: Record<
       border: 'border-purple-500/30',
    },
    blue: {
-      gradient: 'from-blue-500 to-blue-600',
-      text: 'text-blue-400',
-      bg: 'bg-blue-500/10',
-      border: 'border-blue-500/30',
+      gradient: 'from-brand to-brand-dark',
+      text: 'text-brand',
+      bg: 'bg-brand/10',
+      border: 'border-brand/30',
    },
    amber: {
       gradient: 'from-amber-500 to-amber-600',
@@ -206,11 +206,11 @@ export function TermsClient() {
                style={{ animationDuration: '4s' }}
             />
             <div
-               className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"
+               className="absolute bottom-20 right-10 w-96 h-96 bg-brand/10 rounded-full blur-3xl animate-pulse"
                style={{ animationDuration: '6s', animationDelay: '1s' }}
             />
             <div
-               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"
+               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand/5 rounded-full blur-3xl animate-pulse"
                style={{ animationDuration: '8s', animationDelay: '2s' }}
             />
          </div>
@@ -240,11 +240,11 @@ export function TermsClient() {
                      : 'opacity-0 translate-y-8'
                }`}
             >
-               <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 via-purple-600 to-blue-600 mb-6 shadow-lg shadow-purple-500/50 relative group">
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-400 to-blue-500 blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
+               <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 via-purple-600 to-brand mb-6 shadow-lg shadow-purple-500/50 relative group">
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand to-brand-dark blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
                   <FileText className="w-10 h-10 text-white relative z-10" />
                </div>
-               <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent animate-gradient">
+               <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-brand to-brand bg-clip-text text-transparent animate-gradient">
                   Terms of Service
                </h1>
                <p className="text-slate-400 text-lg mb-2">
@@ -308,7 +308,7 @@ export function TermsClient() {
                                           {' '}
                                           <Link
                                              href="/contact"
-                                             className="text-blue-400 font-semibold hover:underline"
+                                             className="text-brand font-semibold hover:underline"
                                           >
                                              contact us here
                                           </Link>
@@ -337,10 +337,10 @@ export function TermsClient() {
                               {section.responsibilities?.map((item, i) => (
                                  <div
                                     key={i}
-                                    className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-4 hover:border-blue-500/30 transition-all"
+                                    className="bg-slate-900/50 border border-slate-700/50 rounded-lg p-4 hover:border-brand/30 transition-all"
                                  >
                                     <div className="flex items-start gap-3">
-                                       <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                                       <CheckCircle className="w-5 h-5 text-brand flex-shrink-0 mt-0.5" />
                                        <span className="text-slate-300">
                                           {item}
                                        </span>

@@ -213,7 +213,7 @@ export default function AdminStreamsManagement() {
             );
          case 'UPCOMING':
             return (
-               <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-500/20 text-blue-400 text-xs font-bold">
+               <span className="inline-flex items-center px-2 py-1 rounded-md bg-brand/20 text-brand text-xs font-bold">
                   UPCOMING
                </span>
             );
@@ -238,7 +238,7 @@ export default function AdminStreamsManagement() {
       return (
          <div className="flex items-center justify-center py-12">
             <div className="text-center">
-               <div className="w-12 h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4" />
+               <div className="w-12 h-12 border-4 border-brand/30 border-t-brand rounded-full animate-spin mx-auto mb-4" />
                <p className="text-slate-400">Loading live matches...</p>
             </div>
          </div>
@@ -250,7 +250,7 @@ export default function AdminStreamsManagement() {
          {/* Header */}
          <div className="flex items-center justify-between">
             <div>
-               <h2 className="text-2xl font-black text-white">
+               <h2 className="text-2xl font-bold text-white">
                   Stream Management
                </h2>
                <p className="text-sm text-slate-400 mt-1">
@@ -283,7 +283,7 @@ export default function AdminStreamsManagement() {
                      resetForm();
                      setShowForm(true);
                   }}
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-white font-semibold transition"
+                  className="flex items-center gap-2 bg-brand hover:bg-brand px-4 py-2 rounded-lg text-white font-semibold transition"
                >
                   <Plus className="w-5 h-5" />
                   Add Stream
@@ -311,11 +311,11 @@ export default function AdminStreamsManagement() {
          {showForm && (
             <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-700/50">
-                  <div className="sticky top-0 p-6 rounded-t-2xl bg-gradient-to-r from-blue-600 to-cyan-600">
+                  <div className="sticky top-0 p-6 rounded-t-2xl bg-gradient-to-r from-brand to-brand-dark">
                      <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                            <Tv className="w-6 h-6 text-white" />
-                           <h3 className="text-xl font-black text-white">
+                           <h3 className="text-xl font-bold text-white">
                               {editingStream ? 'Edit Stream' : 'Add New Stream'}
                            </h3>
                         </div>
@@ -341,7 +341,7 @@ export default function AdminStreamsManagement() {
                                  matchId: e.target.value,
                               })
                            }
-                           className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 text-sm outline-none"
+                           className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700/50 focus:border-brand/50 text-sm outline-none"
                            required
                         >
                            <option value="">Choose a match...</option>
@@ -370,7 +370,7 @@ export default function AdminStreamsManagement() {
                               })
                            }
                            placeholder="e.g., YouTube, Twitch"
-                           className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 text-sm outline-none"
+                           className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700/50 focus:border-brand/50 text-sm outline-none"
                         />
                      </div>
 
@@ -388,7 +388,7 @@ export default function AdminStreamsManagement() {
                               setFormData({ ...formData, url: val });
                            }}
                            placeholder="Paste full iframe code or just the embed URL"
-                           className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 text-sm outline-none resize-none"
+                           className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700/50 focus:border-brand/50 text-sm outline-none resize-none"
                            required
                            rows={3}
                         />
@@ -409,7 +409,7 @@ export default function AdminStreamsManagement() {
                                  isActive: e.target.checked,
                               })
                            }
-                           className="w-5 h-5 rounded accent-blue-500"
+                           className="w-5 h-5 rounded accent-brand"
                         />
                         <label
                            htmlFor="isActive"
@@ -429,7 +429,7 @@ export default function AdminStreamsManagement() {
                         </button>
                         <button
                            type="submit"
-                           className="flex-1 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition text-sm"
+                           className="flex-1 px-6 py-3 rounded-xl bg-brand hover:bg-brand text-white font-semibold transition text-sm"
                         >
                            {editingStream ? 'Update Stream' : 'Create Stream'}
                         </button>
@@ -498,7 +498,7 @@ export default function AdminStreamsManagement() {
                            <td className="px-6 py-4">
                               {match.stream ? (
                                  <div className="flex items-center gap-2">
-                                    <PlayCircle className="w-4 h-4 text-blue-400" />
+                                    <PlayCircle className="w-4 h-4 text-brand" />
                                     {match.stream.provider && (
                                        <span className="text-xs text-slate-400">
                                           {match.stream.provider}
@@ -525,7 +525,7 @@ export default function AdminStreamsManagement() {
                            <td className="px-6 py-4">
                               <button
                                  onClick={() => handleEdit(match)}
-                                 className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700/50 hover:border-blue-500/50 text-blue-400 text-sm font-semibold transition-colors"
+                                 className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700/50 hover:border-brand/50 text-brand text-sm font-semibold transition-colors"
                               >
                                  <Edit2 className="w-4 h-4" />
                                  {match.stream ? 'Edit' : 'Add'}

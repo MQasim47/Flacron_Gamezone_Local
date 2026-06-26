@@ -50,7 +50,7 @@ export function TeamBrowser({
                      setCurrentPage(0);
                   }}
                   placeholder="Search teams…"
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
                />
             </div>
             <div className="flex gap-2">
@@ -136,7 +136,7 @@ export function TeamBrowser({
                                     className="p-1.5 hover:bg-slate-700 rounded-lg"
                                     title="Edit"
                                  >
-                                    <Edit2 className="w-3.5 h-3.5 text-blue-400" />
+                                    <Edit2 className="w-3.5 h-3.5 text-brand" />
                                  </button>
                                  <button
                                     onClick={() => onDelete(team)}

@@ -94,7 +94,7 @@ export function LoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   aria-invalid={!!errors.email}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/50 transition-all"
                />
             </div>
             {errors.email && (
@@ -118,7 +118,7 @@ export function LoginForm() {
                </label>
                <Link
                   href="/forgot-password"
-                  className="text-xs text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                  className="text-xs text-brand hover:text-brand-hover transition-colors font-medium"
                >
                   Forgot password?
                </Link>
@@ -133,13 +133,13 @@ export function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   aria-invalid={!!errors.password}
-                  className="w-full pl-10 pr-12 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                  className="w-full pl-10 pr-12 py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand/50 transition-all"
                />
                <button
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-400 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand transition-colors"
                >
                   {showPassword ? (
                      <EyeOff className="w-5 h-5" />
@@ -162,7 +162,7 @@ export function LoginForm() {
          <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg transition-all hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
+            className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-brand to-brand-dark hover:from-brand-hover hover:to-brand text-white font-semibold rounded-xl shadow-lg transition-all hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
          >
             {loading ? (
                <span className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export function LoginForm() {
             Don't have an account?{' '}
             <Link
                href="/signup"
-               className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+               className="text-brand hover:text-brand-hover transition-colors font-medium"
             >
                Create one
             </Link>

@@ -63,12 +63,12 @@ const FAQS = [
 const PREMIUM_GROUPS = [
    {
       label: 'Streaming',
-      icon: <Tv className="w-4 h-4 text-blue-400" />,
+      icon: <Tv className="w-4 h-4 text-brand" />,
       features: ['Live tournament streaming in HD'],
    },
    {
       label: 'Analysis',
-      icon: <BarChart2 className="w-4 h-4 text-purple-400" />,
+      icon: <BarChart2 className="w-4 h-4 text-brand" />,
       features: [
          'AI-powered match analysis & predictions',
          'Advanced AI preview',
@@ -76,7 +76,7 @@ const PREMIUM_GROUPS = [
    },
    {
       label: 'Matchmaking',
-      icon: <Users className="w-4 h-4 text-cyan-400" />,
+      icon: <Users className="w-4 h-4 text-brand" />,
       features: ['Priority matchmaking queue', 'Exclusive premium tournaments'],
    },
    {
@@ -150,15 +150,15 @@ export function PricingClient() {
          {/* Background blobs */}
          <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div
-               className="absolute top-20 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"
+               className="absolute top-20 left-10 w-96 h-96 bg-brand/10 rounded-full blur-3xl animate-pulse"
                style={{ animationDuration: '4s' }}
             />
             <div
-               className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+               className="absolute bottom-20 right-10 w-96 h-96 bg-brand/10 rounded-full blur-3xl animate-pulse"
                style={{ animationDuration: '6s', animationDelay: '1s' }}
             />
             <div
-               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"
+               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand/5 rounded-full blur-3xl animate-pulse"
                style={{ animationDuration: '8s', animationDelay: '2s' }}
             />
          </div>
@@ -168,7 +168,7 @@ export function PricingClient() {
             {PARTICLES.map((p, i) => (
                <div
                   key={i}
-                  className="absolute w-1 h-1 bg-blue-400/20 rounded-full"
+                  className="absolute w-1 h-1 bg-brand/20 rounded-full"
                   style={{
                      left: p.left,
                      top: p.top,
@@ -184,13 +184,13 @@ export function PricingClient() {
             <div
                className={`text-center mb-16 transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
-               <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-2 mb-6">
-                  <Crown className="w-4 h-4 text-blue-400" />
-                  <span className="text-sm text-blue-400 font-semibold">
+               <div className="inline-flex items-center gap-2 bg-brand/10 border border-brand/30 rounded-full px-4 py-2 mb-6">
+                  <Crown className="w-4 h-4 text-brand" />
+                  <span className="text-sm text-brand font-semibold">
                      Premium Football Experience
                   </span>
                </div>
-               <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent animate-gradient">
+               <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-brand-light via-brand to-brand-hover bg-clip-text text-transparent animate-gradient">
                   Choose Your Plan
                </h1>
                <p className="text-xl text-slate-400 max-w-2xl mx-auto">
@@ -223,7 +223,7 @@ export function PricingClient() {
                         disabled={loading !== null}
                         className={`px-5 py-2.5 sm:px-8 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 ${
                            billingCycle === 'monthly'
-                              ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                              ? 'bg-gradient-to-r from-brand to-brand-dark text-white shadow-lg'
                               : 'text-slate-400 hover:text-white hover:bg-slate-700/40'
                         }`}
                      >
@@ -234,7 +234,7 @@ export function PricingClient() {
                         disabled={loading !== null}
                         className={`px-5 py-2.5 sm:px-8 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 ${
                            billingCycle === 'yearly'
-                              ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                              ? 'bg-gradient-to-r from-brand to-brand-dark text-white shadow-lg'
                               : 'text-slate-400 hover:text-white hover:bg-slate-700/40'
                         }`}
                      >
@@ -258,7 +258,7 @@ export function PricingClient() {
                   className={`relative group transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                >
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-slate-600 to-slate-700 rounded-2xl opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-500" />
-                  <div className="relative bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-2xl border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
+                  <div className="relative bg-gradient-to-b from-navy/95 to-navy-dark/95 backdrop-blur-2xl border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
                      <div className="flex items-center gap-3 mb-4">
                         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center shadow-lg">
                            <Zap className="w-6 h-6 text-white" />
@@ -342,24 +342,24 @@ export function PricingClient() {
                   className={`relative group transition-all duration-1000 delay-400 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                >
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                     <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+                     <div className="bg-gradient-to-r from-brand to-brand-dark text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
                         <Star className="w-4 h-4" />
                         MOST POPULAR
                      </div>
                   </div>
 
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500" />
-                  <div className="relative bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-2xl border-2 border-blue-500/50 rounded-2xl p-8 shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-brand to-brand-dark rounded-2xl opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500" />
+                  <div className="relative bg-gradient-to-b from-navy/95 to-navy-dark/95 backdrop-blur-2xl border-2 border-brand/50 rounded-2xl p-8 shadow-2xl shadow-brand/20 hover:shadow-brand/30 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
                      <div className="flex items-center gap-3 mb-4 mt-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg relative">
-                           <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-400 to-purple-500 blur-md opacity-50" />
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand to-brand-dark flex items-center justify-center shadow-lg relative">
+                           <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-brand to-brand-dark blur-md opacity-50" />
                            <Sparkles className="w-6 h-6 text-white relative z-10" />
                         </div>
                         <div>
                            <h2 className="text-2xl font-bold text-white">
                               Premium
                            </h2>
-                           <p className="text-sm text-blue-400 font-medium">
+                           <p className="text-sm text-brand font-medium">
                               Best for serious football fans
                            </p>
                         </div>
@@ -367,7 +367,7 @@ export function PricingClient() {
 
                      <div className="mb-2">
                         <div className="flex items-baseline gap-2">
-                           <span className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                           <span className="text-5xl font-bold bg-gradient-to-r from-brand to-brand-light bg-clip-text text-transparent">
                               $
                               {billingCycle === 'monthly'
                                  ? monthlyPrice.toFixed(2)
@@ -399,8 +399,8 @@ export function PricingClient() {
                         disabled={loading === 'premium'}
                         className="relative w-full group/btn overflow-hidden mb-3 disabled:opacity-50 disabled:cursor-not-allowed"
                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-brand to-brand-dark rounded-xl" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-brand to-brand-dark rounded-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
                         <div className="relative flex items-center justify-center gap-2 py-3.5 text-white font-bold text-base">
                            {loading === 'premium' ? (
                               <>
@@ -432,7 +432,7 @@ export function PricingClient() {
 
                      <div className="space-y-5 flex-1">
                         <div className="flex items-center gap-2 pb-2 border-b border-slate-700/50">
-                           <Check className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                           <Check className="w-4 h-4 text-brand flex-shrink-0" />
                            <span className="text-white text-sm font-semibold">
                               Everything in Free, plus:
                            </span>
@@ -451,8 +451,8 @@ export function PricingClient() {
                                        key={f}
                                        className="flex items-center gap-3 text-slate-300"
                                     >
-                                       <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 flex items-center justify-center">
-                                          <Check className="w-3 h-3 text-blue-400" />
+                                       <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-r from-brand/20 to-brand-dark/20 flex items-center justify-center">
+                                          <Check className="w-3 h-3 text-brand" />
                                        </div>
                                        <span className="text-sm">{f}</span>
                                     </div>
@@ -471,7 +471,7 @@ export function PricingClient() {
                className={`max-w-3xl mx-auto transition-all duration-1000 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
                <h2 className="text-3xl font-bold text-center mb-8 text-white flex items-center justify-center gap-3">
-                  <HelpCircle className="w-8 h-8 text-blue-400" />
+                  <HelpCircle className="w-8 h-8 text-brand" />
                   Frequently Asked Questions
                </h2>
                <div className="space-y-3">
@@ -480,7 +480,7 @@ export function PricingClient() {
                         key={index}
                         className={`bg-slate-800/50 backdrop-blur-xl border rounded-xl overflow-hidden transition-all duration-300 ${
                            openFaq === index
-                              ? 'border-blue-500/40'
+                              ? 'border-brand/40'
                               : 'border-slate-700/50 hover:border-slate-600/60'
                         }`}
                      >
@@ -491,12 +491,12 @@ export function PricingClient() {
                            className="w-full flex items-center justify-between px-6 py-5 text-left gap-4"
                         >
                            <span
-                              className={`font-semibold text-base transition-colors duration-200 ${openFaq === index ? 'text-blue-400' : 'text-white'}`}
+                              className={`font-semibold text-base transition-colors duration-200 ${openFaq === index ? 'text-brand' : 'text-white'}`}
                            >
                               {faq.question}
                            </span>
                            <ChevronDown
-                              className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-300 ${openFaq === index ? 'rotate-180 text-blue-400' : ''}`}
+                              className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-300 ${openFaq === index ? 'rotate-180 text-brand' : ''}`}
                            />
                         </button>
                         <div
@@ -527,15 +527,15 @@ export function PricingClient() {
                         Secure Payments
                      </span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-400 hover:text-blue-400 transition-colors group">
-                     <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Clock className="w-5 h-5 text-blue-400" />
+                  <div className="flex items-center gap-2 text-slate-400 hover:text-brand transition-colors group">
+                     <div className="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Clock className="w-5 h-5 text-brand" />
                      </div>
                      <span className="text-sm font-medium">Cancel Anytime</span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-400 hover:text-purple-400 transition-colors group">
-                     <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <CreditCard className="w-5 h-5 text-purple-400" />
+                  <div className="flex items-center gap-2 text-slate-400 hover:text-brand transition-colors group">
+                     <div className="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <CreditCard className="w-5 h-5 text-brand" />
                      </div>
                      <span className="text-sm font-medium">
                         Money-back Guarantee

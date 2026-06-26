@@ -72,7 +72,7 @@ export function TeamTab({ admin, leagues, onConfirmDelete }: Props) {
                      setPage(0);
                   }}
                   placeholder="Search teams…"
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-blue-500/50"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-brand/50"
                />
             </div>
             <button
@@ -141,7 +141,7 @@ export function TeamTab({ admin, leagues, onConfirmDelete }: Props) {
                                     onClick={() => openEdit(team)}
                                     className="p-1.5 hover:bg-slate-700 rounded-lg"
                                  >
-                                    <Edit2 className="w-3.5 h-3.5 text-blue-400" />
+                                    <Edit2 className="w-3.5 h-3.5 text-brand" />
                                  </button>
                                  <button
                                     onClick={() =>
@@ -217,7 +217,7 @@ export function TeamTab({ admin, leagues, onConfirmDelete }: Props) {
                                  }))
                               }
                               placeholder={placeholder}
-                              className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 rounded-xl text-sm outline-none"
+                              className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-brand/50 rounded-xl text-sm outline-none"
                            />
                         </div>
                      ))}
@@ -233,7 +233,7 @@ export function TeamTab({ admin, leagues, onConfirmDelete }: Props) {
                                  leagueId: e.target.value,
                               }))
                            }
-                           className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-blue-500/50 rounded-xl text-sm outline-none"
+                           className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700/50 focus:border-brand/50 rounded-xl text-sm outline-none"
                         >
                            <option value="">No league</option>
                            {leagues.map((l) => (
@@ -255,7 +255,7 @@ export function TeamTab({ admin, leagues, onConfirmDelete }: Props) {
                      <button
                         onClick={handleSave}
                         disabled={admin.saving || !form.name.trim()}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-900/50 rounded-xl text-sm font-medium disabled:opacity-50"
+                        className="px-4 py-2 bg-brand hover:bg-brand disabled:bg-brand/50 rounded-xl text-sm font-medium disabled:opacity-50"
                      >
                         {admin.saving ? 'Saving…' : 'Save'}
                      </button>

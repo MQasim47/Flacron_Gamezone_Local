@@ -272,7 +272,7 @@ export function SignupForm() {
          <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-3 mt-2 bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-400 hover:to-blue-500 text-white font-semibold rounded-xl shadow-lg transition-all hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
+            className="w-full flex items-center justify-center gap-2 py-3 mt-2 bg-gradient-to-r from-brand to-brand-dark hover:from-brand-hover hover:to-brand text-white font-semibold rounded-xl shadow-lg transition-all hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100"
          >
             {loading ? (
                <span className="flex items-center gap-2">
