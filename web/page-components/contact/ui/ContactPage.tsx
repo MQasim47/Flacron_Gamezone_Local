@@ -162,7 +162,7 @@ export default function ContactPage() {
                   {
                      icon: Phone,
                      label: 'Phone',
-                     detail: '+1 (555) 123-4567',
+                     detail: '929-444-1275',
                      sub: 'Mon-Fri, 9AM-6PM EST',
                      color: 'purple',
                   },
