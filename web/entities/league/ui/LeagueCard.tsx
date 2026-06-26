@@ -15,10 +15,10 @@ export function LeagueCard({ league, index = 0 }: Props) {
          style={{ animationDelay: `${index * 80}ms` }}
          className="group animate-in fade-in duration-700"
       >
-         <div className="relative h-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 group-hover:border-blue-500/50 p-6 flex flex-col transition-all duration-300 hover:scale-[1.02]">
+         <div className="relative h-full overflow-hidden rounded-2xl bg-gradient-to-br from-navy/85 to-navy-dark/90 backdrop-blur-sm border border-navy-light/40 group-hover:border-brand/50 p-6 flex flex-col transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand/10">
             {/* Logo */}
             <div className="flex items-center justify-center flex-1 mb-4">
-               <div className="relative bg-slate-700/40 rounded-2xl p-4 group-hover:scale-110 transition-transform duration-300">
+               <div className="relative bg-navy-light/20 rounded-2xl p-4 group-hover:scale-110 transition-transform duration-300">
                   {league.logo ? (
                      <Image
                         src={league.logo}
@@ -38,11 +38,11 @@ export function LeagueCard({ league, index = 0 }: Props) {
 
             {/* Info */}
             <div className="text-center space-y-1.5 mb-4">
-               <h3 className="font-bold text-sm sm:text-base leading-tight line-clamp-2 text-white group-hover:text-blue-100 transition-colors">
+               <h3 className="font-bold text-sm sm:text-base leading-tight line-clamp-2 text-white group-hover:text-brand-light transition-colors">
                   {league.name}
                </h3>
                {league.country && (
-                  <div className="flex items-center justify-center gap-1.5 text-slate-400 group-hover:text-cyan-400 transition-colors">
+                  <div className="flex items-center justify-center gap-1.5 text-slate-400 group-hover:text-brand transition-colors">
                      <MapPin className="w-3.5 h-3.5" />
                      <span className="text-xs font-medium uppercase tracking-wide">
                         {league.country}
@@ -52,8 +52,8 @@ export function LeagueCard({ league, index = 0 }: Props) {
             </div>
 
             {/* Footer */}
-            <div className="pt-3 border-t border-slate-700/50 group-hover:border-blue-500/30 transition-colors">
-               <div className="flex items-center justify-center gap-1.5 text-sm text-slate-400 group-hover:text-blue-400 transition-colors">
+            <div className="pt-3 border-t border-white/10 group-hover:border-brand/30 transition-colors">
+               <div className="flex items-center justify-center gap-1.5 text-sm text-slate-400 group-hover:text-brand transition-colors">
                   <span className="font-medium">View League</span>
                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                </div>

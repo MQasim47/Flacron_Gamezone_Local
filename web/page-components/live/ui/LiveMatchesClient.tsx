@@ -142,7 +142,7 @@ export default function LiveMatchesClient({
          <div className="flex-1 p-4 md:p-6">
             <div className="max-w-7xl mx-auto">
                <div className="text-center py-16">
-                  <div className="w-20 h-20 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+                  <div className="w-20 h-20 bg-gradient-to-br from-brand to-brand-dark rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
                      <Activity className="w-10 h-10 text-white" />
                   </div>
                   <p className="text-slate-300 font-bold text-xl">
@@ -171,7 +171,7 @@ export default function LiveMatchesClient({
                            <Radio className="w-8 h-8 text-white" />
                         </div>
                         <div>
-                           <h1 className="text-3xl font-black text-white uppercase">
+                           <h1 className="text-3xl font-bold text-white uppercase tracking-tight">
                               Live Matches
                            </h1>
                            <p className="text-sm text-red-300 font-bold mt-1">
@@ -230,7 +230,7 @@ export default function LiveMatchesClient({
                         <Link
                            key={match.id}
                            href={`/match/${match.id}`}
-                           className="bg-gradient-to-br from-slate-900/95 to-slate-800/95 border-2 border-cyan-500/30 rounded-2xl p-6 hover:scale-[1.02] transition"
+                           className="group bg-gradient-to-br from-navy/90 to-navy-dark/95 border border-navy-light/40 rounded-2xl p-6 transition-all duration-200 hover:border-brand/50 hover:shadow-xl hover:shadow-brand/10 hover:-translate-y-0.5"
                         >
                            <div className="space-y-4">
                               {match.league && (
@@ -245,14 +245,14 @@ export default function LiveMatchesClient({
                                           className="object-contain"
                                        />
                                     ) : (
-                                       <Trophy className="w-8 h-8 text-cyan-400" />
+                                       <Trophy className="w-8 h-8 text-brand" />
                                     )}
                                     <div>
-                                       <div className="text-sm font-black text-white">
+                                       <div className="text-sm font-semibold text-white">
                                           {match.league.name}
                                        </div>
                                        {match.league.country && (
-                                          <div className="text-xs text-cyan-400">
+                                          <div className="text-xs text-brand">
                                              {match.league.country}
                                           </div>
                                        )}
@@ -271,12 +271,18 @@ export default function LiveMatchesClient({
                                           className="object-contain w-6 h-6 sm:w-8 sm:h-8"
                                        />
                                     )}
-                                    <span className="font-black text-white text-sm sm:text-base truncate">
+                                    <span className="font-bold text-white text-sm sm:text-base truncate">
                                        {match.homeTeam.name}
                                     </span>
                                  </div>
-                                 <div className="text-2xl sm:text-3xl font-black text-cyan-400 text-center whitespace-nowrap px-1">
-                                    {match.score ?? 'vs'}
+                                 <div className="flex flex-col items-center gap-1 px-1">
+                                    <span className="flex items-center gap-1 text-[10px] font-semibold text-red-400 uppercase tracking-wider">
+                                       <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                       Live
+                                    </span>
+                                    <div className="bg-navy-dark/70 border border-brand/20 rounded-xl px-3 py-1 text-2xl sm:text-3xl font-bold text-brand text-center whitespace-nowrap">
+                                       {match.score ?? 'vs'}
+                                    </div>
                                  </div>
                                  <div className="flex items-center justify-start gap-2 sm:gap-3">
                                     {match.awayTeam.logo && (
@@ -289,12 +295,12 @@ export default function LiveMatchesClient({
                                           className="object-contain w-6 h-6 sm:w-8 sm:h-8"
                                        />
                                     )}
-                                    <span className="font-black text-white text-sm sm:text-base truncate">
+                                    <span className="font-bold text-white text-sm sm:text-base truncate">
                                        {match.awayTeam.name}
                                     </span>
                                  </div>
                               </div>
-                              <div className="flex items-center justify-between text-sm text-slate-400 border-t pt-3">
+                              <div className="flex items-center justify-between text-sm text-slate-400 border-t border-white/10 pt-3">
                                  {match.venue && (
                                     <div className="flex items-center gap-2">
                                        <MapPin className="w-4 h-4" />
@@ -306,7 +312,7 @@ export default function LiveMatchesClient({
                                  )}
                                  {match.stream?.type === 'EMBED' &&
                                  match.stream.isActive ? (
-                                    <div className="flex items-center gap-2 text-green-400 ml-auto">
+                                    <div className="flex items-center gap-1.5 bg-green-500/10 text-green-400 px-2.5 py-1 rounded-full ml-auto">
                                        <PlayCircle className="w-4 h-4" />
                                        Stream Available
                                     </div>
@@ -324,7 +330,7 @@ export default function LiveMatchesClient({
                ) : (
                   <div className="text-center py-16">
                      <Activity className="w-12 h-12 mx-auto text-slate-600 mb-4" />
-                     <h3 className="text-2xl font-black text-white mb-2">
+                     <h3 className="text-2xl font-bold text-white mb-2">
                         No Live Matches
                      </h3>
                      <p className="text-slate-400">
@@ -334,7 +340,7 @@ export default function LiveMatchesClient({
                      </p>
                      <Link
                         href="/matches"
-                        className="inline-flex items-center gap-2 mt-6 bg-cyan-600 text-white px-6 py-3 rounded-xl"
+                        className="inline-flex items-center gap-2 mt-6 bg-brand hover:bg-brand-hover transition text-white px-6 py-3 rounded-xl"
                      >
                         <Clock className="w-5 h-5" />
                         View Upcoming Matches

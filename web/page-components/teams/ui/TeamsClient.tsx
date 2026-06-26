@@ -106,7 +106,7 @@ export function TeamsClient({ initialTeams }: Props) {
                <button
                   onClick={load}
                   disabled={isLoading}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 text-blue-400 rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand/20 hover:bg-brand/30 border border-brand/30 text-brand rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
                >
                   <RefreshCw
                      className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`}
@@ -153,7 +153,7 @@ export function TeamsClient({ initialTeams }: Props) {
                      <Link
                         key={t.id}
                         href={`/teams/${t.id}`}
-                        className="group bg-gradient-to-b from-slate-900/40 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 cursor-pointer relative overflow-hidden block"
+                        className="group bg-gradient-to-b from-navy/40 to-navy-dark/80 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 hover:border-brand/50 hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 cursor-pointer relative overflow-hidden block"
                         style={{
                            animation: `fadeInUp 0.4s ease-out ${idx * 0.05}s both`,
                         }}
@@ -168,7 +168,7 @@ export function TeamsClient({ initialTeams }: Props) {
                         {/* Team Logo */}
                         <div className="relative mb-4 mx-auto w-24 h-24">
                            <div className="relative group-hover:scale-110 transition-transform duration-300">
-                              <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 flex items-center justify-center p-3 shadow-xl group-hover:shadow-2xl group-hover:border-blue-500/30 transition-all">
+                              <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 flex items-center justify-center p-3 shadow-xl group-hover:shadow-2xl group-hover:border-brand/30 transition-all">
                                  {t.logo && !logoFailed ? (
                                     <img
                                        src={t.logo}
@@ -182,7 +182,7 @@ export function TeamsClient({ initialTeams }: Props) {
                                     />
                                  ) : null}
                                  <div
-                                    className="w-full h-full flex items-center justify-center font-bold text-3xl text-blue-400"
+                                    className="w-full h-full flex items-center justify-center font-bold text-3xl text-brand"
                                     style={{
                                        display:
                                           t.logo && !logoFailed
@@ -205,7 +205,7 @@ export function TeamsClient({ initialTeams }: Props) {
 
                         {/* Team Info */}
                         <div className="relative z-10 text-center space-y-1.5">
-                           <h3 className="font-semibold text-sm leading-tight line-clamp-1 group-hover:text-blue-400 transition-colors duration-200">
+                           <h3 className="font-semibold text-sm leading-tight line-clamp-1 group-hover:text-brand transition-colors duration-200">
                               {t.name}
                            </h3>
 
@@ -226,7 +226,7 @@ export function TeamsClient({ initialTeams }: Props) {
                                  </div>
                               </div>
                               <div className="text-center">
-                                 <div className="font-semibold text-blue-400">
+                                 <div className="font-semibold text-brand">
                                     {winRate}%
                                  </div>
                                  <div className="text-slate-500 text-[10px]">
@@ -236,7 +236,7 @@ export function TeamsClient({ initialTeams }: Props) {
                            </div>
                         </div>
 
-                        <div className="absolute inset-0 border border-blue-500/0 group-hover:border-blue-500/20 rounded-xl transition-all duration-300 pointer-events-none" />
+                        <div className="absolute inset-0 border border-brand/0 group-hover:border-brand/20 rounded-xl transition-all duration-300 pointer-events-none" />
                      </Link>
                   );
                })}
@@ -248,7 +248,7 @@ export function TeamsClient({ initialTeams }: Props) {
       return (
          <div className="text-center py-16 bg-slate-900/30 rounded-2xl border border-slate-700/50">
             <div className="relative w-20 h-20 mx-auto mb-5">
-               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full blur-xl" />
+               <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-brand/5 rounded-full blur-xl" />
                <div className="relative w-20 h-20 bg-slate-800/50 rounded-full flex items-center justify-center border border-slate-700/50">
                   <Users className="w-10 h-10 text-slate-600" />
                </div>
@@ -269,22 +269,22 @@ export function TeamsClient({ initialTeams }: Props) {
       <>
          <div className="space-y-8">
             {/* Hero Section */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900 border border-slate-700/50 p-8 md:p-12">
-               <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow" />
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-dark via-navy to-navy-dark border border-slate-700/50 p-8 md:p-12">
+               <div className="absolute top-0 right-0 w-96 h-96 bg-brand/10 rounded-full blur-3xl animate-pulse-slow" />
                <div
-                  className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow"
+                  className="absolute bottom-0 left-0 w-64 h-64 bg-brand/10 rounded-full blur-3xl animate-pulse-slow"
                   style={{ animationDelay: '1s' }}
                />
 
                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                   <div className="flex-1 space-y-4">
-                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-sm font-medium text-blue-400">
+                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand/10 border border-brand/20 rounded-full text-sm font-medium text-brand">
                         <Zap className="w-4 h-4" />
                         <span>Live Tournament</span>
                      </div>
 
                      <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                        <span className="bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-white via-brand-light to-brand bg-clip-text text-transparent">
                            Compete with the Best
                         </span>
                      </h1>
@@ -296,8 +296,8 @@ export function TeamsClient({ initialTeams }: Props) {
 
                      <div className="flex flex-wrap gap-4 sm:gap-6 pt-4">
                         <div className="flex items-center gap-2 sm:gap-3">
-                           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                              <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
+                           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center flex-shrink-0">
+                              <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-brand" />
                            </div>
                            <div>
                               <div className="text-xl sm:text-2xl font-bold text-white">
@@ -309,8 +309,8 @@ export function TeamsClient({ initialTeams }: Props) {
                            </div>
                         </div>
                         <div className="flex items-center gap-2 sm:gap-3">
-                           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
-                              <Target className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
+                           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center flex-shrink-0">
+                              <Target className="w-5 h-5 sm:w-6 sm:h-6 text-brand" />
                            </div>
                            <div>
                               <div className="text-xl sm:text-2xl font-bold text-white">
@@ -343,7 +343,7 @@ export function TeamsClient({ initialTeams }: Props) {
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors" />
                         <input
                            aria-label="Search teams or leagues"
-                           className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-slate-800/70 transition-all duration-300 placeholder:text-slate-500"
+                           className="w-full bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:border-brand/50 focus:ring-2 focus:ring-brand/20 focus:bg-slate-800/70 transition-all duration-300 placeholder:text-slate-500"
                            placeholder="Search teams or leagues..."
                            value={q}
                            onChange={(e) => setQ(e.target.value)}

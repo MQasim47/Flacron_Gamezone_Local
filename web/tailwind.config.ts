@@ -53,6 +53,20 @@ const config: Config = {
                '4': 'var(--chart-4)',
                '5': 'var(--chart-5)',
             },
+            // ── Brand palette ──────────────────────────────────────────
+            // Use these directly in components: bg-brand, text-brand,
+            // border-brand, hover:bg-brand-hover, bg-navy, etc.
+            brand: {
+               DEFAULT: '#FE6702',
+               hover: '#FF7E1F',
+               dark: '#E55A00',
+               light: '#FF944D',
+            },
+            navy: {
+               DEFAULT: '#06275B',
+               light: '#0D3A82',
+               dark: '#041B40',
+            },
          },
          borderRadius: {
             lg: 'var(--radius)',
@@ -60,8 +74,9 @@ const config: Config = {
             sm: 'calc(var(--radius) - 4px)',
          },
          fontFamily: {
-            display: ['Sora', 'sans-serif'],
-            sans: ['Inter', 'sans-serif'],
+            // Loaded via next/font/google in app/layout.tsx
+            display: ['var(--font-barlow)', 'sans-serif'],
+            sans: ['var(--font-inter)', 'sans-serif'],
          },
          animation: {
             'pulse-glow': 'pulse-glow 2s infinite',
@@ -74,11 +89,11 @@ const config: Config = {
             'pulse-glow': {
                '0%, 100%': {
                   opacity: '1',
-                  boxShadow: '0 0 0 0 rgba(6, 182, 212, 0.7)',
+                  boxShadow: '0 0 0 0 rgba(254, 103, 2, 0.7)',
                },
                '50%': {
                   opacity: '0.8',
-                  boxShadow: '0 0 0 8px rgba(6, 182, 212, 0)',
+                  boxShadow: '0 0 0 8px rgba(254, 103, 2, 0)',
                },
             },
             'bounce-subtle': {
@@ -121,7 +136,7 @@ const config: Config = {
             'gradient-conic':
                'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
             'field-pattern':
-               'linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px)',
+               'linear-gradient(rgba(254, 103, 2, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(254, 103, 2, 0.05) 1px, transparent 1px)',
          },
          backdropBlur: {
             xs: '2px',

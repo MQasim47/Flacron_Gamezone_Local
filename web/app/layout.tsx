@@ -1,9 +1,24 @@
 import type { Metadata } from 'next';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Inter, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
 import { Shell } from '@/widgets/shell/ui/Shell';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
+
+const inter = Inter({
+   subsets: ['latin'],
+   weight: ['400', '500', '600', '700'],
+   variable: '--font-inter',
+   display: 'swap',
+});
+
+const barlow = Barlow_Condensed({
+   subsets: ['latin'],
+   weight: ['600', '700', '800', '900'],
+   variable: '--font-barlow',
+   display: 'swap',
+});
 
 const BASE_URL = 'https://flacrongamezone.com';
 
@@ -126,7 +141,7 @@ export default function RootLayout({
             />
          </head>
          <body
-            className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
+            className={`${GeistSans.variable} ${GeistMono.variable} ${inter.variable} ${barlow.variable} antialiased`}
          >
             <GoogleOAuthProvider
                clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}

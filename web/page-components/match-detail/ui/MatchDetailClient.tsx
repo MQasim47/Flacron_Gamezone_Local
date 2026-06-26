@@ -4,7 +4,6 @@ import { getAllDeepData } from '@/shared/api/deepData';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-   ChevronLeft,
    Trophy,
    Clock,
    MapPin,
@@ -20,6 +19,7 @@ import {
 import { apiGet, apiPost } from '@/shared/api/base';
 import StreamEmbed from '@/entities/stream/ui/StreamEmbed';
 import { PremiumGate } from '@/shared/ui/PremiumGate';
+import { BackButton } from '@/shared/ui/BackButton';
 import { useSubscription } from '@/features/subscription/hooks/useSubscription';
 import { DeepDataSection } from './DeepDataSection';
 import { SCROLLBAR_STYLES } from '../model/matchDetail.constants';
@@ -191,12 +191,12 @@ export function MatchDetailClient({ initialMatch, matchId }: Props) {
       return (
          <div className="flex-1 p-4 md:p-6">
             <div className="max-w-7xl mx-auto">
-               <button
-                  onClick={() => window.history.back()}
-                  className="group flex items-center gap-3 text-slate-400 hover:text-cyan-400 transition-all mb-6 px-4 py-2.5 rounded-xl hover:bg-slate-800/70 border border-transparent hover:border-cyan-500/30"
-               >
-                  <ChevronLeft className="w-5 h-5" /> ← Back
-               </button>
+               <div className="mb-6">
+                  <BackButton
+                     label="Back"
+                     onClick={() => window.history.back()}
+                  />
+               </div>
                <div className="text-center py-16 bg-gradient-to-br from-slate-900/90 to-red-900/30 border-2 border-red-500/30 rounded-2xl">
                   <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
                   <p className="text-red-400 font-bold text-xl mb-4">
@@ -228,17 +228,7 @@ export function MatchDetailClient({ initialMatch, matchId }: Props) {
       <div className="flex-1 p-4 md:p-6">
          <div className="max-w-7xl mx-auto space-y-6">
             {/* Back */}
-            <button
-               onClick={() => window.history.back()}
-               className="group flex items-center gap-3 text-slate-400 hover:text-cyan-400 transition-all px-4 py-2.5 rounded-xl hover:bg-slate-800/70 border border-transparent hover:border-cyan-500/30"
-            >
-               <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800/70 group-hover:bg-gradient-to-br group-hover:from-cyan-600 group-hover:to-blue-600 transition-all shadow-lg">
-                  <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-               </div>
-               <span className="text-sm font-bold uppercase tracking-wide">
-                  ← Back
-               </span>
-            </button>
+            <BackButton label="Back" onClick={() => window.history.back()} />
 
             {/* Premium upsell */}
             {!subLoading && !isPremium && (
@@ -461,7 +451,7 @@ export function MatchDetailClient({ initialMatch, matchId }: Props) {
                            className={`relative overflow-hidden bg-slate-900/90 backdrop-blur-xl border-2 ${isPreview ? 'border-cyan-500/30' : 'border-purple-500/30'} rounded-2xl shadow-2xl`}
                         >
                            <div className="relative p-6">
-                              <div className="flex items-center justify-between mb-5">
+                              <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
                                  <div className="flex items-center gap-3">
                                     <div
                                        className={`w-10 h-10 bg-gradient-to-br ${isPreview ? 'from-cyan-600 to-blue-600' : 'from-purple-600 to-pink-600'} rounded-xl flex items-center justify-center shadow-lg`}

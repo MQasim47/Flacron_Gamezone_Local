@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
    Calendar,
    Filter,
@@ -179,7 +180,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
             );
          case 'UPCOMING':
             return (
-               <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/20">
+               <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-brand to-brand-dark text-white shadow-lg shadow-brand/20">
                   UPCOMING
                </span>
             );
@@ -197,7 +198,16 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
    return (
       <div className="space-y-6">
          {/* Hero Section */}
-         <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900/30 to-purple-900/30 border border-slate-700/50 rounded-2xl shadow-2xl">
+         <div className="relative overflow-hidden border border-navy-light/40 rounded-2xl shadow-2xl">
+            <Image
+               src="/hero-stadium.jpg"
+               alt="Football stadium"
+               fill
+               priority
+               className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-navy-dark via-navy/85 to-navy-dark/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/90 via-transparent to-transparent" />
             <div className="relative z-10 p-6 sm:p-8 md:p-12">
                <div className="max-w-3xl">
                   <div className="inline-flex items-center gap-2 bg-red-500/20 border border-red-500/30 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-3 sm:mb-4 backdrop-blur-sm">
@@ -207,7 +217,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                      </span>
                   </div>
 
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 sm:mb-4 bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent leading-tight">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-white via-brand-light to-purple-300 bg-clip-text text-transparent leading-tight">
                      Watch Football
                      <br />
                      Matches Live
@@ -220,7 +230,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
 
                   <div className="flex flex-wrap gap-4 sm:gap-6 mb-4 sm:mb-6">
                      <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-brand to-brand-dark rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
                            <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                         </div>
                         <div>
@@ -247,26 +257,26 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
 
                   <Link
                      href="/live"
-                     className="group inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-5 py-3 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-base shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-105"
+                     className="group inline-flex items-center gap-2 bg-gradient-to-r from-brand to-brand-dark hover:from-brand-hover hover:to-brand text-white font-bold px-5 py-3 sm:px-6 sm:py-3 rounded-lg text-sm sm:text-base shadow-lg shadow-brand/30 transition-all duration-300 hover:scale-105"
                   >
                      <Play className="w-4 h-4 sm:w-5 sm:h-5" />
                      Watch Live Matches
                   </Link>
                </div>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-brand via-purple-500 to-pink-500" />
          </div>
 
          {/* Filters */}
          <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl border border-slate-700/50 rounded-xl p-3 sm:p-4 shadow-lg">
             <div className="flex items-center gap-2 mb-2 sm:mb-3">
-               <Filter className="w-4 h-4 text-blue-400" />
+               <Filter className="w-4 h-4 text-brand" />
                <h3 className="text-sm font-semibold text-slate-200">Filters</h3>
             </div>
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 items-center">
                <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="col-span-2 sm:col-auto bg-gradient-to-r from-slate-800 to-slate-700 hover:from-blue-600 hover:to-blue-500 border border-slate-600/50 rounded-lg px-3 py-2 text-xs sm:text-sm font-medium transition-all duration-300"
+                  className="col-span-2 sm:col-auto bg-gradient-to-r from-slate-800 to-slate-700 hover:from-brand hover:to-brand-hover border border-slate-600/50 rounded-lg px-3 py-2 text-xs sm:text-sm font-medium transition-all duration-300"
                >
                   <Calendar className="w-3.5 h-3.5 inline mr-1.5" />
                   Date Filter
@@ -331,7 +341,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                      type="date"
                      value={date}
                      onChange={(e) => setDate(e.target.value)}
-                     className="bg-slate-800 border border-slate-600/50 rounded-lg px-3 py-2 w-full text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                     className="bg-slate-800 border border-slate-600/50 rounded-lg px-3 py-2 w-full text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand/50"
                   />
                </div>
             )}
@@ -339,7 +349,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
          {/* Loading */}
          {loading && (
             <div className="text-center py-12">
-               <div className="inline-block w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+               <div className="inline-block w-8 h-8 border-4 border-brand/30 border-t-brand rounded-full animate-spin" />
                <p className="text-slate-400 mt-4 text-sm">Loading matches...</p>
             </div>
          )}
@@ -374,7 +384,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                ) : (
                   allMatches.map((m) => (
                      <Link key={m.id} href={`/match/${m.id}`}>
-                        <div className="group relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-slate-700/50 hover:border-blue-500/50 rounded-xl p-4 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:shadow-blue-500/10 cursor-pointer my-3 sm:my-4">
+                        <div className="group relative bg-gradient-to-br from-navy/80 to-navy-dark/90 backdrop-blur-xl border border-navy-light/40 hover:border-brand/50 rounded-xl p-4 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:shadow-brand/10 cursor-pointer my-3 sm:my-4">
                            {/* League badge */}
                            <div className="flex items-center justify-center mb-3">
                               <div className="inline-flex items-center gap-1.5 bg-slate-800/70 border border-slate-600/30 rounded-full px-3 py-1">
@@ -405,7 +415,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                                     )}
                                  </div>
                                  <div className="flex-1 min-w-0">
-                                    <span className="font-bold text-sm truncate block group-hover:text-blue-400 transition-colors">
+                                    <span className="font-bold text-sm truncate block group-hover:text-brand transition-colors">
                                        {m.homeTeam?.name}
                                     </span>
                                     <span className="text-xs text-slate-500">
@@ -419,7 +429,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                                  {m.status === 'FINISHED' ||
                                  m.status === 'LIVE' ? (
                                     <>
-                                       <div className="text-2xl sm:text-3xl font-black mb-1 text-white tracking-tight">
+                                       <div className="text-2xl sm:text-3xl font-bold mb-1 text-white tracking-tight">
                                           {m.score || '0-0'}
                                        </div>
                                        {getStatusBadge(m.status)}
@@ -445,7 +455,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                               {/* Away */}
                               <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-end min-w-0">
                                  <div className="flex-1 min-w-0 text-right">
-                                    <span className="font-bold text-sm truncate block group-hover:text-purple-400 transition-colors">
+                                    <span className="font-bold text-sm truncate block group-hover:text-brand transition-colors">
                                        {m.awayTeam?.name}
                                     </span>
                                     <span className="text-xs text-slate-500">
@@ -490,7 +500,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                <button
                   onClick={handlePrev}
                   disabled={currentPage <= 1}
-                  className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2 bg-slate-800/50 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/50 hover:border-blue-500/50 rounded-lg transition-all text-xs sm:text-sm font-medium"
+                  className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2 bg-slate-800/50 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/50 hover:border-brand/50 rounded-lg transition-all text-xs sm:text-sm font-medium"
                >
                   <ChevronLeft className="w-4 h-4" />
                   <span className="hidden sm:inline">Previous</span>
@@ -498,8 +508,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
 
                <div className="text-xs sm:text-sm text-slate-400">
                   Page{' '}
-                  <span className="font-bold text-blue-400">{currentPage}</span>{' '}
-                  of{' '}
+                  <span className="font-bold text-brand">{currentPage}</span> of{' '}
                   <span className="font-bold text-slate-300">{totalPages}</span>
                   <span className="hidden sm:inline text-slate-500">
                      {' '}
@@ -510,7 +519,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
                <button
                   onClick={handleNext}
                   disabled={currentPage >= totalPages || !hasMore}
-                  className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2 bg-slate-800/50 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/50 hover:border-blue-500/50 rounded-lg transition-all text-xs sm:text-sm font-medium"
+                  className="flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2 bg-slate-800/50 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/50 hover:border-brand/50 rounded-lg transition-all text-xs sm:text-sm font-medium"
                >
                   <span className="hidden sm:inline">Next</span>
                   <ChevronRight className="w-4 h-4" />

@@ -24,12 +24,16 @@ export function BackButton({ href, label = 'Back', onClick }: Props) {
    };
 
    const cls =
-      'group inline-flex items-center gap-2.5 px-5 py-2.5 text-sm font-medium bg-slate-800/50 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/50 hover:border-blue-500/50 rounded-xl transition-all duration-300';
+      'group inline-flex items-center gap-3 text-slate-400 hover:text-cyan-400 transition-all duration-300 px-2 py-1.5 sm:px-4 sm:py-2.5 rounded-xl hover:bg-slate-800/70 border border-transparent hover:border-cyan-500/30';
 
    const inner = (
       <>
-         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
-         {label}
+         <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg bg-slate-800/70 group-hover:bg-gradient-to-br group-hover:from-cyan-600 group-hover:to-blue-600 transition-all duration-300 shadow-lg flex-shrink-0">
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-0.5 transition-transform duration-300" />
+         </div>
+         <span className="text-sm font-bold uppercase tracking-wide">
+            {label}
+         </span>
       </>
    );
 

@@ -92,42 +92,44 @@ export function Shell({ children }: { children: React.ReactNode }) {
             onClose={() => setSearchOpen(false)}
          />
 
-         {/* ── Header ─────────────────────────────────────────────── */}
+         {/* ── Header (real glass effect — translucent, not solid) ───── */}
          <header
             className={cn(
-               'sticky top-0 z-50 transition-all duration-300',
+               'sticky top-0 z-50 transition-all duration-300 border-b',
                scrolled
-                  ? 'bg-slate-900/95 backdrop-blur-xl border-b border-slate-700/50 shadow-lg'
-                  : 'bg-slate-900/80 backdrop-blur-md border-b border-slate-800/50'
+                  ? 'bg-navy/60 backdrop-blur-2xl border-white/10 shadow-lg shadow-black/30'
+                  : 'bg-navy/35 backdrop-blur-xl border-white/5'
             )}
          >
-            <div className="container mx-auto px-4 py-4">
-               <div className="flex items-center justify-between">
+            <div className="container mx-auto px-4 py-3">
+               <div className="flex items-center justify-between gap-3">
                   {/* Logo */}
                   <Link href="/" className="flex items-center gap-3">
-                     <Image
-                        src="/logo.png"
-                        width={48}
-                        height={48}
-                        alt="Flacron GameZone"
-                        className="object-contain"
-                     />
+                     <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white p-1.5 shadow-sm ring-1 ring-white/10">
+                        <Image
+                           src="/logo.png"
+                           width={40}
+                           height={40}
+                           alt="Flacron GameZone"
+                           className="object-contain"
+                        />
+                     </span>
                   </Link>
 
-                  {/* Desktop Nav */}
-                  <nav className="hidden md:flex items-center gap-1">
+                  {/* Desktop Nav — compact glass pill, not spread across the bar */}
+                  <nav className="hidden md:flex items-center gap-0.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-full p-1.5">
                      {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
                         <Link
                            key={href}
                            href={href}
                            className={cn(
-                              'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all',
+                              'flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-full transition-all whitespace-nowrap',
                               isActive(href)
-                                 ? 'text-blue-400 bg-blue-500/10'
-                                 : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                                 ? 'bg-brand text-white shadow-md shadow-brand/30'
+                                 : 'text-slate-200 hover:text-white hover:bg-white/10'
                            )}
                         >
-                           <Icon className="w-4 h-4" />
+                           <Icon className="w-3.5 h-3.5" />
                            {label}
                         </Link>
                      ))}
@@ -135,36 +137,36 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         <Link
                            href={isAdmin ? '/admin' : '/dashboard'}
                            className={cn(
-                              'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all',
+                              'flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-full transition-all whitespace-nowrap',
                               isActive('/dashboard') || isActive('/admin')
-                                 ? 'text-blue-400 bg-blue-500/10'
-                                 : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                                 ? 'bg-brand text-white shadow-md shadow-brand/30'
+                                 : 'text-slate-200 hover:text-white hover:bg-white/10'
                            )}
                         >
-                           <LayoutDashboard className="w-4 h-4" />
+                           <LayoutDashboard className="w-3.5 h-3.5" />
                            {isAdmin ? 'Admin' : 'Dashboard'}
                         </Link>
                      )}
                   </nav>
 
                   {/* Right actions */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                      <button
                         onClick={() => setSearchOpen(true)}
-                        className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md hover:shadow-cyan-500/40 hover:scale-105 transition-all"
+                        className="hidden md:flex items-center gap-2 px-3.5 py-2 text-sm font-semibold rounded-full bg-white/10 hover:bg-white/20 text-white transition-all hover:scale-105"
                      >
                         <Search className="w-4 h-4" />
                         Search
                      </button>
                      <button
                         onClick={() => setSearchOpen(true)}
-                        className="md:hidden p-2 hover:bg-blue-500/10 rounded-lg text-blue-400 transition-colors"
+                        className="md:hidden p-2 hover:bg-white/10 rounded-lg text-white/80 hover:text-white transition-colors"
                      >
                         <Search className="w-5 h-5" />
                      </button>
 
                      <Link href="/contact" className="hidden sm:block">
-                        <button className="p-2 hover:bg-slate-800/50 rounded-lg text-slate-400 hover:text-white transition-colors">
+                        <button className="p-2 hover:bg-white/10 rounded-lg text-slate-300 hover:text-white transition-colors">
                            <Mail className="w-4 h-4" />
                         </button>
                      </Link>
@@ -172,7 +174,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                      {isAuthenticated ? (
                         <button
                            onClick={logout}
-                           className="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium hover:bg-red-500/10 hover:text-red-400 rounded-xl transition-colors text-slate-300"
+                           className="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium hover:bg-red-500/10 hover:text-red-400 rounded-xl transition-colors text-slate-200"
                         >
                            <LogOut className="w-4 h-4" />
                            Logout
@@ -180,13 +182,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
                      ) : (
                         <div className="hidden sm:flex items-center gap-2">
                            <Link href="/login">
-                              <button className="px-3 py-2 text-sm font-medium hover:bg-blue-500/10 hover:text-blue-400 rounded-xl transition-colors text-slate-300">
-                                 Login
+                              <button className="px-3 py-2 text-sm font-medium hover:bg-brand/10 hover:text-brand rounded-xl transition-colors text-slate-200">
+                                 Sign In
                               </button>
                            </Link>
                            <Link href="/signup">
-                              <button className="px-3 py-2 text-sm font-medium bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white rounded-xl shadow-lg transition-all">
-                                 Sign Up
+                              <button className="px-4 py-2 text-sm font-bold bg-brand hover:bg-brand-hover text-white rounded-full shadow-lg shadow-brand/20 transition-all">
+                                 Go Premium
                               </button>
                            </Link>
                         </div>
@@ -194,7 +196,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
                      <button
                         onClick={() => setMobileOpen((o) => !o)}
-                        className="md:hidden p-2 hover:bg-slate-800/50 rounded-lg transition-colors"
+                        className="md:hidden p-2 hover:bg-white/10 rounded-lg text-white transition-colors"
                         aria-label="Toggle menu"
                      >
                         {mobileOpen ? (
@@ -208,7 +210,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
                {/* Mobile Nav */}
                {mobileOpen && (
-                  <nav className="md:hidden mt-4 pt-4 border-t border-slate-700/50 flex flex-col gap-1 animate-in slide-in-from-top-4 duration-300">
+                  <nav className="md:hidden mt-3 pt-3 border-t border-white/10 flex flex-col gap-1 animate-in slide-in-from-top-4 duration-300">
                      {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
                         <Link
                            key={href}
@@ -216,8 +218,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
                            className={cn(
                               'flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all',
                               isActive(href)
-                                 ? 'text-blue-400 bg-blue-500/10'
-                                 : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                                 ? 'bg-brand text-white'
+                                 : 'text-slate-200 hover:text-white hover:bg-white/5'
                            )}
                         >
                            <Icon className="w-4 h-4" />
@@ -227,7 +229,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                      {isAuthenticated && (
                         <Link
                            href={isAdmin ? '/admin' : '/dashboard'}
-                           className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all"
+                           className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-200 hover:text-white hover:bg-white/5 rounded-xl transition-all"
                         >
                            <LayoutDashboard className="w-4 h-4" />
                            {isAdmin ? 'Admin' : 'Dashboard'}
@@ -235,12 +237,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
                      )}
                      <Link
                         href="/contact"
-                        className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all"
+                        className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-200 hover:text-white hover:bg-white/5 rounded-xl transition-all"
                      >
                         <Mail className="w-4 h-4" />
                         Contact
                      </Link>
-                     <div className="h-px bg-slate-700/50 my-1" />
+                     <div className="h-px bg-white/10 my-1" />
                      {isAuthenticated ? (
                         <button
                            onClick={logout}
@@ -253,15 +255,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         <>
                            <Link
                               href="/login"
-                              className="px-4 py-3 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all"
+                              className="px-4 py-3 text-sm font-medium text-slate-200 hover:text-white hover:bg-white/5 rounded-xl transition-all"
                            >
-                              Login
+                              Sign In
                            </Link>
                            <Link
                               href="/signup"
-                              className="px-4 py-3 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all"
+                              className="px-4 py-3 text-sm font-bold text-white bg-brand hover:bg-brand-hover rounded-xl transition-all mx-4 text-center"
                            >
-                              Sign Up
+                              Go Premium
                            </Link>
                         </>
                      )}
@@ -274,28 +276,27 @@ export function Shell({ children }: { children: React.ReactNode }) {
          <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
 
          {/* ── Footer ─────────────────────────────────────────────── */}
-         <footer className="bg-slate-900/50 border-t border-slate-800/50 mt-12">
+         <footer className="bg-navy border-t border-navy-light/30 mt-12">
             <div className="container mx-auto px-4 py-12">
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                   {/* Brand */}
                   <div>
                      <Link href="/" className="flex items-center gap-3 mb-4">
-                        <Image
-                           src="/logo.png"
-                           width={48}
-                           height={48}
-                           alt="Flacron GameZone"
-                           className="object-contain"
-                        />
+                        <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white p-1.5 shadow-sm ring-1 ring-white/10">
+                           <Image
+                              src="/logo.png"
+                              width={40}
+                              height={40}
+                              alt="Flacron GameZone"
+                              className="object-contain"
+                           />
+                        </span>
                         <div className="font-black leading-none">
                            <span className="text-white">Flacron</span>
-                           <br />
-                           <span className="text-sm bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                              GameZone
-                           </span>
+                           {/* ... */}
                         </div>
                      </Link>
-                     <p className="text-sm text-slate-400 mb-4">
+                     <p className="text-sm text-slate-300 mb-4">
                         Your ultimate destination for live football matches and
                         comprehensive league coverage.
                      </p>
@@ -304,9 +305,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
                            <a
                               key={i}
                               href="#"
-                              className="w-8 h-8 bg-slate-800/50 hover:bg-blue-500/20 border border-slate-700/50 hover:border-blue-500/50 rounded-lg flex items-center justify-center transition-all group"
+                              className="w-8 h-8 bg-white/5 hover:bg-brand/20 border border-white/10 hover:border-brand/50 rounded-lg flex items-center justify-center transition-all group"
                            >
-                              <Icon className="w-4 h-4 text-slate-400 group-hover:text-blue-400 transition-colors" />
+                              <Icon className="w-4 h-4 text-slate-300 group-hover:text-brand transition-colors" />
                            </a>
                         ))}
                      </div>
@@ -323,7 +324,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                               <li key={href}>
                                  <Link
                                     href={href}
-                                    className="text-slate-400 hover:text-blue-400 transition-colors"
+                                    className="text-slate-300 hover:text-brand transition-colors"
                                  >
                                     {label}
                                  </Link>
@@ -334,16 +335,16 @@ export function Shell({ children }: { children: React.ReactNode }) {
                   ))}
                </div>
 
-               <div className="border-t border-slate-800/50 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-                  <p className="text-sm text-slate-500">
+               <div className="border-t border-navy-light/30 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                  <p className="text-sm text-slate-400">
                      &copy; {new Date().getFullYear()} Flacron GameZone. All
                      rights reserved.
                   </p>
-                  <div className="flex items-center gap-2 text-sm text-slate-500">
+                  <div className="flex items-center gap-2 text-sm text-slate-400">
                      <span>Made with</span>
                      <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />
                      <span>for football fans</span>
-                     <Globe className="w-4 h-4 text-blue-400" />
+                     <Globe className="w-4 h-4 text-brand" />
                   </div>
                </div>
             </div>

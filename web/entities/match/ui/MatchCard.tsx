@@ -24,12 +24,12 @@ export function MatchCard({
    return (
       <Link
          href={`/match/${match.id}`}
-         className="group block bg-gradient-to-br from-slate-800/40 to-slate-900/40 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-5 hover:border-blue-500/50 hover:shadow-lg transition-all duration-300"
+         className="group block bg-gradient-to-br from-navy/70 to-navy-dark/80 backdrop-blur-sm border border-navy-light/40 rounded-2xl p-5 hover:border-brand/50 hover:shadow-lg hover:shadow-brand/10 transition-all duration-300"
       >
          {/* Header row */}
          <div className="flex items-center justify-between mb-4">
             {showLeague && match.league && (
-               <span className="text-xs font-semibold px-3 py-1.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg truncate max-w-[140px]">
+               <span className="text-xs font-semibold px-3 py-1.5 bg-brand/10 text-brand border border-brand/20 rounded-lg truncate max-w-[140px]">
                   {match.league.name}
                </span>
             )}
@@ -59,7 +59,7 @@ export function MatchCard({
                   </div>
                ) : (
                   <div className="space-y-1">
-                     <p className="text-2xl font-black text-white">
+                     <p className="text-2xl font-bold text-white">
                         {match.score ?? '–'}
                      </p>
                      <StatusBadge status={match.status} size="sm" />
@@ -86,7 +86,7 @@ export function MatchCard({
                ) : (
                   <span />
                )}
-               <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-blue-400 group-hover:translate-x-1 transition-all flex-shrink-0" />
+               <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-brand group-hover:translate-x-1 transition-all flex-shrink-0" />
             </div>
          )}
       </Link>
@@ -125,8 +125,8 @@ function TeamDisplay({
             </div>
          )}
          <span
-            className={`text-sm font-semibold truncate group-hover:text-blue-300 transition-colors ${
-               isHighlighted ? 'text-blue-400' : 'text-white'
+            className={`text-sm font-semibold truncate group-hover:text-brand-light transition-colors ${
+               isHighlighted ? 'text-brand' : 'text-white'
             }`}
          >
             {team.name}

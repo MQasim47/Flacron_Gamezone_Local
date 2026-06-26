@@ -2,7 +2,7 @@
 
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { loginWithGoogle } from '../api/authApi';
 import { useAuth } from '@/shared/hooks';
 
@@ -14,6 +14,27 @@ export function GoogleAuthButton({ onError }: GoogleAuthButtonProps) {
    const router = useRouter();
    const { login: storeLogin } = useAuth();
    const [loading, setLoading] = useState(false);
+   const containerRef = useRef<HTMLDivElement>(null);
+   const [buttonWidth, setButtonWidth] = useState(320);
+
+   // Google's button only accepts a fixed pixel width (200–400px range).
+   // Measuring the actual container means it never overflows narrow phones.
+   useEffect(() => {
+      const el = containerRef.current;
+      if (!el) return;
+
+      const measure = () => {
+         const available = el.offsetWidth;
+         if (available > 0) {
+            setButtonWidth(Math.min(400, Math.max(200, Math.floor(available))));
+         }
+      };
+
+      measure();
+      const observer = new ResizeObserver(measure);
+      observer.observe(el);
+      return () => observer.disconnect();
+   }, []);
 
    const handleSuccess = async (credentialResponse: CredentialResponse) => {
       if (!credentialResponse.credential) {
@@ -38,7 +59,8 @@ export function GoogleAuthButton({ onError }: GoogleAuthButtonProps) {
 
    return (
       <div
-         className={`flex justify-center ${loading ? 'opacity-60 pointer-events-none' : ''}`}
+         ref={containerRef}
+         className={`flex justify-center w-full ${loading ? 'opacity-60 pointer-events-none' : ''}`}
       >
          <GoogleLogin
             onSuccess={handleSuccess}
@@ -47,7 +69,7 @@ export function GoogleAuthButton({ onError }: GoogleAuthButtonProps) {
             }
             theme="filled_black"
             shape="pill"
-            width="320"
+            width={buttonWidth}
          />
       </div>
    );

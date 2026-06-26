@@ -257,7 +257,7 @@ export function TermsClient() {
 
             {/* Content card */}
             <div
-               className={`bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-2xl border border-slate-700/50 rounded-2xl p-8 shadow-2xl transition-all duration-1000 delay-150 ${
+               className={`bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-2xl border border-slate-700/50 rounded-2xl p-5 sm:p-8 shadow-2xl transition-all duration-1000 delay-150 ${
                   mounted
                      ? 'opacity-100 translate-y-0'
                      : 'opacity-0 translate-y-8'
@@ -276,19 +276,19 @@ export function TermsClient() {
                            onMouseLeave={() => setActiveSection(null)}
                         >
                            {/* Section header */}
-                           <div className="flex items-start gap-4 mb-4">
+                           <div className="flex items-start gap-3 sm:gap-4 mb-4">
                               <div
-                                 className={`w-12 h-12 rounded-xl bg-gradient-to-br ${c.gradient} flex items-center justify-center flex-shrink-0 shadow-lg transition-transform duration-300 ${
+                                 className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${c.gradient} flex items-center justify-center flex-shrink-0 shadow-lg transition-transform duration-300 ${
                                     activeSection === index ? 'scale-110' : ''
                                  }`}
                               >
-                                 <Icon className="w-6 h-6 text-white" />
+                                 <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                               </div>
                               <div className="flex-1">
-                                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                                 <h2 className="text-lg sm:text-2xl font-bold text-white flex items-center gap-2 sm:gap-3 flex-wrap">
                                     {section.title}
                                     <span
-                                       className={`text-sm font-semibold px-3 py-1 rounded-full ${c.text} ${c.bg} border ${c.border}`}
+                                       className={`text-xs sm:text-sm font-semibold px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full ${c.text} ${c.bg} border ${c.border}`}
                                     >
                                        {index + 1}
                                     </span>
@@ -296,7 +296,7 @@ export function TermsClient() {
                               </div>
                            </div>
 
-                           <div className="ml-16 space-y-2">
+                           <div className="ml-0 sm:ml-16 space-y-2">
                               {/* Main paragraph */}
                               {section.content && (
                                  <p className="text-slate-300 leading-relaxed">
