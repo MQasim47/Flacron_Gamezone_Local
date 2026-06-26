@@ -200,7 +200,7 @@ export function MatchesClient({ initialMatches }: MatchesClientProps) {
          {/* Hero Section */}
          <div className="relative overflow-hidden border border-navy-light/40 rounded-2xl shadow-2xl">
             <Image
-               src="/hero-stadium.jpg"
+               src="/hero-matches.jpg"
                alt="Football stadium"
                fill
                priority

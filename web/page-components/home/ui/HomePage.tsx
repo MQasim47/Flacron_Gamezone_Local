@@ -357,7 +357,7 @@ export default function HomePage({
                   </div>
                   <div className="grid grid-cols-3 gap-3 sm:gap-6 mt-8 sm:mt-12 max-w-xs sm:max-w-2xl">
                      <div className="text-center">
-                        <div className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-brand to-brand-light bg-clip-text text-transparent">
+                        <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-brand to-brand-light bg-clip-text text-transparent">
                            {allLeagues.length}+
                         </div>
                         <div className="text-xs sm:text-sm text-slate-300 mt-1">
@@ -365,7 +365,7 @@ export default function HomePage({
                         </div>
                      </div>
                      <div className="text-center">
-                        <div className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-red-400 to-brand bg-clip-text text-transparent">
+                        <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-red-400 to-brand bg-clip-text text-transparent">
                            {totalLiveMatches}
                         </div>
                         <div className="text-xs sm:text-sm text-slate-300 mt-1">
@@ -373,7 +373,7 @@ export default function HomePage({
                         </div>
                      </div>
                      <div className="text-center">
-                        <div className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                        <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                            {upcomingMatches.length}+
                         </div>
                         <div className="text-xs sm:text-sm text-slate-300 mt-1">
@@ -613,7 +613,7 @@ export default function HomePage({
                               </div>
                               <div>
                                  <div className="flex items-center gap-2 flex-wrap">
-                                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white">
+                                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
                                        Live Matches
                                     </h2>
                                     <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/30">
@@ -621,7 +621,7 @@ export default function HomePage({
                                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
                                           <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
                                        </span>
-                                       <span className="text-xs font-black text-red-400 uppercase tracking-wide">
+                                       <span className="text-xs font-bold text-red-400 uppercase tracking-wide">
                                           {totalLiveMatches} LIVE
                                        </span>
                                     </div>
@@ -643,14 +643,14 @@ export default function HomePage({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                      {liveMatches.map((match) => (
                         <Link key={match.id} href={`/match/${match.id}`}>
-                           <div className="group relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 border-2 border-red-500/30 hover:border-red-400/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.02] cursor-pointer shadow-lg">
+                           <div className="group relative bg-gradient-to-br from-navy/90 to-navy-dark/95 border-2 border-red-500/30 hover:border-red-400/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.02] cursor-pointer shadow-lg">
                               <div className="absolute top-3 right-3 z-10">
                                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-gradient-to-r from-red-600 to-orange-600 shadow-lg">
                                     <span className="relative flex h-2 w-2">
                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
                                     </span>
-                                    <span className="text-xs font-black text-white uppercase">
+                                    <span className="text-xs font-bold text-white uppercase">
                                        LIVE
                                     </span>
                                  </div>
@@ -674,7 +674,7 @@ export default function HomePage({
                                     </div>
                                  )}
                                  <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4 mt-4 sm:mt-6">
-                                    <div className="text-right">
+                                    <div className="text-right min-w-0">
                                        <div className="flex justify-end mb-2">
                                           {match.homeTeam.logo ? (
                                              <img
@@ -683,7 +683,7 @@ export default function HomePage({
                                                 className="w-10 h-10 sm:w-16 sm:h-16 object-contain"
                                              />
                                           ) : (
-                                             <div className="w-10 h-10 sm:w-16 sm:h-16 bg-slate-700 rounded-xl flex items-center justify-center text-base sm:text-xl font-black">
+                                             <div className="w-10 h-10 sm:w-16 sm:h-16 bg-slate-700 rounded-xl flex items-center justify-center text-base sm:text-xl font-bold">
                                                 {match.homeTeam.name.substring(
                                                    0,
                                                    2
@@ -699,11 +699,11 @@ export default function HomePage({
                                        </div>
                                     </div>
                                     <div className="text-center min-w-[60px] sm:min-w-[90px]">
-                                       <div className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-red-400 via-orange-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                                       <div className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-red-400 bg-clip-text text-transparent animate-pulse">
                                           {match.score || '0-0'}
                                        </div>
                                     </div>
-                                    <div className="text-left">
+                                    <div className="text-left min-w-0">
                                        <div className="flex justify-start mb-2">
                                           {match.awayTeam.logo ? (
                                              <img
@@ -712,7 +712,7 @@ export default function HomePage({
                                                 className="w-10 h-10 sm:w-16 sm:h-16 object-contain"
                                              />
                                           ) : (
-                                             <div className="w-10 h-10 sm:w-16 sm:h-16 bg-slate-700 rounded-xl flex items-center justify-center text-base sm:text-xl font-black">
+                                             <div className="w-10 h-10 sm:w-16 sm:h-16 bg-slate-700 rounded-xl flex items-center justify-center text-base sm:text-xl font-bold">
                                                 {match.awayTeam.name.substring(
                                                    0,
                                                    2
@@ -854,7 +854,7 @@ export default function HomePage({
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                      {upcomingMatches.map((match) => (
                         <Link key={match.id} href={`/match/${match.id}`}>
-                           <div className="group bg-gradient-to-br from-slate-900/90 to-slate-800/90 border border-slate-700/50 hover:border-brand/40 rounded-xl sm:rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                           <div className="group bg-gradient-to-br from-navy/85 to-navy-dark/90 border border-navy-light/40 hover:border-brand/40 rounded-xl sm:rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] cursor-pointer">
                               <div className="flex items-center justify-center mb-3">
                                  {getStatusBadge(match.status)}
                               </div>
@@ -887,7 +887,7 @@ export default function HomePage({
                                           {match.awayTeam.name.substring(0, 2)}
                                        </div>
                                     )}
-                                    <span className="font-semibold text-xs sm:text-sm truncate group-hover:text-purple-400 transition-colors">
+                                    <span className="font-semibold text-xs sm:text-sm truncate group-hover:text-brand transition-colors">
                                        {match.awayTeam.name}
                                     </span>
                                  </div>

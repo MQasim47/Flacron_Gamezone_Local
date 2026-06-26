@@ -70,7 +70,7 @@ export function MajorLeaguesRail({
                                  className="w-full h-full object-contain"
                               />
                            ) : (
-                              <span className="text-lg font-black text-yellow-400">
+                              <span className="text-lg font-bold text-yellow-400">
                                  {league.name.charAt(0)}
                               </span>
                            )}

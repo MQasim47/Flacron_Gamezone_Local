@@ -39,7 +39,7 @@ export function TournamentSpotlight({ matches }: Props) {
                         <Trophy className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
                      </div>
                      <div>
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
                            {tournamentName} Spotlight
                         </h2>
                         <p className="text-xs sm:text-sm text-yellow-300 font-medium mt-0.5">
@@ -59,13 +59,13 @@ export function TournamentSpotlight({ matches }: Props) {
          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {matches.map((match) => (
                <Link key={match.id} href={`/match/${match.id}`}>
-                  <div className="group relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 border-2 border-yellow-500/30 hover:border-yellow-400/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.02] cursor-pointer shadow-lg">
+                  <div className="group relative bg-gradient-to-br from-navy/90 to-navy-dark/95 border-2 border-yellow-500/30 hover:border-yellow-400/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.02] cursor-pointer shadow-lg">
                      <div className="space-y-3">
                         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
                            <TeamSide team={match.homeTeam} align="right" />
                            <div className="text-center min-w-[60px] sm:min-w-[90px]">
                               {match.status === 'LIVE' ? (
-                                 <div className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-red-400 via-orange-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                                 <div className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-red-400 via-orange-400 to-red-400 bg-clip-text text-transparent animate-pulse">
                                     {match.score || '0-0'}
                                  </div>
                               ) : (
@@ -101,7 +101,11 @@ function TeamSide({
    align: 'left' | 'right';
 }) {
    return (
-      <div className={align === 'right' ? 'text-right' : 'text-left'}>
+      <div
+         className={
+            align === 'right' ? 'text-right min-w-0' : 'text-left min-w-0'
+         }
+      >
          <div
             className={`flex mb-2 ${align === 'right' ? 'justify-end' : 'justify-start'}`}
          >
@@ -112,7 +116,7 @@ function TeamSide({
                   className="w-10 h-10 sm:w-16 sm:h-16 object-contain"
                />
             ) : (
-               <div className="w-10 h-10 sm:w-16 sm:h-16 bg-slate-700 rounded-xl flex items-center justify-center text-base sm:text-xl font-black">
+               <div className="w-10 h-10 sm:w-16 sm:h-16 bg-slate-700 rounded-xl flex items-center justify-center text-base sm:text-xl font-bold">
                   {team.name.substring(0, 2)}
                </div>
             )}
